@@ -39,11 +39,6 @@ public class Attribute {
         this(name, false, false, null, null, null, null);
     }
 
-    public Attribute(Attribute otherAttribute) {
-        this(otherAttribute.name, otherAttribute.required, otherAttribute.immutable, otherAttribute.type,
-                otherAttribute.pattern, otherAttribute.defaultValue, otherAttribute.description);
-    }
-
     public String getName() {
         return name;
     }

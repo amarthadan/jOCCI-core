@@ -7,37 +7,17 @@ import java.util.Set;
 
 public class Kind extends Category {
 
-    private Set<Action> actions = new HashSet<>();
     private Set<Kind> related = new HashSet<>();
     private String entityType;
-    private Set<Entity> entities;
-    
-    public Kind(URI scheme, String term, String title, Collection<Attribute> attributes, String entityType) {
-        super(scheme, term, title, attributes);
-        
-        if (entityType == null || entityType.isEmpty()) {
-            throw new IllegalArgumentException("Kind entity type cannot be null nor empty.");
-        }
-        this.entityType = entityType;
-    }
-    
-    public Kind(String term, String title, Collection<Attribute> attributes, String entityType) {
-        super(term, title, attributes);
-        
-        if (entityType == null || entityType.isEmpty()) {
-            throw new IllegalArgumentException("Kind entity type cannot be null nor empty.");
-        }
+
+    public Kind(URI scheme, String term, String title, String location, Collection<Attribute> attributes, String entityType) {
+        super(scheme, term, title, location, attributes);
+
         this.entityType = entityType;
     }
 
-    public Kind(URI scheme, String term, String title, Collection<Attribute> attributes, String entityType, Kind relatedKind) {
-        this(scheme, term, title, attributes, entityType);
-        related.add(relatedKind);
-    }
-    
-    public Kind(String term, String title, Collection<Attribute> attributes, String entityType, Kind relatedKind) {
-        this(term, title, attributes, entityType);
-        related.add(relatedKind);
+    public Kind(URI scheme, String term) {
+        this(scheme, term, null, null, null, null);
     }
 
     public String getEntityType() {

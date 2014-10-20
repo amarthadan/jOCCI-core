@@ -14,6 +14,10 @@ public abstract class Entity {
     private Map<Attribute, Object> attributeValues;
     private Model model;
 
+    public String getIdentifier() {
+        return kind.getIdentifier() + id;
+    }
+
     public abstract void toText();
 
     public abstract void toJSON();

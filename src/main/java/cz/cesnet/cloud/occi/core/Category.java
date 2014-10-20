@@ -1,6 +1,8 @@
 package cz.cesnet.cloud.occi.core;
 
+import cz.cesnet.cloud.occi.exception.NonexistingActionException;
 import cz.cesnet.cloud.occi.exception.NonexistingAttributeException;
+import cz.cesnet.cloud.occi.exception.NonexistingEntityException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
@@ -19,9 +21,12 @@ public class Category {
     private String term;
     private URI scheme;
     private String title;
+    private String location;
     private final Set<Attribute> attributes = new HashSet<>();
+    private final Set<Action> actions = new HashSet<>();
+    private Set<Entity> entities = new HashSet<>();
 
-    public static URI makeURI(String uri) {
+    private static URI makeURI(String uri) {
         try {
             return new URI(uri);
         } catch (URISyntaxException ex) {
@@ -30,7 +35,7 @@ public class Category {
         }
     }
 
-    public Category(URI scheme, String term, String title, Collection<Attribute> attributes) {
+    public Category(URI scheme, String term, String title, String location, Collection<Attribute> attributes) {
         if (scheme == null) {
             throw new IllegalArgumentException("Category scheme cannot be null.");
         }
@@ -42,14 +47,15 @@ public class Category {
         this.scheme = scheme;
         this.term = term;
         this.title = title;
+        this.location = location;
 
         if (attributes != null) {
             this.attributes.addAll(attributes);
         }
     }
 
-    public Category(String term, String title, Collection<Attribute> attributes) {
-        this(DEFAULT_SCHEME, term, title, attributes);
+    public Category(URI scheme, String term) {
+        this(scheme, term, null, null, null);
     }
 
     public String getTerm() {
@@ -76,6 +82,10 @@ public class Category {
         this.scheme = scheme;
     }
 
+    public String getIdentifier() {
+        return getScheme().toString() + getTerm();
+    }
+
     public String getTitle() {
         return title;
     }
@@ -84,6 +94,15 @@ public class Category {
         this.title = title;
     }
 
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    //attributes
     public boolean containsAttribute(Attribute attribute) {
         return attributes.contains(attribute);
     }
@@ -102,7 +121,7 @@ public class Category {
             throw new NonexistingAttributeException("Category " + this + " doesn't contain attribute with name " + attributeName + ".");
         }
 
-        return new Attribute(findAttribute(attributeName));
+        return findAttribute(attributeName);
     }
 
     public boolean removeAttribute(Attribute attribute) {
@@ -119,8 +138,110 @@ public class Category {
         throw new NonexistingAttributeException("Category " + this + " doesn't contain attribute with name " + attributeName + ".");
     }
 
+    public void clearAttributes() {
+        attributes.clear();
+    }
+
     public Collection<Attribute> getAttributes() {
         return Collections.unmodifiableSet(attributes);
+    }
+
+    //actions
+    public boolean containsAction(Action action) {
+        return actions.contains(action);
+    }
+
+    public boolean containsAction(String actionIdentifier) {
+        for (Action action : actions) {
+            if (action.getIdentifier().equals(actionIdentifier)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean addAction(Action action) {
+        return actions.add(action);
+    }
+
+    public Action getAction(String actionIdentifier) throws NonexistingActionException {
+        if (!containsAction(actionIdentifier)) {
+            throw new NonexistingActionException("Category " + this + " doesn't contain action with identifier " + actionIdentifier + ".");
+        }
+
+        return findAction(actionIdentifier);
+    }
+
+    public boolean removeAction(Action action) {
+        return actions.remove(action);
+    }
+
+    private Action findAction(String actionIdentifier) throws NonexistingActionException {
+        for (Action action : actions) {
+            if (action.getIdentifier().equals(actionIdentifier)) {
+                return action;
+            }
+        }
+
+        throw new NonexistingActionException("Category " + this + " doesn't contain action with identifier " + actionIdentifier + ".");
+    }
+
+    public void clearActions() {
+        actions.clear();
+    }
+
+    public Collection<Action> getActions() {
+        return Collections.unmodifiableSet(actions);
+    }
+
+    //entities
+    public boolean containsEntity(Entity entity) {
+        return entities.contains(entity);
+    }
+
+    public boolean containsEntity(String entityIdentifier) {
+        for (Entity entity : entities) {
+            if (entity.getIdentifier().equals(entityIdentifier)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean addEntity(Entity entity) {
+        return entities.add(entity);
+    }
+
+    public Entity getEntity(String entityIdentifier) throws NonexistingEntityException {
+        if (!containsEntity(entityIdentifier)) {
+            throw new NonexistingEntityException("Category " + this + " doesn't contain entity with identifier " + entityIdentifier + ".");
+        }
+
+        return findEntity(entityIdentifier);
+    }
+
+    public boolean removeEntity(Entity entity) {
+        return entities.remove(entity);
+    }
+
+    private Entity findEntity(String entityIdentifier) throws NonexistingEntityException {
+        for (Entity entity : entities) {
+            if (entity.getIdentifier().equals(entityIdentifier)) {
+                return entity;
+            }
+        }
+
+        throw new NonexistingEntityException("Category " + this + " doesn't contain entity with identifier " + entityIdentifier + ".");
+    }
+
+    public void clearEntities() {
+        entities.clear();
+    }
+
+    public Collection<Entity> getEntities() {
+        return Collections.unmodifiableSet(entities);
     }
 
     @Override
