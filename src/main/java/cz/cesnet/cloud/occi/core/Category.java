@@ -35,10 +35,13 @@ public class Category implements Identifiable {
 
     public Category(URI scheme, String term, String title, String location, Collection<Attribute> attributes) {
         if (scheme == null) {
-            throw new IllegalArgumentException("Category scheme cannot be null.");
+            throw new NullPointerException("Category scheme cannot be null.");
         }
-        if (term == null || term.isEmpty()) {
-            throw new IllegalArgumentException("Category term cannot be null nor empty.");
+        if (term == null) {
+            throw new NullPointerException("Category term cannot be null.");
+        }
+        if (term.isEmpty()) {
+            throw new IllegalArgumentException("Category term cannot be empty.");
         }
 
         LOGGER.debug("Creating category: scheme={}, term={}, title={}, attributes={}", scheme, term, title, attributes);
@@ -61,8 +64,11 @@ public class Category implements Identifiable {
     }
 
     public void setTerm(String term) {
-        if (term == null || term.isEmpty()) {
-            throw new IllegalArgumentException("Category term cannot be null nor empty.");
+        if (term == null) {
+            throw new NullPointerException("Category term cannot be null.");
+        }
+        if (term.isEmpty()) {
+            throw new IllegalArgumentException("Category term cannot be empty.");
         }
 
         this.term = term;
@@ -74,7 +80,7 @@ public class Category implements Identifiable {
 
     public void setScheme(URI scheme) {
         if (scheme == null) {
-            throw new IllegalArgumentException("Category scheme cannot be null.");
+            throw new NullPointerException("Category scheme cannot be null.");
         }
 
         this.scheme = scheme;
@@ -216,6 +222,6 @@ public class Category implements Identifiable {
 
     @Override
     public String toString() {
-        return "Category{" + "term=" + term + ", scheme=" + scheme + ", title=" + title + '}';
+        return "Category{" + "class=" + getClass().getName() + ", term=" + term + ", scheme=" + scheme + ", title=" + title + '}';
     }
 }

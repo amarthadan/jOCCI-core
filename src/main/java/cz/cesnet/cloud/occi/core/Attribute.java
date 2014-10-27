@@ -18,9 +18,13 @@ public class Attribute implements Identifiable {
     private String description;
 
     public Attribute(String name, boolean required, boolean immutable, String type, String pattern, String defaultValue, String description) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Attribute name cannot be null nor empty.");
+        if (name == null) {
+            throw new NullPointerException("Attribute name cannot be null.");
         }
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Attribute name cannot be empty.");
+        }
+
         LOGGER.debug("Creating attribute: name={}, required={}, immutable={}, type={}, pattern={}, defaultValue={}, description={}",
                 name, required, immutable, type, pattern, defaultValue, description);
         this.name = name;
@@ -45,8 +49,11 @@ public class Attribute implements Identifiable {
     }
 
     public void setName(String name) {
-        if (name == null || name.isEmpty()) {
-            throw new IllegalArgumentException("Attribute name cannot be null nor empty.");
+        if (name == null) {
+            throw new NullPointerException("Attribute name cannot be null.");
+        }
+        if (name.isEmpty()) {
+            throw new IllegalArgumentException("Attribute name cannot be empty.");
         }
 
         this.name = name;

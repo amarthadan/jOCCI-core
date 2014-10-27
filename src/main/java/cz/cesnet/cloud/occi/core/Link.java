@@ -1,35 +1,48 @@
 package cz.cesnet.cloud.occi.core;
 
+import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
+import java.net.URI;
+
 public class Link extends Entity {
 
-    Resource links;
+    public static final String SOURCE_ATTRIBUTE_NAME = "occi.core.source";
+    public static final String TARGET_ATTRIBUTE_NAME = "occi.core.target";
 
-    public Resource getSource() {
-        // TODO - implement Link.getSource
-        throw new UnsupportedOperationException();
+    public Link(URI id, Kind kind, String title, Model model) {
+        super(id, kind, title, model);
     }
 
-    /**
-     *
-     * @param source
-     */
-    public void setSource(Resource source) {
-        // TODO - implement Link.setSource
-        throw new UnsupportedOperationException();
+    public Link(URI id, Kind kind) {
+        super(id, kind);
     }
 
-    public Resource getTarget() {
-        // TODO - implement Link.getTarget
-        throw new UnsupportedOperationException();
+    public String getSource() {
+        return getValue(SOURCE_ATTRIBUTE_NAME);
     }
 
-    /**
-     *
-     * @param target
-     */
-    public void setTarget(Resource target) {
-        // TODO - implement Link.setTarget
-        throw new UnsupportedOperationException();
+    public void setSource(Resource source) throws InvalidAttributeException {
+        Attribute sourceAttribute = new Attribute(SOURCE_ATTRIBUTE_NAME);
+        addAttribute(sourceAttribute, source.getIdentifier());
+    }
+
+    public void setSource(String sourceIdentifier) throws InvalidAttributeException {
+        Attribute sourceAttribute = new Attribute(SOURCE_ATTRIBUTE_NAME);
+        addAttribute(sourceAttribute, sourceIdentifier);
+    }
+
+    public String getTarget() {
+        return getValue(TARGET_ATTRIBUTE_NAME);
+    }
+
+    public void setTarget(Resource target) throws InvalidAttributeException {
+        Attribute sourceAttribute = new Attribute(TARGET_ATTRIBUTE_NAME);
+        addAttribute(sourceAttribute, target.getIdentifier());
+    }
+
+    public void setTarget(String targetIdentifier) throws InvalidAttributeException {
+        Attribute sourceAttribute = new Attribute(TARGET_ATTRIBUTE_NAME);
+        addAttribute(sourceAttribute, targetIdentifier);
     }
 
     @Override

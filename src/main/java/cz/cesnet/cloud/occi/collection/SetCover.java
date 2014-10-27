@@ -27,23 +27,34 @@ public class SetCover<E extends Identifiable> {
     }
 
     public boolean add(E element) {
+        if (element == null) {
+            throw new NullPointerException("Cannot add null " + getElementClassName() + " .");
+        }
+
         return set.add(element);
     }
 
     public boolean addAll(Collection<E> elements) {
+        if (elements.contains(null)) {
+            throw new NullPointerException("Cannot add null " + getElementClassName() + " .");
+        }
+
         return set.addAll(elements);
     }
 
     public E get(String elementIdentifier) throws NonexistingElementException {
         if (!contains(elementIdentifier)) {
-            Class elementClass = (Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-            throw new NonexistingElementException(elementClass.getName() + " with identifier " + elementIdentifier + " was not found.");
+            throw new NonexistingElementException(getElementClassName() + " with identifier " + elementIdentifier + " was not found.");
         }
 
         return find(elementIdentifier);
     }
 
     public boolean remove(E element) {
+        if (element == null) {
+            throw new NullPointerException("Cannot remove null " + getElementClassName() + " .");
+        }
+
         return set.remove(element);
     }
 
@@ -54,8 +65,7 @@ public class SetCover<E extends Identifiable> {
             }
         }
 
-        Class elementClass = (Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        throw new NonexistingElementException(elementClass.getName() + " with identifier " + elementIdentifier + " was not found.");
+        throw new NonexistingElementException(getElementClassName() + " with identifier " + elementIdentifier + " was not found.");
     }
 
     public void clear() {
@@ -64,5 +74,14 @@ public class SetCover<E extends Identifiable> {
 
     public Set<E> getSet() {
         return Collections.unmodifiableSet(set);
+    }
+
+    private String getElementClassName() {
+        return ((Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
+    }
+
+    @Override
+    public String toString() {
+        return "SetCover{" + set + '}';
     }
 }
