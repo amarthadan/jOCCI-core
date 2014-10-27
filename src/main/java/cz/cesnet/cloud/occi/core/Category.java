@@ -1,19 +1,17 @@
 package cz.cesnet.cloud.occi.core;
 
-import cz.cesnet.cloud.occi.exception.NonexistingActionException;
-import cz.cesnet.cloud.occi.exception.NonexistingAttributeException;
-import cz.cesnet.cloud.occi.exception.NonexistingEntityException;
+import cz.cesnet.cloud.occi.collection.SetCover;
+import cz.cesnet.cloud.occi.type.Identifiable;
+import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Category {
+public class Category implements Identifiable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
     public static final URI DEFAULT_SCHEME = makeURI("http://schemas.ogf.org/occi/core#");
@@ -22,9 +20,9 @@ public class Category {
     private URI scheme;
     private String title;
     private String location;
-    private final Set<Attribute> attributes = new HashSet<>();
-    private final Set<Action> actions = new HashSet<>();
-    private Set<Entity> entities = new HashSet<>();
+    private final SetCover<Attribute> attributes = new SetCover<>();
+    private final SetCover<Action> actions = new SetCover<>();
+    private final SetCover<Entity> entities = new SetCover<>();
 
     private static URI makeURI(String uri) {
         try {
@@ -82,6 +80,7 @@ public class Category {
         this.scheme = scheme;
     }
 
+    @Override
     public String getIdentifier() {
         return getScheme().toString() + getTerm();
     }
@@ -107,43 +106,28 @@ public class Category {
         return attributes.contains(attribute);
     }
 
-    public boolean containsAttribute(String attributeName) {
-        Attribute tmpAttr = new Attribute(attributeName);
-        return containsAttribute(tmpAttr);
+    public boolean containsAttribute(String attributeIdentifier) {
+        return attributes.contains(attributeIdentifier);
     }
 
     public boolean addAttribute(Attribute attribute) {
         return attributes.add(attribute);
     }
 
-    public Attribute getAttribute(String attributeName) throws NonexistingAttributeException {
-        if (!containsAttribute(attributeName)) {
-            throw new NonexistingAttributeException("Category " + this + " doesn't contain attribute with name " + attributeName + ".");
-        }
-
-        return findAttribute(attributeName);
+    public Attribute getAttribute(String attributeIdentifier) throws NonexistingElementException {
+        return attributes.get(attributeIdentifier);
     }
 
     public boolean removeAttribute(Attribute attribute) {
         return attributes.remove(attribute);
     }
 
-    private Attribute findAttribute(String attributeName) throws NonexistingAttributeException {
-        for (Attribute attribute : attributes) {
-            if (attribute.getName().equals(attributeName)) {
-                return attribute;
-            }
-        }
-
-        throw new NonexistingAttributeException("Category " + this + " doesn't contain attribute with name " + attributeName + ".");
-    }
-
     public void clearAttributes() {
         attributes.clear();
     }
 
-    public Collection<Attribute> getAttributes() {
-        return Collections.unmodifiableSet(attributes);
+    public Set<Attribute> getAttributes() {
+        return attributes.getSet();
     }
 
     //actions
@@ -152,47 +136,27 @@ public class Category {
     }
 
     public boolean containsAction(String actionIdentifier) {
-        for (Action action : actions) {
-            if (action.getIdentifier().equals(actionIdentifier)) {
-                return true;
-            }
-        }
-
-        return false;
+        return actions.contains(actionIdentifier);
     }
 
     public boolean addAction(Action action) {
         return actions.add(action);
     }
 
-    public Action getAction(String actionIdentifier) throws NonexistingActionException {
-        if (!containsAction(actionIdentifier)) {
-            throw new NonexistingActionException("Category " + this + " doesn't contain action with identifier " + actionIdentifier + ".");
-        }
-
-        return findAction(actionIdentifier);
+    public Action getAction(String actionIdentifier) throws NonexistingElementException {
+        return actions.get(actionIdentifier);
     }
 
     public boolean removeAction(Action action) {
         return actions.remove(action);
     }
 
-    private Action findAction(String actionIdentifier) throws NonexistingActionException {
-        for (Action action : actions) {
-            if (action.getIdentifier().equals(actionIdentifier)) {
-                return action;
-            }
-        }
-
-        throw new NonexistingActionException("Category " + this + " doesn't contain action with identifier " + actionIdentifier + ".");
-    }
-
     public void clearActions() {
         actions.clear();
     }
 
-    public Collection<Action> getActions() {
-        return Collections.unmodifiableSet(actions);
+    public Set<Action> getActions() {
+        return actions.getSet();
     }
 
     //entities
@@ -201,47 +165,27 @@ public class Category {
     }
 
     public boolean containsEntity(String entityIdentifier) {
-        for (Entity entity : entities) {
-            if (entity.getIdentifier().equals(entityIdentifier)) {
-                return true;
-            }
-        }
-
-        return false;
+        return entities.contains(entityIdentifier);
     }
 
     public boolean addEntity(Entity entity) {
         return entities.add(entity);
     }
 
-    public Entity getEntity(String entityIdentifier) throws NonexistingEntityException {
-        if (!containsEntity(entityIdentifier)) {
-            throw new NonexistingEntityException("Category " + this + " doesn't contain entity with identifier " + entityIdentifier + ".");
-        }
-
-        return findEntity(entityIdentifier);
+    public Entity getEntity(String entityIdentifier) throws NonexistingElementException {
+        return entities.get(entityIdentifier);
     }
 
     public boolean removeEntity(Entity entity) {
         return entities.remove(entity);
     }
 
-    private Entity findEntity(String entityIdentifier) throws NonexistingEntityException {
-        for (Entity entity : entities) {
-            if (entity.getIdentifier().equals(entityIdentifier)) {
-                return entity;
-            }
-        }
-
-        throw new NonexistingEntityException("Category " + this + " doesn't contain entity with identifier " + entityIdentifier + ".");
-    }
-
     public void clearEntities() {
         entities.clear();
     }
 
-    public Collection<Entity> getEntities() {
-        return Collections.unmodifiableSet(entities);
+    public Set<Entity> getEntities() {
+        return entities.getSet();
     }
 
     @Override

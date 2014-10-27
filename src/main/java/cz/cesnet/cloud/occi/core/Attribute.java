@@ -1,10 +1,11 @@
 package cz.cesnet.cloud.occi.core;
 
+import cz.cesnet.cloud.occi.type.Identifiable;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Attribute {
+public class Attribute implements Identifiable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Attribute.class);
 
@@ -49,6 +50,11 @@ public class Attribute {
         }
 
         this.name = name;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return getName();
     }
 
     public boolean isRequired() {

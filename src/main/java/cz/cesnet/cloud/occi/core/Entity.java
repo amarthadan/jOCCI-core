@@ -1,11 +1,12 @@
 package cz.cesnet.cloud.occi.core;
 
+import cz.cesnet.cloud.occi.type.Identifiable;
 import cz.cesnet.cloud.occi.*;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-public abstract class Entity {
+public abstract class Entity implements Identifiable {
 
     private URI id;
     private String title;
@@ -14,6 +15,7 @@ public abstract class Entity {
     private Map<Attribute, Object> attributeValues;
     private Model model;
 
+    @Override
     public String getIdentifier() {
         return kind.getIdentifier() + id;
     }

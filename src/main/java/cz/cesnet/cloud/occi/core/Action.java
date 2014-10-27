@@ -1,10 +1,12 @@
 package cz.cesnet.cloud.occi.core;
 
-import cz.cesnet.cloud.occi.exception.NonexistingAttributeException;
+import cz.cesnet.cloud.occi.type.Identifiable;
+import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 import java.net.URI;
 import java.util.Collection;
+import java.util.Objects;
 
-public class Action {
+public class Action implements Identifiable {
 
     private Category category;
 
@@ -32,6 +34,7 @@ public class Action {
         category.setTerm(term);
     }
 
+    @Override
     public String getIdentifier() {
         return category.getIdentifier();
     }
@@ -64,7 +67,7 @@ public class Action {
         return category.addAttribute(attribute);
     }
 
-    public Attribute getAttribute(String attributeName) throws NonexistingAttributeException {
+    public Attribute getAttribute(String attributeName) throws NonexistingElementException {
         return category.getAttribute(attributeName);
     }
 
@@ -74,5 +77,32 @@ public class Action {
 
     public Collection<Attribute> getAttributes() {
         return category.getAttributes();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 29 * hash + Objects.hashCode(this.category);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Action other = (Action) obj;
+        if (!Objects.equals(this.category, other.category)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "Action{" + "category=" + category + '}';
     }
 }
