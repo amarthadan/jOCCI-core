@@ -31,7 +31,7 @@ public class Attribute implements Identifiable {
         this.required = required;
         this.immutable = immutable;
         this.type = type;
-        this.pattern = pattern;
+        this.pattern = pattern == null ? ".*" : pattern;
         this.defaultValue = defaultValue;
         this.description = description;
     }

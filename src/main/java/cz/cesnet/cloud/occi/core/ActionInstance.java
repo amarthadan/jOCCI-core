@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
-import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 
 public class ActionInstance {
 
@@ -32,7 +31,7 @@ public class ActionInstance {
         attributes.add(attribute, value);
     }
 
-    public void removeAttribute(Attribute attribute) throws NonexistingElementException {
+    public void removeAttribute(Attribute attribute) {
         attributes.remove(attribute);
     }
 

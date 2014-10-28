@@ -1,92 +1,96 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
+import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Kind;
+import cz.cesnet.cloud.occi.core.Resource;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.ComputeState;
-import cz.cesnet.cloud.occi.core.*;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Architecture;
+import java.net.URI;
 
 public class Compute extends Resource {
 
-    public ComputeState getState() {
-        // TODO - implement Compute.getState
-        throw new UnsupportedOperationException();
+    public static final String ARCHITECTURE_ATTRIBUTE_NAME = "occi.compute.architecture";
+    public static final String CORES_ATTRIBUTE_NAME = "occi.compute.cores";
+    public static final String HOSTNAME_ATTRIBUTE_NAME = "occi.compute.hostname";
+    public static final String SPEED_ATTRIBUTE_NAME = "occi.compute.speed";
+    public static final String MEMORY_ATTRIBUTE_NAME = "occi.compute.memory";
+    public static final String STATE_ATTRIBUTE_NAME = "occi.compute.state";
+
+    public Compute(URI id, Kind kind, String title, Model model, String summary) {
+        super(id, kind, title, model, summary);
     }
 
-    /**
-     *
-     * @param state
-     */
-    public void setState(ComputeState state) {
-        // TODO - implement Compute.setState
-        throw new UnsupportedOperationException();
+    public Compute(URI id, Kind kind) {
+        super(id, kind);
     }
 
-    public float getMemory() {
-        // TODO - implement Compute.getMemory
-        throw new UnsupportedOperationException();
+    public String getState() {
+        return getValue(STATE_ATTRIBUTE_NAME);
     }
 
-    /**
-     *
-     * @param memory
-     */
-    public void setMemory(float memory) {
-        // TODO - implement Compute.setMemory
-        throw new UnsupportedOperationException();
+    public void setState(ComputeState state) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 
-    public float getSpeed() {
-        // TODO - implement Compute.getSpeed
-        throw new UnsupportedOperationException();
+    public void setState(String stateName) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(STATE_ATTRIBUTE_NAME, stateName);
     }
 
-    /**
-     *
-     * @param speed
-     */
-    public void setSpeed(float speed) {
-        // TODO - implement Compute.setSpeed
-        throw new UnsupportedOperationException();
+    public String getMemory() {
+        return getValue(MEMORY_ATTRIBUTE_NAME);
+    }
+
+    public void setMemory(float memory) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(MEMORY_ATTRIBUTE_NAME, String.valueOf(memory));
+    }
+
+    public void setMemory(String memory) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(MEMORY_ATTRIBUTE_NAME, memory);
+    }
+
+    public String getSpeed() {
+        return getValue(SPEED_ATTRIBUTE_NAME);
+    }
+
+    public void setSpeed(float speed) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(SPEED_ATTRIBUTE_NAME, String.valueOf(speed));
+    }
+
+    public void setSpeed(String speed) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(SPEED_ATTRIBUTE_NAME, speed);
     }
 
     public String getHostname() {
-        // TODO - implement Compute.getHostname
-        throw new UnsupportedOperationException();
+        return getValue(HOSTNAME_ATTRIBUTE_NAME);
     }
 
-    /**
-     *
-     * @param hostname
-     */
-    public void setHostname(String hostname) {
-        // TODO - implement Compute.setHostname
-        throw new UnsupportedOperationException();
+    public void setHostname(String hostname) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(HOSTNAME_ATTRIBUTE_NAME, hostname);
     }
 
-    public int getCores() {
-        // TODO - implement Compute.getCores
-        throw new UnsupportedOperationException();
+    public String getCores() {
+        return getValue(CORES_ATTRIBUTE_NAME);
     }
 
-    /**
-     *
-     * @param cores
-     */
-    public void setCores(int cores) {
-        // TODO - implement Compute.setCores
-        throw new UnsupportedOperationException();
+    public void setCores(int cores) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(CORES_ATTRIBUTE_NAME, String.valueOf(cores));
     }
 
-    public Architecture getArchitecture() {
-        // TODO - implement Compute.getArchitecture
-        throw new UnsupportedOperationException();
+    public void setCores(String cores) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(CORES_ATTRIBUTE_NAME, cores);
     }
 
-    /**
-     *
-     * @param architecture
-     */
-    public void setArchitecture(Architecture architecture) {
-        // TODO - implement Compute.setArchitecture
-        throw new UnsupportedOperationException();
+    public String getArchitecture() {
+        return getValue(ARCHITECTURE_ATTRIBUTE_NAME);
+    }
+
+    public void setArchitecture(Architecture architecture) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(ARCHITECTURE_ATTRIBUTE_NAME, architecture.toString());
+    }
+
+    public void setArchitecture(String architectureName) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(ARCHITECTURE_ATTRIBUTE_NAME, architectureName);
     }
 }

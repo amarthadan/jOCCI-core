@@ -1,35 +1,47 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
+import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Kind;
+import cz.cesnet.cloud.occi.core.Resource;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.StorageState;
-import cz.cesnet.cloud.occi.core.*;
+import java.net.URI;
 
 public class Storage extends Resource {
 
-    public float getSize() {
-        // TODO - implement Storage.getSize
-        throw new UnsupportedOperationException();
+    public static final String SIZE_ATTRIBUTE_NAME = "occi.storage.size";
+    public static final String STATE_ATTRIBUTE_NAME = "occi.storage.state";
+
+    public Storage(URI id, Kind kind, String title, Model model, String summary) {
+        super(id, kind, title, model, summary);
     }
 
-    /**
-     *
-     * @param size
-     */
-    public void setSize(float size) {
-        // TODO - implement Storage.setSize
-        throw new UnsupportedOperationException();
+    public Storage(URI id, Kind kind) {
+        super(id, kind);
     }
 
-    public StorageState getState() {
-        // TODO - implement Storage.getState
-        throw new UnsupportedOperationException();
+    public String getSize() {
+        return getValue(SIZE_ATTRIBUTE_NAME);
     }
 
-    /**
-     *
-     * @param state
-     */
-    public void setState(StorageState state) {
-        // TODO - implement Storage.setState
-        throw new UnsupportedOperationException();
+    public void setSize(float size) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(SIZE_ATTRIBUTE_NAME, String.valueOf(size));
+    }
+
+    public void setSize(String size) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(SIZE_ATTRIBUTE_NAME, size);
+    }
+
+    public String getState() {
+        return getValue(STATE_ATTRIBUTE_NAME);
+    }
+
+    public void setState(StorageState state) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
+    }
+
+    public void setState(String stateName) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(STATE_ATTRIBUTE_NAME, stateName);
     }
 }

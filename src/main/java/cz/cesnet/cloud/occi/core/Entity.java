@@ -5,7 +5,7 @@ import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
-import cz.cesnet.cloud.occi.exception.NonexistingElementException;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import java.net.URI;
 import java.util.Objects;
 import java.util.Set;
@@ -82,21 +82,52 @@ public abstract class Entity implements Identifiable {
         this.model = model;
     }
 
-    public void addAttribute(Attribute attribute, String value) throws InvalidAttributeException {
-        if (!isValidAttribute(attribute)) {
-            throw new InvalidAttributeException(this + " cannot have " + attribute);
+    public void addAttribute(String attributeIdentifier, String value) throws InvalidAttributeException, InvalidAttributeValueException {
+        if (!isValidAttribute(attributeIdentifier)) {
+            throw new InvalidAttributeException(this + " cannot have attribute with name " + attributeIdentifier);
         }
-        //TODO add value checking
+        if (!isValidAttributeValue(attributeIdentifier, value)) {
+            Attribute attribute = kind.getAttribute(attributeIdentifier);
+            throw new InvalidAttributeValueException("'" + value + "' is not a suitable value for " + attribute);
+        }
 
+        Attribute attribute = kind.getAttribute(attributeIdentifier);
         attributes.add(attribute, value);
     }
 
-    private boolean isValidAttribute(Attribute attribute) {
-        return kind.getAttributes().contains(attribute);
+    private boolean isValidAttribute(String attributeIdentifier) {
+        if (kind.containsAttribute(attributeIdentifier)) {
+            return true;
+        }
+
+        for (Mixin mixin : getMixins()) {
+            if (mixin.containsAttribute(attributeIdentifier)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
-    public void removeAttribute(Attribute attribute) throws NonexistingElementException {
-        attributes.remove(attribute);
+    private boolean isValidAttributeValue(String attributeIdentifier, String value) {
+        Attribute attribute = kind.getAttribute(attributeIdentifier);
+        if (attribute == null) {
+            for (Mixin mixin : getMixins()) {
+                if (mixin.containsAttribute(attributeIdentifier)) {
+                    attribute = mixin.getAttribute(attributeIdentifier);
+                }
+            }
+        }
+
+        if (attribute.getPattern() == null || attribute.getPattern().isEmpty()) {
+            return true;
+        }
+
+        return attribute.getPattern().matches(value);
+    }
+
+    public void removeAttribute(String attributeIdentifier) {
+        attributes.remove(attributeIdentifier);
     }
 
     public boolean containsAttribute(Attribute attribute) {
@@ -131,7 +162,7 @@ public abstract class Entity implements Identifiable {
         return mixins.add(mixin);
     }
 
-    public Mixin getMixin(String mixinIdentifier) throws NonexistingElementException {
+    public Mixin getMixin(String mixinIdentifier) {
         return mixins.get(mixinIdentifier);
     }
 

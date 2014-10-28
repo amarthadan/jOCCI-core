@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.collection;
 
 import cz.cesnet.cloud.occi.type.Identifiable;
-import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Collections;
@@ -42,9 +41,9 @@ public class SetCover<E extends Identifiable> {
         return set.addAll(elements);
     }
 
-    public E get(String elementIdentifier) throws NonexistingElementException {
+    public E get(String elementIdentifier) {
         if (!contains(elementIdentifier)) {
-            throw new NonexistingElementException(getElementClassName() + " with identifier " + elementIdentifier + " was not found.");
+            return null;
         }
 
         return find(elementIdentifier);
@@ -58,14 +57,14 @@ public class SetCover<E extends Identifiable> {
         return set.remove(element);
     }
 
-    private E find(String elementIdentifier) throws NonexistingElementException {
+    private E find(String elementIdentifier) {
         for (E element : set) {
             if (element.getIdentifier().equals(elementIdentifier)) {
                 return element;
             }
         }
 
-        throw new NonexistingElementException(getElementClassName() + " with identifier " + elementIdentifier + " was not found.");
+        return null;
     }
 
     public void clear() {

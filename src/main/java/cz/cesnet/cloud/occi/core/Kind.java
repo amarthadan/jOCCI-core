@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.SetCover;
-import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
@@ -41,7 +40,7 @@ public class Kind extends Category {
         return related.add(kind);
     }
 
-    public Kind getRelatedKind(String kindIdentifier) throws NonexistingElementException {
+    public Kind getRelatedKind(String kindIdentifier) {
         return related.get(kindIdentifier);
     }
 

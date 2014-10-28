@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.type.Identifiable;
-import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Objects;
@@ -67,7 +66,7 @@ public class Action implements Identifiable {
         return category.addAttribute(attribute);
     }
 
-    public Attribute getAttribute(String attributeName) throws NonexistingElementException {
+    public Attribute getAttribute(String attributeName) {
         return category.getAttribute(attributeName);
     }
 

@@ -2,7 +2,6 @@ package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.SetCover;
-import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 import java.net.URI;
 import java.util.Set;
 
@@ -41,7 +40,7 @@ public class Resource extends Entity {
         return links.add(link);
     }
 
-    public Link getLink(String linkIdentifier) throws NonexistingElementException {
+    public Link getLink(String linkIdentifier) {
         return links.get(linkIdentifier);
     }
 

@@ -2,6 +2,7 @@ package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import java.net.URI;
 
 public class Link extends Entity {
@@ -21,28 +22,24 @@ public class Link extends Entity {
         return getValue(SOURCE_ATTRIBUTE_NAME);
     }
 
-    public void setSource(Resource source) throws InvalidAttributeException {
-        Attribute sourceAttribute = new Attribute(SOURCE_ATTRIBUTE_NAME);
-        addAttribute(sourceAttribute, source.getIdentifier());
+    public void setSource(Resource source) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(SOURCE_ATTRIBUTE_NAME, source.getIdentifier());
     }
 
-    public void setSource(String sourceIdentifier) throws InvalidAttributeException {
-        Attribute sourceAttribute = new Attribute(SOURCE_ATTRIBUTE_NAME);
-        addAttribute(sourceAttribute, sourceIdentifier);
+    public void setSource(String sourceIdentifier) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(SOURCE_ATTRIBUTE_NAME, sourceIdentifier);
     }
 
     public String getTarget() {
         return getValue(TARGET_ATTRIBUTE_NAME);
     }
 
-    public void setTarget(Resource target) throws InvalidAttributeException {
-        Attribute sourceAttribute = new Attribute(TARGET_ATTRIBUTE_NAME);
-        addAttribute(sourceAttribute, target.getIdentifier());
+    public void setTarget(Resource target) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(TARGET_ATTRIBUTE_NAME, target.getIdentifier());
     }
 
-    public void setTarget(String targetIdentifier) throws InvalidAttributeException {
-        Attribute sourceAttribute = new Attribute(TARGET_ATTRIBUTE_NAME);
-        addAttribute(sourceAttribute, targetIdentifier);
+    public void setTarget(String targetIdentifier) throws InvalidAttributeException, InvalidAttributeValueException {
+        addAttribute(TARGET_ATTRIBUTE_NAME, targetIdentifier);
     }
 
     @Override

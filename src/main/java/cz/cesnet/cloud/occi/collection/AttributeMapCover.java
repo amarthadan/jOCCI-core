@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.collection;
 
 import cz.cesnet.cloud.occi.core.Attribute;
-import cz.cesnet.cloud.occi.exception.NonexistingElementException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,15 +22,17 @@ public class AttributeMapCover {
         attributes.put(attribute, value);
     }
 
-    public void remove(Attribute attribute) throws NonexistingElementException {
+    public void remove(Attribute attribute) {
         if (attribute == null) {
             throw new NullPointerException("Cannot remove null attribute.");
         }
-        if (!containsAttribute(attribute)) {
-            throw new NonexistingElementException("ActionInstance " + this + "doesn't contain attribute " + attribute + ". Cannot be removed.");
-        }
 
         attributes.remove(attribute);
+    }
+
+    public void remove(String attributeName) {
+        Attribute attTmp = new Attribute(attributeName);
+        attributes.remove(attTmp);
     }
 
     public boolean containsAttribute(Attribute attribute) {
