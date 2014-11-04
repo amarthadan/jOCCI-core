@@ -72,7 +72,15 @@ public class SetCover<E extends Identifiable> {
     }
 
     public Set<E> getSet() {
-        return Collections.unmodifiableSet(set);
+        return getSet(false);
+    }
+
+    public Set<E> getSet(boolean modifiable) {
+        if (modifiable) {
+            return set;
+        } else {
+            return Collections.unmodifiableSet(set);
+        }
     }
 
     private String getElementClassName() {
