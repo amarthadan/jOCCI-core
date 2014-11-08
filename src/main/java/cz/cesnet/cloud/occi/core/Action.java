@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.type.Identifiable;
-import java.net.URI;
 import java.util.Collection;
 import java.util.Objects;
 
@@ -9,19 +8,19 @@ public class Action implements Identifiable {
 
     private Category category;
 
-    public Action(URI scheme, String term, String title, String location, Collection<Attribute> attributes) {
+    public Action(String scheme, String term, String title, String location, Collection<Attribute> attributes) {
         this.category = new Category(scheme, term, title, location, attributes);
     }
 
-    public Action(URI scheme, String term) {
+    public Action(String scheme, String term) {
         this(scheme, term, null, null, null);
     }
 
-    public URI getScheme() {
+    public String getScheme() {
         return category.getScheme();
     }
 
-    public void setScheme(URI scheme) {
+    public void setScheme(String scheme) {
         category.setScheme(scheme);
     }
 

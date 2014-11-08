@@ -4,6 +4,7 @@ import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.core.Action;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Mixin;
+import java.util.Objects;
 import java.util.Set;
 
 public class Model {
@@ -94,6 +95,36 @@ public class Model {
 
     public Set<Action> getActions() {
         return actions.getSet();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 59 * hash + Objects.hashCode(this.kinds);
+        hash = 59 * hash + Objects.hashCode(this.mixins);
+        hash = 59 * hash + Objects.hashCode(this.actions);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Model other = (Model) obj;
+        if (!Objects.equals(this.kinds, other.kinds)) {
+            return false;
+        }
+        if (!Objects.equals(this.mixins, other.mixins)) {
+            return false;
+        }
+        if (!Objects.equals(this.actions, other.actions)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

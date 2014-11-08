@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
 import java.util.HashSet;
+import java.util.Objects;
 
 public class SetCover<E extends Identifiable> {
 
@@ -85,6 +86,28 @@ public class SetCover<E extends Identifiable> {
 
     private String getElementClassName() {
         return ((Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 53 * hash + Objects.hashCode(this.set);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final SetCover<?> other = (SetCover<?>) obj;
+        if (!Objects.equals(this.set, other.set)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

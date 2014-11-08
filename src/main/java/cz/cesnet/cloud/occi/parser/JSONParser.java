@@ -1,17 +1,25 @@
 package cz.cesnet.cloud.occi.parser;
 
 import cz.cesnet.cloud.occi.Model;
-import cz.cesnet.cloud.occi.core.Entity;
+import cz.cesnet.cloud.occi.core.Resource;
+import cz.cesnet.cloud.occi.exception.ParsingException;
+import java.util.List;
+import java.util.Map;
 
 public class JSONParser implements Parser {
 
     @Override
-    public Model parseModel(String model) {
+    public Model parseModel(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
-    public Entity parseEntity(String entity, Class entityClass) {
+    public Resource parseResource(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List<String> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

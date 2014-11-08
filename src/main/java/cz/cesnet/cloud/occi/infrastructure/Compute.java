@@ -3,11 +3,9 @@ package cz.cesnet.cloud.occi.infrastructure;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Resource;
-import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.ComputeState;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Architecture;
-import java.net.URI;
 
 public class Compute extends Resource {
 
@@ -18,11 +16,11 @@ public class Compute extends Resource {
     public static final String MEMORY_ATTRIBUTE_NAME = "occi.compute.memory";
     public static final String STATE_ATTRIBUTE_NAME = "occi.compute.state";
 
-    public Compute(URI id, Kind kind, String title, Model model, String summary) {
+    public Compute(String id, Kind kind, String title, Model model, String summary) throws InvalidAttributeValueException {
         super(id, kind, title, model, summary);
     }
 
-    public Compute(URI id, Kind kind) {
+    public Compute(String id, Kind kind) throws InvalidAttributeValueException {
         super(id, kind);
     }
 
@@ -30,11 +28,11 @@ public class Compute extends Resource {
         return getValue(STATE_ATTRIBUTE_NAME);
     }
 
-    public void setState(ComputeState state) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setState(ComputeState state) throws InvalidAttributeValueException {
         addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 
-    public void setState(String stateName) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setState(String stateName) throws InvalidAttributeValueException {
         addAttribute(STATE_ATTRIBUTE_NAME, stateName);
     }
 
@@ -42,11 +40,11 @@ public class Compute extends Resource {
         return getValue(MEMORY_ATTRIBUTE_NAME);
     }
 
-    public void setMemory(float memory) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setMemory(float memory) throws InvalidAttributeValueException {
         addAttribute(MEMORY_ATTRIBUTE_NAME, String.valueOf(memory));
     }
 
-    public void setMemory(String memory) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setMemory(String memory) throws InvalidAttributeValueException {
         addAttribute(MEMORY_ATTRIBUTE_NAME, memory);
     }
 
@@ -54,11 +52,11 @@ public class Compute extends Resource {
         return getValue(SPEED_ATTRIBUTE_NAME);
     }
 
-    public void setSpeed(float speed) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setSpeed(float speed) throws InvalidAttributeValueException {
         addAttribute(SPEED_ATTRIBUTE_NAME, String.valueOf(speed));
     }
 
-    public void setSpeed(String speed) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setSpeed(String speed) throws InvalidAttributeValueException {
         addAttribute(SPEED_ATTRIBUTE_NAME, speed);
     }
 
@@ -66,7 +64,7 @@ public class Compute extends Resource {
         return getValue(HOSTNAME_ATTRIBUTE_NAME);
     }
 
-    public void setHostname(String hostname) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setHostname(String hostname) throws InvalidAttributeValueException {
         addAttribute(HOSTNAME_ATTRIBUTE_NAME, hostname);
     }
 
@@ -74,11 +72,11 @@ public class Compute extends Resource {
         return getValue(CORES_ATTRIBUTE_NAME);
     }
 
-    public void setCores(int cores) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setCores(int cores) throws InvalidAttributeValueException {
         addAttribute(CORES_ATTRIBUTE_NAME, String.valueOf(cores));
     }
 
-    public void setCores(String cores) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setCores(String cores) throws InvalidAttributeValueException {
         addAttribute(CORES_ATTRIBUTE_NAME, cores);
     }
 
@@ -86,11 +84,11 @@ public class Compute extends Resource {
         return getValue(ARCHITECTURE_ATTRIBUTE_NAME);
     }
 
-    public void setArchitecture(Architecture architecture) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setArchitecture(Architecture architecture) throws InvalidAttributeValueException {
         addAttribute(ARCHITECTURE_ATTRIBUTE_NAME, architecture.toString());
     }
 
-    public void setArchitecture(String architectureName) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setArchitecture(String architectureName) throws InvalidAttributeValueException {
         addAttribute(ARCHITECTURE_ATTRIBUTE_NAME, architectureName);
     }
 }

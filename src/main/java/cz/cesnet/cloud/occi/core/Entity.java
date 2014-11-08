@@ -4,22 +4,21 @@ import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import cz.cesnet.cloud.occi.collection.SetCover;
-import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
-import java.net.URI;
 import java.util.Objects;
 import java.util.Set;
 
 public abstract class Entity implements Identifiable {
 
-    private URI id;
+    public static final String ID_ATTRIBUTE_NAME = "occi.core.id";
+    public static final String TITLE_ATTRIBUTE_NAME = "occi.core.title";
+
     private Kind kind;
-    private String title;
     private Model model;
     private final SetCover<Mixin> mixins = new SetCover<>();
     private final AttributeMapCover attributes = new AttributeMapCover();
 
-    public Entity(URI id, Kind kind, String title, Model model) {
+    public Entity(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
         if (id == null) {
             throw new NullPointerException("Entity id cannot be null.");
         }
@@ -27,26 +26,26 @@ public abstract class Entity implements Identifiable {
             throw new NullPointerException("Entity kind cannot be null.");
         }
 
-        this.id = id;
+        privateAddAttribute(ID_ATTRIBUTE_NAME, id);
+        privateAddAttribute(TITLE_ATTRIBUTE_NAME, title);
         this.kind = kind;
-        this.title = title;
         this.model = model;
     }
 
-    public Entity(URI id, Kind kind) {
-        this(id, kind, null, null);
+    public Entity(String id, Kind kind) throws InvalidAttributeValueException {
+        this(id, kind, "", null);
     }
 
-    public URI getId() {
-        return id;
+    public String getId() {
+        return getValue(ID_ATTRIBUTE_NAME);
     }
 
-    public void setId(URI id) {
+    public void setId(String id) throws InvalidAttributeValueException {
         if (id == null) {
             throw new NullPointerException("Entity id cannot be null.");
         }
 
-        this.id = id;
+        addAttribute(ID_ATTRIBUTE_NAME, id);
     }
 
     public Kind getKind() {
@@ -63,15 +62,15 @@ public abstract class Entity implements Identifiable {
 
     @Override
     public String getIdentifier() {
-        return kind.getIdentifier() + id.toString();
+        return kind.getIdentifier() + "|" + getId();
     }
 
     public String getTitle() {
-        return title;
+        return getValue(TITLE_ATTRIBUTE_NAME);
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setTitle(String title) throws InvalidAttributeValueException {
+        addAttribute(TITLE_ATTRIBUTE_NAME, title);
     }
 
     public Model getModel() {
@@ -82,41 +81,28 @@ public abstract class Entity implements Identifiable {
         this.model = model;
     }
 
-    public void addAttribute(String attributeIdentifier, String value) throws InvalidAttributeException, InvalidAttributeValueException {
-        if (!isValidAttribute(attributeIdentifier)) {
-            throw new InvalidAttributeException(this + " cannot have attribute with name " + attributeIdentifier);
-        }
+    private void privateAddAttribute(String attributeIdentifier, String value) throws InvalidAttributeValueException {
         if (!isValidAttributeValue(attributeIdentifier, value)) {
-            Attribute attribute = kind.getAttribute(attributeIdentifier);
+            Attribute attribute = getAttribute(attributeIdentifier);
             throw new InvalidAttributeValueException("'" + value + "' is not a suitable value for " + attribute);
         }
 
-        Attribute attribute = kind.getAttribute(attributeIdentifier);
+        Attribute attribute = getAttribute(attributeIdentifier);
+        if (attribute == null) {
+            attribute = new Attribute(attributeIdentifier);
+        }
         attributes.add(attribute, value);
     }
 
-    private boolean isValidAttribute(String attributeIdentifier) {
-        if (kind.containsAttribute(attributeIdentifier)) {
-            return true;
-        }
-
-        for (Mixin mixin : getMixins()) {
-            if (mixin.containsAttribute(attributeIdentifier)) {
-                return true;
-            }
-        }
-
-        return false;
+    public void addAttribute(String attributeIdentifier, String value) throws InvalidAttributeValueException {
+        privateAddAttribute(attributeIdentifier, value);
     }
 
     private boolean isValidAttributeValue(String attributeIdentifier, String value) {
-        Attribute attribute = kind.getAttribute(attributeIdentifier);
+        Attribute attribute = getAttribute(attributeIdentifier);
+
         if (attribute == null) {
-            for (Mixin mixin : getMixins()) {
-                if (mixin.containsAttribute(attributeIdentifier)) {
-                    attribute = mixin.getAttribute(attributeIdentifier);
-                }
-            }
+            return true;
         }
 
         if (attribute.getPattern() == null || attribute.getPattern().isEmpty()) {
@@ -124,6 +110,50 @@ public abstract class Entity implements Identifiable {
         }
 
         return attribute.getPattern().matches(value);
+    }
+
+    private Attribute getAttribute(String attributeIdentifier) {
+        Attribute attribute = getAttributeFromKindsIfExists(kind, attributeIdentifier);
+        if (attribute == null) {
+            attribute = getAttributeFromMixinsIfExists(getMixins(), attributeIdentifier);
+        }
+
+        return attribute;
+    }
+
+    private Attribute getAttributeFromKindsIfExists(Kind kind, String attributeIdentifier) {
+        if (kind == null) {
+            return null;
+        }
+
+        if (kind.containsAttribute(attributeIdentifier)) {
+            return kind.getAttribute(attributeIdentifier);
+        }
+
+        Attribute attribute = null;
+        for (Kind k : kind.getRelations()) {
+            if (attribute != null) {
+                return attribute;
+            }
+
+            attribute = getAttributeFromKindsIfExists(k, attributeIdentifier);
+        }
+
+        return attribute;
+    }
+
+    private Attribute getAttributeFromMixinsIfExists(Set<Mixin> mixins, String attributeIdentifier) {
+        for (Mixin m : mixins) {
+            if (m.containsAttribute(attributeIdentifier)) {
+                return m.getAttribute(attributeIdentifier);
+            }
+            Attribute attribute = getAttributeFromMixinsIfExists(m.getRelations(), attributeIdentifier);
+            if (attribute != null) {
+                return attribute;
+            }
+        }
+
+        return null;
     }
 
     public void removeAttribute(String attributeIdentifier) {
@@ -181,7 +211,7 @@ public abstract class Entity implements Identifiable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + Objects.hashCode(this.id);
+        hash = 89 * hash + Objects.hashCode(getId());
         hash = 89 * hash + Objects.hashCode(this.kind);
         return hash;
     }
@@ -195,7 +225,7 @@ public abstract class Entity implements Identifiable {
             return false;
         }
         final Entity other = (Entity) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(getId(), other.getId())) {
             return false;
         }
         if (!Objects.equals(this.kind, other.kind)) {
@@ -206,7 +236,7 @@ public abstract class Entity implements Identifiable {
 
     @Override
     public String toString() {
-        return "Entity{" + "class=" + getClass().getName() + ", id=" + id + ", kind=" + kind + ", title=" + title + ", mixins=" + mixins + ", attributes=" + attributes + '}';
+        return "Entity{" + "class=" + getClass().getName() + ", id=" + getId() + ", kind=" + kind + ", title=" + getTitle() + ", mixins=" + mixins + ", attributes=" + attributes + '}';
     }
 
     public abstract void toText();

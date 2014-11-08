@@ -1,20 +1,18 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.Model;
-import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
-import java.net.URI;
 
 public class Link extends Entity {
 
     public static final String SOURCE_ATTRIBUTE_NAME = "occi.core.source";
     public static final String TARGET_ATTRIBUTE_NAME = "occi.core.target";
 
-    public Link(URI id, Kind kind, String title, Model model) {
+    public Link(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
         super(id, kind, title, model);
     }
 
-    public Link(URI id, Kind kind) {
+    public Link(String id, Kind kind) throws InvalidAttributeValueException {
         super(id, kind);
     }
 
@@ -22,11 +20,11 @@ public class Link extends Entity {
         return getValue(SOURCE_ATTRIBUTE_NAME);
     }
 
-    public void setSource(Resource source) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setSource(Resource source) throws InvalidAttributeValueException {
         addAttribute(SOURCE_ATTRIBUTE_NAME, source.getIdentifier());
     }
 
-    public void setSource(String sourceIdentifier) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setSource(String sourceIdentifier) throws InvalidAttributeValueException {
         addAttribute(SOURCE_ATTRIBUTE_NAME, sourceIdentifier);
     }
 
@@ -34,11 +32,11 @@ public class Link extends Entity {
         return getValue(TARGET_ATTRIBUTE_NAME);
     }
 
-    public void setTarget(Resource target) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setTarget(Resource target) throws InvalidAttributeValueException {
         addAttribute(TARGET_ATTRIBUTE_NAME, target.getIdentifier());
     }
 
-    public void setTarget(String targetIdentifier) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setTarget(String targetIdentifier) throws InvalidAttributeValueException {
         addAttribute(TARGET_ATTRIBUTE_NAME, targetIdentifier);
     }
 

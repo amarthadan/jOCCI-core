@@ -3,10 +3,8 @@ package cz.cesnet.cloud.occi.infrastructure;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Link;
-import cz.cesnet.cloud.occi.exception.InvalidAttributeException;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.NetworkState;
-import java.net.URI;
 
 public class NetworkInterface extends Link {
 
@@ -14,11 +12,11 @@ public class NetworkInterface extends Link {
     public static final String MAC_ATTRIBUTE_NAME = "occi.networkinterface.mac";
     public static final String STATE_ATTRIBUTE_NAME = "occi.networkinterface.state";
 
-    public NetworkInterface(URI id, Kind kind, String title, Model model) {
+    public NetworkInterface(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
         super(id, kind, title, model);
     }
 
-    public NetworkInterface(URI id, Kind kind) {
+    public NetworkInterface(String id, Kind kind) throws InvalidAttributeValueException {
         super(id, kind);
     }
 
@@ -26,7 +24,7 @@ public class NetworkInterface extends Link {
         return getValue(INTERFACE_ATTRIBUTE_NAME);
     }
 
-    public void setNetworkInterface(String networkInterface) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setNetworkInterface(String networkInterface) throws InvalidAttributeValueException {
         addAttribute(INTERFACE_ATTRIBUTE_NAME, networkInterface);
     }
 
@@ -34,7 +32,7 @@ public class NetworkInterface extends Link {
         return getValue(MAC_ATTRIBUTE_NAME);
     }
 
-    public void setMac(String mac) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setMac(String mac) throws InvalidAttributeValueException {
         addAttribute(MAC_ATTRIBUTE_NAME, mac);
     }
 
@@ -42,11 +40,11 @@ public class NetworkInterface extends Link {
         return getValue(STATE_ATTRIBUTE_NAME);
     }
 
-    public void setState(NetworkState state) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setState(NetworkState state) throws InvalidAttributeValueException {
         addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 
-    public void setState(String stateName) throws InvalidAttributeException, InvalidAttributeValueException {
+    public void setState(String stateName) throws InvalidAttributeValueException {
         addAttribute(STATE_ATTRIBUTE_NAME, stateName);
     }
 }

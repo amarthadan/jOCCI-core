@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.SetCover;
-import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
 
@@ -10,14 +9,12 @@ public class Kind extends Category {
     private final SetCover<Kind> related = new SetCover<>();
     private String entityType;
 
-    public Kind(URI scheme, String term, String title, String location, Collection<Attribute> attributes, String entityType) {
+    public Kind(String scheme, String term, String title, String location, Collection<Attribute> attributes) {
         super(scheme, term, title, location, attributes);
-
-        this.entityType = entityType;
     }
 
-    public Kind(URI scheme, String term) {
-        this(scheme, term, null, null, null, null);
+    public Kind(String scheme, String term) {
+        this(scheme, term, null, null, null);
     }
 
     public String getEntityType() {

@@ -2,30 +2,31 @@ package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.SetCover;
-import java.net.URI;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import java.util.Set;
 
 public class Resource extends Entity {
 
-    private String summary;
+    public static final String SUMMARY_ATTRIBUTE_NAME = "occi.core.summary";
+
     private final SetCover<Link> links = new SetCover<>();
 
-    public Resource(URI id, Kind kind, String title, Model model, String summary) {
+    public Resource(String id, Kind kind, String title, Model model, String summary) throws InvalidAttributeValueException {
         super(id, kind, title, model);
 
-        this.summary = summary;
+        addAttribute(SUMMARY_ATTRIBUTE_NAME, summary);
     }
 
-    public Resource(URI id, Kind kind) {
+    public Resource(String id, Kind kind) throws InvalidAttributeValueException {
         super(id, kind);
     }
 
     public String getSummary() {
-        return summary;
+        return getValue(SUMMARY_ATTRIBUTE_NAME);
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setSummary(String summary) throws InvalidAttributeValueException {
+        addAttribute(SUMMARY_ATTRIBUTE_NAME, summary);
     }
 
     public boolean containsLink(Link link) {

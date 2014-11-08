@@ -3,6 +3,7 @@ package cz.cesnet.cloud.occi.collection;
 import cz.cesnet.cloud.occi.core.Attribute;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class AttributeMapCover {
 
@@ -14,9 +15,6 @@ public class AttributeMapCover {
         }
         if (value == null) {
             throw new NullPointerException("Cannot add null value.");
-        }
-        if (value.isEmpty()) {
-            throw new IllegalArgumentException("Cannot add empty value.");
         }
 
         attributes.put(attribute, value);
@@ -55,6 +53,28 @@ public class AttributeMapCover {
 
     public void clear() {
         attributes.clear();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 83 * hash + Objects.hashCode(this.attributes);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AttributeMapCover other = (AttributeMapCover) obj;
+        if (!Objects.equals(this.attributes, other.attributes)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

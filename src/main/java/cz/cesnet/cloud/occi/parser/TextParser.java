@@ -1,17 +1,462 @@
 package cz.cesnet.cloud.occi.parser;
 
 import cz.cesnet.cloud.occi.Model;
-import cz.cesnet.cloud.occi.core.Entity;
+import cz.cesnet.cloud.occi.core.Action;
+import cz.cesnet.cloud.occi.core.Attribute;
+import cz.cesnet.cloud.occi.core.Category;
+import cz.cesnet.cloud.occi.core.Kind;
+import cz.cesnet.cloud.occi.core.Link;
+import cz.cesnet.cloud.occi.core.Mixin;
+import cz.cesnet.cloud.occi.core.Resource;
+import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
+import cz.cesnet.cloud.occi.exception.ParsingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class TextParser implements Parser {
 
+    public static final String REGEXP_LOALPHA = "[a-z]";
+    public static final String REGEXP_ALPHA = "[a-zA-Z]";
+    public static final String REGEXP_DIGIT = "[0-9]";
+    public static final String REGEXP_INT = REGEXP_DIGIT + "+";
+    public static final String REGEXP_FLOAT = REGEXP_INT + "\\." + REGEXP_INT;
+    public static final String REGEXP_NUMBER = REGEXP_FLOAT + "|" + REGEXP_INT;
+    public static final String REGEXP_BOOL = "\\b(?<!\\|)true(?!\\|)\\b|\\b(?<!\\|)false(?!\\|)\\b";
+    public static final String REGEXP_QUOTED_STRING = "([^\"\\\\]|\\.)*";
+    public static final String REGEXP_URI = "(?x-mi:([a-zA-Z][\\-+.a-zA-Z\\d]*):(?:((?:[\\-_.!~*'()a-zA-Z\\d;?:@&=+$,]|%[a-fA-F\\d]{2})(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)|(?:(?:\\/\\/(?:(?:(?:((?:[\\-_.!~*'()a-zA-Z\\d;:&=+$,]|%[a-fA-F\\d]{2})*)@)?(?:((?:(?:[a-zA-Z0-9\\-.]|%[0-9a-fA-F][0-9a-fA-F])+|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(?:(?:[a-fA-F\\d]{1,4}:)*[a-fA-F\\d]{1,4})?::(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}))?)\\]))(?::(\\d*))?))?|((?:[\\-_.!~*'()a-zA-Z\\d$,;:@&=+]|%[a-fA-F\\d]{2})+))|(?!\\/\\/))(\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?)(?:\\?((?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*))?)(?:\\#((?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*))?)";
+    public static final String REGEXP_URI_REF = "(?:[a-zA-Z][\\-+.a-zA-Z\\d]*:(?:(?:\\/\\/(?:(?:(?:[\\-_.!~*'()a-zA-Z\\d;:&=+$,]|%[a-fA-F\\d]{2})*@)?(?:(?:[a-zA-Z0-9\\-.]|%[0-9a-fA-F][0-9a-fA-F])+|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(?:(?:[a-fA-F\\d]{1,4}:)*[a-fA-F\\d]{1,4})?::(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}))?)\\])(?::\\d*)?|(?:[\\-_.!~*'()a-zA-Z\\d$,;:@&=+]|%[a-fA-F\\d]{2})+)(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?|\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)(?:\\?(?:(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*))?|(?:[\\-_.!~*'()a-zA-Z\\d;?:@&=+$,]|%[a-fA-F\\d]{2})(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)|(?:\\/\\/(?:(?:(?:[\\-_.!~*'()a-zA-Z\\d;:&=+$,]|%[a-fA-F\\d]{2})*@)?(?:(?:[a-zA-Z0-9\\-.]|%[0-9a-fA-F][0-9a-fA-F])+|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(?:(?:[a-fA-F\\d]{1,4}:)*[a-fA-F\\d]{1,4})?::(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}))?)\\])(?::\\d*)?|(?:[\\-_.!~*'()a-zA-Z\\d$,;:@&=+]|%[a-fA-F\\d]{2})+)(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?|\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*|(?:[\\-_.!~*'()a-zA-Z\\d;@&=+$,]|%[a-fA-F\\d]{2})+(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?)(?:\\?(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)?)?(?:#(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)?";
+
+    public static final String REGEXP_TERM = REGEXP_LOALPHA + "(" + REGEXP_LOALPHA + "|" + REGEXP_DIGIT + "|-|_)*";
+    public static final String REGEXP_SCHEME = REGEXP_URI + "#";
+    public static final String REGEXP_TYPE_IDENTIFIER = REGEXP_SCHEME + REGEXP_TERM;
+    public static final String REGEXP_CLASS = "\\b(?<!\\|)action(?!\\|)\\b|\\b(?<!\\|)mixin(?!\\|)\\b|\\b(?<!\\|)kind(?!\\|)\\b";
+    public static final String REGEXP_TYPE_IDENTIFIER_LIST = REGEXP_TYPE_IDENTIFIER + "(\\s+" + REGEXP_TYPE_IDENTIFIER + ")*";
+
+    public static final String REGEXP_ATTRIBUTE_COMPONENT = REGEXP_LOALPHA + "(" + REGEXP_LOALPHA + "|" + REGEXP_DIGIT + "|-|_)*";
+    public static final String REGEXP_ATTRIBUTE_NAME = REGEXP_ATTRIBUTE_COMPONENT + "(\\." + REGEXP_ATTRIBUTE_COMPONENT + ")*";
+    public static final String REGEXP_ATTRIBUTE_PROPERTY = "\\b(?<!\\|)immutable(?!\\|)\\b|\\b(?<!\\|)required(?!\\|)\\b";
+    public static final String REGEXP_ATTRIBUTE_DEF = "(" + REGEXP_ATTRIBUTE_NAME + ")(\\{" + REGEXP_ATTRIBUTE_PROPERTY + "(\\s+" + REGEXP_ATTRIBUTE_PROPERTY + ")*\\})?";
+    public static final String REGEXP_ATTRIBUTE_LIST = REGEXP_ATTRIBUTE_DEF + "(\\s+" + REGEXP_ATTRIBUTE_DEF + ")*";
+    public static final String REGEXP_ATTRIBUTE_REPR = REGEXP_ATTRIBUTE_NAME + "=(\"" + REGEXP_QUOTED_STRING + "\"|" + REGEXP_NUMBER + "|" + REGEXP_BOOL + ")";
+
+    public static final String REGEXP_ACTION = REGEXP_TYPE_IDENTIFIER;
+    public static final String REGEXP_ACTION_LIST = REGEXP_ACTION + "(\\s+" + REGEXP_ACTION + ")*";
+    public static final String REGEXP_RESOURCE_TYPE = REGEXP_TYPE_IDENTIFIER + "(\\s+" + REGEXP_TYPE_IDENTIFIER + ")*";
+    public static final String REGEXP_LINK_INSTANCE = REGEXP_URI;
+    public static final String REGEXP_LINK_TYPE = REGEXP_TYPE_IDENTIFIER + "(\\s+" + REGEXP_TYPE_IDENTIFIER + ")*";
+
+    public static final String REGEXP_CATEGORY = "(?<term>" + REGEXP_TERM + ")" // term (mandatory)
+            + ";\\s*scheme=\"(?<scheme>" + REGEXP_SCHEME + ")(?:" + REGEXP_TERM + ")?\"" // scheme (mandatory)
+            + ";\\s*class=\"?(?<class>" + REGEXP_CLASS + ")\"?" // class (mandatory)
+            + "(;\\s*title=\"(?<title>" + REGEXP_QUOTED_STRING + ")\")?" // title (optional)
+            + "(;\\s*rel=\"(?<rel>" + REGEXP_TYPE_IDENTIFIER_LIST + ")\")?" // rel (optional)
+            + "(;\\s*location=\"(?<location>" + REGEXP_URI_REF + ")\")?" // location (optional)
+            + "(;\\s*attributes=\"(?<attributes>" + REGEXP_ATTRIBUTE_LIST + ")\")?" // attributes (optional)
+            + "(;\\s*actions=\"(?<actions>" + REGEXP_ACTION_LIST + ")\")?" // actions (optional)
+            + ";?"; // additional semicolon at the end (not specified, for interoperability)
+
+    public static final String REGEXP_ATTRIBUTES = "((?:" + REGEXP_ATTRIBUTE_NAME + ")+(?:\\{(?:required immutable|immutable required|required|immutable)\\})?)";
+
+    public static final String REGEXP_LINK = "\\<(?<uri>" + REGEXP_URI_REF + ")\\>" // uri (mandatory)
+            + ";\\s*rel=\"(?<rel>" + REGEXP_RESOURCE_TYPE + ")\"" // rel (mandatory)
+            + "(;\\s*self=\"(?<self>" + REGEXP_LINK_INSTANCE + ")\")?" // self (optional)
+            + "(;\\s*category=\"(?<category>(;?\\s*(" + REGEXP_LINK_TYPE + "))+)\")?" // category (optional)
+            + "(?<attributes>(;?\\s*(" + REGEXP_ATTRIBUTE_REPR + "))*)" // attributes (optional)
+            + ";?"; // additional semicolon at the end (not specified, for interoperability)
+
+    public static final Pattern PATTERN_CATEGORY = Pattern.compile(REGEXP_CATEGORY);
+    public static final Pattern PATTERN_ATTRIBUTES = Pattern.compile(REGEXP_ATTRIBUTES);
+    public static final Pattern PATTERN_LINK = Pattern.compile(REGEXP_LINK);
+
     @Override
-    public Model parseModel(String model) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Model parseModel(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+        switch (mediaType) {
+            case TEXT_OCCI:
+                return parseModelFromHeaders(headers);
+            case TEXT_PLAIN:
+            default:
+                return parseModelFromBody(body);
+
+        }
+    }
+
+    private Model parseModelFromBody(String body) throws ParsingException {
+        String replaced = body.replaceAll("Category:\\s*", "");
+
+        String[] lines = replaced.split("[\\r\\n]+");
+        return parseModelFromArray(lines);
+    }
+
+    private Model parseModelFromHeaders(Map<String, String> headers) throws ParsingException {
+        if (!headers.containsKey("Category")) {
+            throw new ParsingException("No header 'Category' among headers.");
+        }
+
+        String[] categories = headers.get("Category").split(",");
+        return parseModelFromArray(categories);
+    }
+
+    private Model parseModelFromArray(String[] lines) throws ParsingException {
+        Model model = new Model();
+
+        for (String line : lines) {
+            Matcher matcher = PATTERN_CATEGORY.matcher(line);
+            matcher.find();
+            String term = matcher.group("term");
+            String scheme = matcher.group("scheme");
+            String categoryClass = matcher.group("class");
+            String title = matcher.group("title");
+            String rel = matcher.group("rel");
+            String location = matcher.group("location");
+            String attributes = matcher.group("attributes");
+            String actions = matcher.group("actions");
+
+            if (term == null || term.isEmpty()) {
+                throw new ParsingException("No term found.");
+            }
+            if (scheme == null || scheme.isEmpty()) {
+                throw new ParsingException("No scheme found.");
+            }
+            if (categoryClass == null || categoryClass.isEmpty()) {
+                throw new ParsingException("No class found.");
+            }
+
+            switch (categoryClass) {
+                case "kind":
+                    addKind(term, scheme, title, rel, location, attributes, actions, model);
+                    break;
+                case "mixin":
+                    addMixin(term, scheme, title, rel, location, attributes, actions, model);
+                    break;
+                case "action":
+                    addAction(term, scheme, title, location, attributes, model);
+                    break;
+                default:
+                    throw new ParsingException("Unknown class type.");
+            }
+        }
+
+        return model;
+    }
+
+    private void addKind(String term, String scheme, String title, String rel, String location, String attributes, String actions, Model model) throws ParsingException {
+        Kind kind = getKind(term, scheme, title, location, attributes, actions, model);
+
+        if (rel != null && !rel.isEmpty()) {
+            if (!model.containsKind(rel)) {
+                throw new ParsingException("Unexpected relation " + rel + " in kind " + term + ".");
+            }
+            Kind k = model.getKind(rel);
+            kind.addRelation(k);
+        }
+
+        model.addKind(kind);
+    }
+
+    private void addMixin(String term, String scheme, String title, String rel, String location, String attributes, String actions, Model model) throws ParsingException {
+        Mixin mixin = getMixin(term, scheme, title, location, attributes, actions, model);
+
+        if (rel != null && !rel.isEmpty()) {
+            if (!model.containsMixin(rel)) {
+                throw new ParsingException("Unexpected relation " + rel + " in mixin " + term + ".");
+            }
+            Mixin m = model.getMixin(rel);
+            mixin.addRelation(m);
+        }
+
+        model.addMixin(mixin);
+    }
+
+    private void connectActions(String actions, Category category, Model model) throws ParsingException {
+        if (actions == null || actions.isEmpty()) {
+            return;
+        }
+
+        String[] splitedActions = actions.split("\\s+");
+        for (String actionIdentifier : splitedActions) {
+            Action action;
+            if (model != null && model.containsAction(actionIdentifier)) {
+                action = model.getAction(actionIdentifier);
+            } else {
+                String[] splitedAction = actionIdentifier.split("#");
+                if (splitedAction.length != 2) {
+                    throw new ParsingException("Wrong action identifier: " + actionIdentifier + ".");
+                }
+                action = new Action(splitedAction[0] + "#", splitedAction[1]);
+            }
+
+            category.addAction(action);
+        }
+    }
+
+    private void addAction(String term, String scheme, String title, String location, String attributes, Model model) {
+        Set<Attribute> parsedAttributes = parseAttributes(attributes);
+        String actionIdentifier = scheme + term;
+        if (model.containsAction(actionIdentifier)) {
+            Action action = model.getAction(actionIdentifier);
+            action.setTitle(title);
+            action.setLocation(location);
+            for (Attribute attribute : parsedAttributes) {
+                action.addAttribute(attribute);
+            }
+        } else {
+            Action action = new Action(scheme, term, title, location, parsedAttributes);
+            model.addAction(action);
+        }
+    }
+
+    private Set<Attribute> parseAttributes(String attributes) {
+        Set<Attribute> attributeSet = new HashSet<>();
+        if (attributes == null || attributes.isEmpty()) {
+            return attributeSet;
+        }
+
+        Matcher matcher = PATTERN_ATTRIBUTES.matcher(attributes);
+        while (matcher.find()) {
+            String attributeString = matcher.group();
+            Attribute attribute = parseAttribute(attributeString);
+            attributeSet.add(attribute);
+        }
+
+        return attributeSet;
+    }
+
+    private Attribute parseAttribute(String attributeString) {
+        String[] splitedAttribute = attributeString.split("\\{");
+        Attribute attribute = new Attribute(splitedAttribute[0]);
+        if (splitedAttribute.length == 2) {
+            if (splitedAttribute[1].contains("immutable")) {
+                attribute.setImmutable(true);
+            }
+            if (splitedAttribute[1].contains("required")) {
+                attribute.setRequired(true);
+            }
+        }
+
+        return attribute;
     }
 
     @Override
-    public Entity parseEntity(String entity, Class entityClass) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Resource parseResource(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+        switch (mediaType) {
+            case TEXT_OCCI:
+                return parseResourceFromHeaders(headers);
+            case TEXT_PLAIN:
+            default:
+                return parseResourceFromBody(body);
+
+        }
+    }
+
+    private Resource parseResourceFromHeaders(Map<String, String> headers) throws ParsingException {
+        if (!headers.containsKey("Category")) {
+            throw new ParsingException("No 'Category' header.");
+        }
+
+        List<String> lines = new ArrayList<>();
+        lines.addAll(Arrays.asList(headers.get("Category").split(",")));
+
+        if (headers.containsKey("X-Occi-Attribute")) {
+            lines.addAll(Arrays.asList(headers.get("X-Occi-Attribute").split(",")));
+        }
+
+        if (headers.containsKey("Link")) {
+            lines.addAll(Arrays.asList(headers.get("Link").split(";")));
+        }
+
+        return parseResourceFromArray(lines.toArray(new String[0]));
+    }
+
+    private Resource parseResourceFromBody(String body) throws ParsingException {
+        String replaced = body.replaceAll("Category:\\s*", "");
+        replaced = replaced.replaceAll("Link:\\s*", "");
+        replaced = replaced.replaceAll("X-OCCI-Attribute:\\s*", "");
+        String[] lines = replaced.split("[\\r\\n]+");
+
+        return parseResourceFromArray(lines);
+    }
+
+    private Resource parseResourceFromArray(String[] lines) throws ParsingException {
+        Kind kind = null;
+        Set<Mixin> mixins = new HashSet<>();
+        Set<Link> links = new HashSet<>();
+        List<String> rawAttributes = new ArrayList<>();
+
+        for (String line : lines) {
+            Matcher matcher = PATTERN_CATEGORY.matcher(line);
+            if (matcher.find()) {
+                String term = matcher.group("term");
+                String scheme = matcher.group("scheme");
+                String categoryClass = matcher.group("class");
+                String title = matcher.group("title");
+                String location = matcher.group("location");
+                String attributes = matcher.group("attributes");
+                String actions = matcher.group("actions");
+
+                switch (categoryClass) {
+                    case "kind":
+                        kind = getKind(term, scheme, title, location, attributes, actions, null);
+                        break;
+                    case "mixin":
+                        Mixin mixin = getMixin(term, scheme, title, location, attributes, actions, null);
+                        mixins.add(mixin);
+                        break;
+                    default:
+                        throw new ParsingException("Unknown category class '" + categoryClass + "'.");
+                }
+
+                continue;
+            }
+
+            if (line.matches(REGEXP_ATTRIBUTE_REPR)) {
+                rawAttributes.add(line);
+                continue;
+            }
+
+            matcher = PATTERN_LINK.matcher(line);
+            if (matcher.find()) {
+                String uri = matcher.group("uri");
+                String rel = matcher.group("rel");
+                String self = matcher.group("self");
+                String category = matcher.group("category");
+                String attributes = matcher.group("attributes");
+
+                Link link = getLink(uri, rel, self, category, attributes);
+                links.add(link);
+            }
+        }
+
+        if (kind == null) {
+            throw new ParsingException("No kind specification found.");
+        }
+
+        Map<String, String> attributesWithValues = parseAttributesWithValues(rawAttributes.toArray(new String[0]));
+
+        if (!attributesWithValues.containsKey(Resource.ID_ATTRIBUTE_NAME)) {
+            throw new ParsingException("No id found. Cannot construct a resource.");
+        }
+
+        Resource resource = null;
+        try {
+            resource = new Resource(attributesWithValues.get(Resource.ID_ATTRIBUTE_NAME), kind);
+
+            attributesWithValues.remove(Resource.ID_ATTRIBUTE_NAME);
+            for (Mixin mixin : mixins) {
+                resource.addMixin(mixin);
+            }
+            for (Link link : links) {
+                link.setSource(resource);
+                resource.addLink(link);
+            }
+            for (String name : attributesWithValues.keySet()) {
+                resource.addAttribute(name, attributesWithValues.get(name));
+            }
+        } catch (InvalidAttributeValueException ex) {
+            throw new ParsingException("Invalid attribute value found", ex);
+        }
+
+        return resource;
+    }
+
+    private Map<String, String> parseAttributesWithValues(String[] attributes) throws ParsingException {
+        Map<String, String> result = new HashMap<>();
+
+        for (String attribute : attributes) {
+            String[] parts = attribute.split("=");
+            if (parts.length != 2) {
+                throw new ParsingException("Wrong attribute format.");
+            }
+
+            String name = parts[0];
+            String value = parts[1].replaceAll("\"", "");
+
+            result.put(name, value);
+        }
+
+        return result;
+    }
+
+    private Kind getKind(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
+        Set<Attribute> parsedAttributes = parseAttributes(attributes);
+        Kind kind = new Kind(scheme, term, title, location, parsedAttributes);
+        connectActions(actions, kind, model);
+
+        return kind;
+    }
+
+    private Mixin getMixin(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
+        Set<Attribute> parsedAttributes = parseAttributes(attributes);
+        Mixin mixin = new Mixin(scheme, term, title, location, parsedAttributes);
+        connectActions(actions, mixin, model);
+
+        return mixin;
+    }
+
+    private Link getLink(String uri, String rel, String self, String category, String attributes) throws ParsingException {
+        String[] splitedCategory = category.split("#");
+        if (splitedCategory.length != 2) {
+            throw new ParsingException("Invalid link category");
+        }
+        Kind kind = new Kind(splitedCategory[0], splitedCategory[1]);
+
+        String[] splitedSelf = divideUriByLastSegment(self);
+        kind.setLocation(splitedSelf[1]);
+
+        Link link = null;
+        try {
+            link = new Link(splitedSelf[0], kind);
+            link.setTarget(rel + "|" + divideUriByLastSegment(uri)[0]);
+            Map<String, String> attributesWithValues = parseAttributesWithValues(attributes.split(";"));
+            for (String name : attributesWithValues.keySet()) {
+                link.addAttribute(name, attributesWithValues.get(name));
+            }
+        } catch (InvalidAttributeValueException ex) {
+            throw new ParsingException("Invalid attribute value found", ex);
+        }
+
+        return link;
+    }
+
+    private String[] divideUriByLastSegment(String uri) {
+        String[] parts = new String[2];
+        parts[0] = uri.substring(uri.lastIndexOf('/') + 1);
+        parts[1] = uri.substring(0, uri.lastIndexOf('/') + 1);
+
+        return parts;
+    }
+
+    @Override
+    public List<String> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+        switch (mediaType) {
+            case TEXT_OCCI:
+                return parseLocationsFromHeaders(headers);
+            case TEXT_URI_LIST:
+            case TEXT_PLAIN:
+            default:
+                return parseLocationsFromBody(body);
+
+        }
+    }
+
+    private List<String> parseLocationsFromHeaders(Map<String, String> headers) throws ParsingException {
+        if (!headers.containsKey("Location")) {
+            throw new ParsingException("No header 'Location' among headers.");
+        }
+
+        String[] locations = headers.get("Location").split(",");
+        return Arrays.asList(locations);
+    }
+
+    private List<String> parseLocationsFromBody(String body) {
+        String replaced = body.replaceAll("X-OCCI-Location:\\s*", "");
+        String[] lines = replaced.split("[\\r\\n]+");
+        return Arrays.asList(lines);
     }
 }
