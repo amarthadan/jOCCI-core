@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.parser;
 
+import cz.cesnet.cloud.occi.Collection;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.core.Action;
 import cz.cesnet.cloud.occi.core.Attribute;
@@ -244,18 +245,18 @@ public class TextParser implements Parser {
     }
 
     @Override
-    public Resource parseResource(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+    public Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
         switch (mediaType) {
             case TEXT_OCCI:
-                return parseResourceFromHeaders(headers);
+                return parseCollectionFromHeaders(headers);
             case TEXT_PLAIN:
             default:
-                return parseResourceFromBody(body);
+                return parseCollectionFromBody(body);
 
         }
     }
 
-    private Resource parseResourceFromHeaders(Map<String, String> headers) throws ParsingException {
+    private Collection parseCollectionFromHeaders(Map<String, String> headers) throws ParsingException {
         if (!headers.containsKey("Category")) {
             throw new ParsingException("No 'Category' header.");
         }
@@ -271,19 +272,19 @@ public class TextParser implements Parser {
             lines.addAll(Arrays.asList(headers.get("Link").split(";")));
         }
 
-        return parseResourceFromArray(lines.toArray(new String[0]));
+        return parseCollectionFromArray(lines.toArray(new String[0]));
     }
 
-    private Resource parseResourceFromBody(String body) throws ParsingException {
+    private Collection parseCollectionFromBody(String body) throws ParsingException {
         String replaced = body.replaceAll("Category:\\s*", "");
         replaced = replaced.replaceAll("Link:\\s*", "");
         replaced = replaced.replaceAll("X-OCCI-Attribute:\\s*", "");
         String[] lines = replaced.split("[\\r\\n]+");
 
-        return parseResourceFromArray(lines);
+        return parseCollectionFromArray(lines);
     }
 
-    private Resource parseResourceFromArray(String[] lines) throws ParsingException {
+    private Collection parseCollectionFromArray(String[] lines) throws ParsingException {
         Kind kind = null;
         Set<Mixin> mixins = new HashSet<>();
         Set<Link> links = new HashSet<>();
@@ -362,7 +363,10 @@ public class TextParser implements Parser {
             throw new ParsingException("Invalid attribute value found", ex);
         }
 
-        return resource;
+        Collection collection = new Collection();
+        collection.addResource(resource);
+
+        return collection;
     }
 
     private Map<String, String> parseAttributesWithValues(String[] attributes) throws ParsingException {

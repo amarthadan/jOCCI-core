@@ -347,16 +347,15 @@ public class TextParserTest {
         return r;
     }
 
-    @Test
-    public void testParseResourcePlain() throws Exception {
-        String body = readFile(RESOURCE_PATH + "resource_plain.txt");
-        Map<String, String> headers = null;
-        TextParser instance = new TextParser();
-        Resource expResult = createResource();
-        Resource result = instance.parseResource(MediaType.TEXT_PLAIN, body, headers);
-        assertEquals(expResult, result);
-    }
-
+//    @Test
+//    public void testParseResourcePlain() throws Exception {
+//        String body = readFile(RESOURCE_PATH + "resource_plain.txt");
+//        Map<String, String> headers = null;
+//        TextParser instance = new TextParser();
+//        Resource expResult = createResource();
+//        Resource result = instance.parseResource(MediaType.TEXT_PLAIN, body, headers);
+//        assertEquals(expResult, result);
+//    }
     private Map<String, String> createHeadersWithResource() {
         Map<String, String> headers = new HashMap<>();
         headers.put("Status Code", "200 OK");
@@ -378,16 +377,15 @@ public class TextParserTest {
         return headers;
     }
 
-    @Test
-    public void testParseResourceOcci() throws Exception {
-        String body = null;
-        Map<String, String> headers = createHeadersWithResource();
-        TextParser instance = new TextParser();
-        Resource expResult = createResource();
-        Resource result = instance.parseResource(MediaType.TEXT_OCCI, body, headers);
-        assertEquals(expResult, result);
-    }
-
+//    @Test
+//    public void testParseResourceOcci() throws Exception {
+//        String body = null;
+//        Map<String, String> headers = createHeadersWithResource();
+//        TextParser instance = new TextParser();
+//        Resource expResult = createResource();
+//        Resource result = instance.parseResource(MediaType.TEXT_OCCI, body, headers);
+//        assertEquals(expResult, result);
+//    }
     @Test
     public void testParseModelPlainKindsMinimal() throws Exception {
         fail();
@@ -582,52 +580,52 @@ public class TextParserTest {
 //        fail();
 //    }
     @Test
-    public void testParseResourcePlainAttributes() throws Exception {
+    public void testParseCollectionPlainAttributes() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourcePlainKinds() throws Exception {
+    public void testParseCollectionPlainKinds() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourcePlainMixins() throws Exception {
+    public void testParseCollectionPlainMixins() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourcePlainLinks() throws Exception {
+    public void testParseCollectionPlainLinks() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourcePlainAll() throws Exception {
+    public void testParseCollectionPlainAll() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourceOcciAttributes() throws Exception {
+    public void testParseCollectionOcciAttributes() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourceOcciKinds() throws Exception {
+    public void testParseCollectionOcciKinds() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourceOcciMixins() throws Exception {
+    public void testParseCollectionOcciMixins() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourceOcciLinks() throws Exception {
+    public void testParseCollectionOcciLinks() throws Exception {
         fail();
     }
 
     @Test
-    public void testParseResourceOcciAll() throws Exception {
+    public void testParseCollectionOcciAll() throws Exception {
         fail();
     }
 }
