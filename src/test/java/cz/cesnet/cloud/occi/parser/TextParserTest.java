@@ -8,8 +8,6 @@ import cz.cesnet.cloud.occi.core.Mixin;
 import cz.cesnet.cloud.occi.core.Resource;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.Compute;
-import cz.cesnet.cloud.occi.infrastructure.enumeration.Architecture;
-import cz.cesnet.cloud.occi.infrastructure.enumeration.ComputeState;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -22,6 +20,7 @@ import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 import org.junit.Test;
 
 public class TextParserTest {
@@ -387,5 +386,248 @@ public class TextParserTest {
         Resource expResult = createResource();
         Resource result = instance.parseResource(MediaType.TEXT_OCCI, body, headers);
         assertEquals(expResult, result);
+    }
+
+    @Test
+    public void testParseModelPlainKindsMinimal() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainKindsFull() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainKindsRelations() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainKindsAttributesZero() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainKindsAttributesOne() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainKindsAttributesBoth() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainMixinsMinimal() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainMixinsFull() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainMixinsRelations() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainMixinsAttributesZero() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainMixinsAttributesOne() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainMixinsAttributesBoth() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainActionsMinimal() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainActionsFull() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainActionsAttributesZero() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainActionsAttributesOne() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelPlainActionsAttributesBoth() throws Exception {
+        fail();
+    }
+
+//    @Test
+//    public void testParseModelPlainAll() throws Exception {
+//        fail();
+//    }
+    @Test
+    public void testParseModelOcciKindsMinimal() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciKindsFull() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciKindsRelations() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciKindsAttributesZero() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciKindsAttributesOne() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciKindsAttributesBoth() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciMixinsMinimal() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciMixinsFull() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciMixinsRelations() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciMixinsAttributesZero() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciMixinsAttributesOne() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciMixinsAttributesBoth() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciActionsMinimal() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciActionsFull() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciActionsAttributesZero() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciActionsAttributesOne() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciActionsAttributesBoth() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseModelOcciAll() throws Exception {
+        fail();
+    }
+
+//    @Test
+//    public void testParseLocationsPlain() throws Exception {
+//        fail();
+//    }
+//
+//    @Test
+//    public void testParseLocationsOcci() throws Exception {
+//        fail();
+//    }
+//
+//    @Test
+//    public void testParseLocationsUriList() throws Exception {
+//        fail();
+//    }
+    @Test
+    public void testParseResourcePlainAttributes() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourcePlainKinds() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourcePlainMixins() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourcePlainLinks() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourcePlainAll() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourceOcciAttributes() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourceOcciKinds() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourceOcciMixins() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourceOcciLinks() throws Exception {
+        fail();
+    }
+
+    @Test
+    public void testParseResourceOcciAll() throws Exception {
+        fail();
     }
 }
