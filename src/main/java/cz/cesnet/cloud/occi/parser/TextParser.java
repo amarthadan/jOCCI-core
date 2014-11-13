@@ -11,6 +11,8 @@ import cz.cesnet.cloud.occi.core.Mixin;
 import cz.cesnet.cloud.occi.core.Resource;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.ParsingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -186,30 +188,38 @@ public class TextParser implements Parser {
             if (model != null && model.containsAction(actionIdentifier)) {
                 action = model.getAction(actionIdentifier);
             } else {
-                String[] splitedAction = actionIdentifier.split("#");
-                if (splitedAction.length != 2) {
-                    throw new ParsingException("Wrong action identifier: " + actionIdentifier + ".");
+                try {
+                    String[] splitedAction = actionIdentifier.split("#");
+                    if (splitedAction.length != 2) {
+                        throw new ParsingException("Invalid action identifier: " + actionIdentifier + ".");
+                    }
+                    action = new Action(new URI(splitedAction[0] + "#"), splitedAction[1]);
+                } catch (URISyntaxException ex) {
+                    throw new ParsingException("Invalid category scheme: " + actionIdentifier + ".", ex);
                 }
-                action = new Action(splitedAction[0] + "#", splitedAction[1]);
             }
 
             category.addAction(action);
         }
     }
 
-    private void addAction(String term, String scheme, String title, String location, String attributes, Model model) {
+    private void addAction(String term, String scheme, String title, String location, String attributes, Model model) throws ParsingException {
         Set<Attribute> parsedAttributes = parseAttributes(attributes);
         String actionIdentifier = scheme + term;
-        if (model.containsAction(actionIdentifier)) {
-            Action action = model.getAction(actionIdentifier);
-            action.setTitle(title);
-            action.setLocation(location);
-            for (Attribute attribute : parsedAttributes) {
-                action.addAttribute(attribute);
+        try {
+            if (model.containsAction(actionIdentifier)) {
+                Action action = model.getAction(actionIdentifier);
+                action.setTitle(title);
+                action.setLocation(new URI(location));
+                for (Attribute attribute : parsedAttributes) {
+                    action.addAttribute(attribute);
+                }
+            } else {
+                Action action = new Action(new URI(scheme), term, title, new URI(location), parsedAttributes);
+                model.addAction(action);
             }
-        } else {
-            Action action = new Action(scheme, term, title, location, parsedAttributes);
-            model.addAction(action);
+        } catch (URISyntaxException ex) {
+            throw new ParsingException("Invalid shceme or location.", ex);
         }
     }
 
@@ -388,44 +398,53 @@ public class TextParser implements Parser {
     }
 
     private Kind getKind(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
-        Set<Attribute> parsedAttributes = parseAttributes(attributes);
-        Kind kind = new Kind(scheme, term, title, location, parsedAttributes);
-        connectActions(actions, kind, model);
+        try {
+            Set<Attribute> parsedAttributes = parseAttributes(attributes);
+            Kind kind = new Kind(new URI(scheme), term, title, new URI(location), parsedAttributes);
+            connectActions(actions, kind, model);
 
-        return kind;
+            return kind;
+        } catch (URISyntaxException ex) {
+            throw new ParsingException("Invalid shceme or location.", ex);
+        }
     }
 
     private Mixin getMixin(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
-        Set<Attribute> parsedAttributes = parseAttributes(attributes);
-        Mixin mixin = new Mixin(scheme, term, title, location, parsedAttributes);
-        connectActions(actions, mixin, model);
+        try {
+            Set<Attribute> parsedAttributes = parseAttributes(attributes);
+            Mixin mixin = new Mixin(new URI(scheme), term, title, new URI(location), parsedAttributes);
+            connectActions(actions, mixin, model);
 
-        return mixin;
+            return mixin;
+        } catch (URISyntaxException ex) {
+            throw new ParsingException("Invalid shceme or location.", ex);
+        }
     }
 
     private Link getLink(String uri, String rel, String self, String category, String attributes) throws ParsingException {
-        String[] splitedCategory = category.split("#");
-        if (splitedCategory.length != 2) {
-            throw new ParsingException("Invalid link category");
-        }
-        Kind kind = new Kind(splitedCategory[0], splitedCategory[1]);
-
-        String[] splitedSelf = divideUriByLastSegment(self);
-        kind.setLocation(splitedSelf[1]);
-
-        Link link = null;
         try {
-            link = new Link(splitedSelf[0], kind);
+            String[] splitedCategory = category.split("#");
+            if (splitedCategory.length != 2) {
+                throw new ParsingException("Invalid link category");
+            }
+            Kind kind = new Kind(new URI(splitedCategory[0]), splitedCategory[1]);
+
+            String[] splitedSelf = divideUriByLastSegment(self);
+            kind.setLocation(new URI(splitedSelf[1]));
+
+            Link link = new Link(splitedSelf[0], kind);
             link.setTarget(rel + "|" + divideUriByLastSegment(uri)[0]);
             Map<String, String> attributesWithValues = parseAttributesWithValues(attributes.split(";"));
             for (String name : attributesWithValues.keySet()) {
                 link.addAttribute(name, attributesWithValues.get(name));
             }
+
+            return link;
         } catch (InvalidAttributeValueException ex) {
             throw new ParsingException("Invalid attribute value found", ex);
+        } catch (URISyntaxException ex) {
+            throw new ParsingException("Invalid shceme or location.", ex);
         }
-
-        return link;
     }
 
     private String[] divideUriByLastSegment(String uri) {
@@ -437,7 +456,7 @@ public class TextParser implements Parser {
     }
 
     @Override
-    public List<String> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+    public List<URI> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
         switch (mediaType) {
             case TEXT_OCCI:
                 return parseLocationsFromHeaders(headers);
@@ -449,18 +468,32 @@ public class TextParser implements Parser {
         }
     }
 
-    private List<String> parseLocationsFromHeaders(Map<String, String> headers) throws ParsingException {
+    private List<URI> parseLocationsFromHeaders(Map<String, String> headers) throws ParsingException {
         if (!headers.containsKey("Location")) {
             throw new ParsingException("No header 'Location' among headers.");
         }
 
         String[] locations = headers.get("Location").split(",");
-        return Arrays.asList(locations);
+        return makeURIList(locations);
     }
 
-    private List<String> parseLocationsFromBody(String body) {
+    private List<URI> parseLocationsFromBody(String body) throws ParsingException {
         String replaced = body.replaceAll("X-OCCI-Location:\\s*", "");
         String[] lines = replaced.split("[\\r\\n]+");
-        return Arrays.asList(lines);
+        return makeURIList(lines);
+    }
+
+    private List<URI> makeURIList(String[] locations) throws ParsingException {
+
+        List<URI> locationsURI = new ArrayList<>();
+        for (String location : locations) {
+            try {
+                locationsURI.add(new URI(location));
+            } catch (URISyntaxException ex) {
+                throw new ParsingException("Invalid location: " + location + ".");
+            }
+        }
+
+        return locationsURI;
     }
 }

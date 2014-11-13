@@ -1,6 +1,7 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.SetCover;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Set;
 
@@ -8,11 +9,11 @@ public class Mixin extends Category {
 
     private final SetCover<Mixin> related = new SetCover<>();
 
-    public Mixin(String scheme, String term, String title, String location, Collection<Attribute> attributes) {
+    public Mixin(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
         super(scheme, term, title, location, attributes);
     }
 
-    public Mixin(String scheme, String term) {
+    public Mixin(URI scheme, String term) {
         this(scheme, term, null, null, null);
     }
 

@@ -1,8 +1,9 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.SetCover;
-import cz.cesnet.cloud.occi.parser.TextParser;
 import cz.cesnet.cloud.occi.type.Identifiable;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
@@ -12,22 +13,19 @@ import org.slf4j.LoggerFactory;
 public class Category implements Identifiable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
-    public static final String DEFAULT_SCHEME = "http://schemas.ogf.org/occi/core#";
+    public static final URI DEFAULT_SCHEME = makeURI("http://schemas.ogf.org/occi/core#");
 
     private String term;
-    private String scheme;
+    private URI scheme;
     private String title;
-    private String location;
+    private URI location;
     private final SetCover<Attribute> attributes = new SetCover<>();
     private final SetCover<Action> actions = new SetCover<>();
     private final SetCover<Entity> entities = new SetCover<>();
 
-    public Category(String scheme, String term, String title, String location, Collection<Attribute> attributes) {
+    public Category(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
         if (scheme == null) {
             throw new NullPointerException("Category scheme cannot be null.");
-        }
-        if (scheme.isEmpty() || !scheme.matches(TextParser.REGEXP_URI)) {
-            throw new IllegalArgumentException("Category scheme cannot be empty and has to have correct URI format.");
         }
         if (term == null) {
             throw new NullPointerException("Category term cannot be null.");
@@ -36,7 +34,7 @@ public class Category implements Identifiable {
             throw new IllegalArgumentException("Category term cannot be empty.");
         }
 
-        LOGGER.debug("Creating category: scheme={}, term={}, title={}, attributes={}", scheme, term, title, attributes);
+        LOGGER.debug("Creating category: scheme={}, term={}, title={}, attributes={}", scheme.toString(), term, title, attributes);
         this.scheme = scheme;
         this.term = term;
         this.title = title;
@@ -47,8 +45,17 @@ public class Category implements Identifiable {
         }
     }
 
-    public Category(String scheme, String term) {
+    public Category(URI scheme, String term) {
         this(scheme, term, null, null, null);
+    }
+
+    private static URI makeURI(String uri) {
+        try {
+            return new URI(uri);
+        } catch (URISyntaxException ex) {
+            LOGGER.error("Wrong scheme URI", ex);
+            return null;
+        }
     }
 
     public String getTerm() {
@@ -66,16 +73,13 @@ public class Category implements Identifiable {
         this.term = term;
     }
 
-    public String getScheme() {
+    public URI getScheme() {
         return scheme;
     }
 
-    public void setScheme(String scheme) {
+    public void setScheme(URI scheme) {
         if (scheme == null) {
             throw new NullPointerException("Category scheme cannot be null.");
-        }
-        if (scheme.isEmpty()) {
-            throw new IllegalArgumentException("Category scheme cannot be empty.");
         }
 
         this.scheme = scheme;
@@ -83,7 +87,7 @@ public class Category implements Identifiable {
 
     @Override
     public String getIdentifier() {
-        return getScheme() + getTerm();
+        return getScheme().toString() + getTerm();
     }
 
     public String getTitle() {
@@ -94,11 +98,11 @@ public class Category implements Identifiable {
         this.title = title;
     }
 
-    public String getLocation() {
+    public URI getLocation() {
         return location;
     }
 
-    public void setLocation(String location) {
+    public void setLocation(URI location) {
         this.location = location;
     }
 
@@ -217,6 +221,6 @@ public class Category implements Identifiable {
 
     @Override
     public String toString() {
-        return "Category{" + "class=" + getClass().getName() + ", term=" + term + ", scheme=" + scheme + ", title=" + title + ", attributes=" + attributes + '}';
+        return "Category{" + "class=" + getClass().getName() + ", term=" + term + ", scheme=" + scheme.toString() + ", title=" + title + ", attributes=" + attributes + '}';
     }
 }
