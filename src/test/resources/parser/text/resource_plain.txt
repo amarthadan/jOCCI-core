@@ -1,9 +1,0 @@
-Category: compute;scheme="http://schemas.ogf.org/occi/infrastructure#";class="kind";location="/compute/";title="compute resource"
-Category: debian6;scheme="http://occi.example.org/occi/infrastructure/os_tpl#";class="mixin";location="/mixin/os_tpl/debian6/";title="debian"
-X-OCCI-Attribute: occi.core.id="87f3bfc3-42d4-4474-b45c-757e55e093e9"
-X-OCCI-Attribute: occi.core.title="compute1"
-X-OCCI-Attribute: occi.compute.architecture="x86"
-X-OCCI-Attribute: occi.compute.hostname="compute1.example.org"
-X-OCCI-Attribute: occi.compute.memory=1.7
-X-OCCI-Attribute: occi.compute.speed=1.0
-X-OCCI-Attribute: occi.compute.state="active"

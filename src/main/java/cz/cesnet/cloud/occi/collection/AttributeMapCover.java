@@ -1,6 +1,7 @@
 package cz.cesnet.cloud.occi.collection;
 
 import cz.cesnet.cloud.occi.core.Attribute;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -49,6 +50,10 @@ public class AttributeMapCover {
     public String getValue(String attributeName) {
         Attribute attTmp = new Attribute(attributeName);
         return getValue(attTmp);
+    }
+
+    public Map<Attribute, String> getAttributes() {
+        return Collections.unmodifiableMap(attributes);
     }
 
     public void clear() {

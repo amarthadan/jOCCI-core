@@ -1,0 +1,1 @@
+os_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin"

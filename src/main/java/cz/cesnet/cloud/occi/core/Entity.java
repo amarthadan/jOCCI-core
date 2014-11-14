@@ -5,6 +5,7 @@ import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
@@ -109,7 +110,7 @@ public abstract class Entity implements Identifiable {
             return true;
         }
 
-        return attribute.getPattern().matches(value);
+        return value.matches(attribute.getPattern());
     }
 
     private Attribute getAttribute(String attributeIdentifier) {
@@ -174,6 +175,10 @@ public abstract class Entity implements Identifiable {
 
     public String getValue(String attributeName) {
         return attributes.getValue(attributeName);
+    }
+
+    public Map<Attribute, String> getAttributes() {
+        return attributes.getAttributes();
     }
 
     public void clearAttributes() {

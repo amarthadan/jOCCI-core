@@ -44,15 +44,15 @@ public class TextParser implements Parser {
 
     public static final String REGEXP_ATTRIBUTE_COMPONENT = REGEXP_LOALPHA + "(" + REGEXP_LOALPHA + "|" + REGEXP_DIGIT + "|-|_)*";
     public static final String REGEXP_ATTRIBUTE_NAME = REGEXP_ATTRIBUTE_COMPONENT + "(\\." + REGEXP_ATTRIBUTE_COMPONENT + ")*";
-    public static final String REGEXP_ATTRIBUTE_PROPERTY = "\\b(?<!\\|)immutable(?!\\|)\\b|\\b(?<!\\|)required(?!\\|)\\b";
-    public static final String REGEXP_ATTRIBUTE_DEF = "(" + REGEXP_ATTRIBUTE_NAME + ")(\\{" + REGEXP_ATTRIBUTE_PROPERTY + "(\\s+" + REGEXP_ATTRIBUTE_PROPERTY + ")*\\})?";
+    public static final String REGEXP_ATTRIBUTE_PROPERTIES = "\\{(?:required immutable|immutable required|required|immutable)\\}";
+    public static final String REGEXP_ATTRIBUTE_DEF = "(?:" + REGEXP_ATTRIBUTE_NAME + ")(?:" + REGEXP_ATTRIBUTE_PROPERTIES + ")?";
     public static final String REGEXP_ATTRIBUTE_LIST = REGEXP_ATTRIBUTE_DEF + "(\\s+" + REGEXP_ATTRIBUTE_DEF + ")*";
     public static final String REGEXP_ATTRIBUTE_REPR = REGEXP_ATTRIBUTE_NAME + "=(\"" + REGEXP_QUOTED_STRING + "\"|" + REGEXP_NUMBER + "|" + REGEXP_BOOL + ")";
 
     public static final String REGEXP_ACTION = REGEXP_TYPE_IDENTIFIER;
     public static final String REGEXP_ACTION_LIST = REGEXP_ACTION + "(\\s+" + REGEXP_ACTION + ")*";
     public static final String REGEXP_RESOURCE_TYPE = REGEXP_TYPE_IDENTIFIER + "(\\s+" + REGEXP_TYPE_IDENTIFIER + ")*";
-    public static final String REGEXP_LINK_INSTANCE = REGEXP_URI;
+    public static final String REGEXP_LINK_INSTANCE = REGEXP_URI_REF;
     public static final String REGEXP_LINK_TYPE = REGEXP_TYPE_IDENTIFIER + "(\\s+" + REGEXP_TYPE_IDENTIFIER + ")*";
 
     public static final String REGEXP_CATEGORY = "(?<term>" + REGEXP_TERM + ")" // term (mandatory)
@@ -65,13 +65,13 @@ public class TextParser implements Parser {
             + "(;\\s*actions=\"(?<actions>" + REGEXP_ACTION_LIST + ")\")?" // actions (optional)
             + ";?"; // additional semicolon at the end (not specified, for interoperability)
 
-    public static final String REGEXP_ATTRIBUTES = "((?:" + REGEXP_ATTRIBUTE_NAME + ")+(?:\\{(?:required immutable|immutable required|required|immutable)\\})?)";
+    public static final String REGEXP_ATTRIBUTES = "(" + REGEXP_ATTRIBUTE_DEF + ")";
 
     public static final String REGEXP_LINK = "\\<(?<uri>" + REGEXP_URI_REF + ")\\>" // uri (mandatory)
             + ";\\s*rel=\"(?<rel>" + REGEXP_RESOURCE_TYPE + ")\"" // rel (mandatory)
             + "(;\\s*self=\"(?<self>" + REGEXP_LINK_INSTANCE + ")\")?" // self (optional)
             + "(;\\s*category=\"(?<category>(;?\\s*(" + REGEXP_LINK_TYPE + "))+)\")?" // category (optional)
-            + "(?<attributes>(;?\\s*(" + REGEXP_ATTRIBUTE_REPR + "))*)" // attributes (optional)
+            + "(;\\s*(?<attributes>(;?\\s*" + REGEXP_ATTRIBUTE_REPR + ")*))?" // attributes (optional)
             + ";?"; // additional semicolon at the end (not specified, for interoperability)
 
     public static final Pattern PATTERN_CATEGORY = Pattern.compile(REGEXP_CATEGORY);
@@ -206,16 +206,20 @@ public class TextParser implements Parser {
     private void addAction(String term, String scheme, String title, String location, String attributes, Model model) throws ParsingException {
         Set<Attribute> parsedAttributes = parseAttributes(attributes);
         String actionIdentifier = scheme + term;
+        URI locationUri = null;
         try {
+            if (location != null) {
+                locationUri = new URI(location);
+            }
             if (model.containsAction(actionIdentifier)) {
                 Action action = model.getAction(actionIdentifier);
                 action.setTitle(title);
-                action.setLocation(new URI(location));
+                action.setLocation(locationUri);
                 for (Attribute attribute : parsedAttributes) {
                     action.addAttribute(attribute);
                 }
             } else {
-                Action action = new Action(new URI(scheme), term, title, new URI(location), parsedAttributes);
+                Action action = new Action(new URI(scheme), term, title, locationUri, parsedAttributes);
                 model.addAction(action);
             }
         } catch (URISyntaxException ex) {
@@ -279,7 +283,7 @@ public class TextParser implements Parser {
         }
 
         if (headers.containsKey("Link")) {
-            lines.addAll(Arrays.asList(headers.get("Link").split(";")));
+            lines.addAll(Arrays.asList(headers.get("Link").split(",")));
         }
 
         return parseCollectionFromArray(lines.toArray(new String[0]));
@@ -338,6 +342,8 @@ public class TextParser implements Parser {
                 String self = matcher.group("self");
                 String category = matcher.group("category");
                 String attributes = matcher.group("attributes");
+
+                System.out.println(uri + ", " + rel + ", " + self + ", " + category + ", " + attributes);
 
                 Link link = getLink(uri, rel, self, category, attributes);
                 links.add(link);
@@ -400,7 +406,11 @@ public class TextParser implements Parser {
     private Kind getKind(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
         try {
             Set<Attribute> parsedAttributes = parseAttributes(attributes);
-            Kind kind = new Kind(new URI(scheme), term, title, new URI(location), parsedAttributes);
+            URI locationUri = null;
+            if (location != null) {
+                locationUri = new URI(location);
+            }
+            Kind kind = new Kind(new URI(scheme), term, title, locationUri, parsedAttributes);
             connectActions(actions, kind, model);
 
             return kind;
@@ -411,8 +421,12 @@ public class TextParser implements Parser {
 
     private Mixin getMixin(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
         try {
+            URI locationUri = null;
+            if (location != null) {
+                locationUri = new URI(location);
+            }
             Set<Attribute> parsedAttributes = parseAttributes(attributes);
-            Mixin mixin = new Mixin(new URI(scheme), term, title, new URI(location), parsedAttributes);
+            Mixin mixin = new Mixin(new URI(scheme), term, title, locationUri, parsedAttributes);
             connectActions(actions, mixin, model);
 
             return mixin;
@@ -427,13 +441,13 @@ public class TextParser implements Parser {
             if (splitedCategory.length != 2) {
                 throw new ParsingException("Invalid link category");
             }
-            Kind kind = new Kind(new URI(splitedCategory[0]), splitedCategory[1]);
+            Kind kind = new Kind(new URI(splitedCategory[0] + "#"), splitedCategory[1]);
 
             String[] splitedSelf = divideUriByLastSegment(self);
             kind.setLocation(new URI(splitedSelf[1]));
 
             Link link = new Link(splitedSelf[0], kind);
-            link.setTarget(rel + "|" + divideUriByLastSegment(uri)[0]);
+            link.setTarget(uri);
             Map<String, String> attributesWithValues = parseAttributesWithValues(attributes.split(";"));
             for (String name : attributesWithValues.keySet()) {
                 link.addAttribute(name, attributesWithValues.get(name));

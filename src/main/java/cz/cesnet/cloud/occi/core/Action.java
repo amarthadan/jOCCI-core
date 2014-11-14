@@ -4,6 +4,7 @@ import cz.cesnet.cloud.occi.type.Identifiable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Objects;
+import java.util.Set;
 
 public class Action implements Identifiable {
 
@@ -74,7 +75,7 @@ public class Action implements Identifiable {
         return category.removeAttribute(attribute);
     }
 
-    public Collection<Attribute> getAttributes() {
+    public Set<Attribute> getAttributes() {
         return category.getAttributes();
     }
 

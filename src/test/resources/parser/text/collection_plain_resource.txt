@@ -1,0 +1,15 @@
+Category: compute;scheme="http://schemas.ogf.org/occi/infrastructure#";class="kind";location="/compute/";title="compute resource"
+Category: os_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Operating System Template";location="/mixins/os_tpl/"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";title="IP Network Mixin";location="/mixins/ipnetwork/";attributes="occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state"
+Category: resource_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Resource Template";location="/mixins/resource_tpl/"
+Category: larger;scheme="https://occi.localhost/occi/infrastructure/resource_tpl#";class="mixin";title="Larger Instance - 4 cores and 10 GB of RAM";rel="http://schemas.ogf.org/occi/infrastructure#resource_tpl";location="/mixins/larger/";attributes="occi.compute.architecture occi.compute.cores{immutable required} occi.compute.speed occi.compute.memory{immutable}"
+Category: debianvm;scheme="https://occi.localhost/occi/infrastructure/os_tpl#";class="mixin";title="debianvm";rel="http://schemas.ogf.org/occi/infrastructure#os_tpl";location="/mixins/debianvm/"
+X-OCCI-Attribute: occi.core.id="87f3bfc3-42d4-4474-b45c-757e55e093e9"
+X-OCCI-Attribute: occi.core.title="compute1"
+X-OCCI-Attribute: occi.compute.architecture="x86"
+X-OCCI-Attribute: occi.compute.hostname="compute1.example.org"
+X-OCCI-Attribute: occi.compute.memory=1.7
+X-OCCI-Attribute: occi.compute.speed=1.0
+X-OCCI-Attribute: occi.compute.state="active"
+Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";self="/link/networkinterface/456";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";occi.networkinterface.interface="eth0";occi.networkinterface.mac="00:11:22:33:44:55";occi.networkinterface.state="active";
+Link: </storage/852>;rel="http://schemas.ogf.org/occi/infrastructure#storage";self="/link/storagelink/789";category="http://schemas.ogf.org/occi/infrastructure#storagelink";occi.storagelink.deviceid="1234qwerty";occi.storagelink.mountpoint="/mnt/somewhere/";occi.storagelink.state="active";

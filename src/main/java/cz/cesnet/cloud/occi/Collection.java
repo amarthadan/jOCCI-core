@@ -3,6 +3,7 @@ package cz.cesnet.cloud.occi;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.core.Resource;
+import java.util.Objects;
 import java.util.Set;
 
 public class Collection {
@@ -81,5 +82,35 @@ public class Collection {
         for (Resource resource : resources.getSet(true)) {
             resource.setModel(model);
         }
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 41 * hash + Objects.hashCode(this.resources);
+        hash = 41 * hash + Objects.hashCode(this.links);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Collection other = (Collection) obj;
+        if (!Objects.equals(this.resources, other.resources)) {
+            return false;
+        }
+        if (!Objects.equals(this.links, other.links)) {
+            return false;
+        }
+        return true;
     }
 }
