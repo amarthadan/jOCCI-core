@@ -5,12 +5,16 @@ import java.net.URI;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Action implements Identifiable {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Action.class);
     private Category category;
 
     public Action(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
+        LOGGER.debug("Creating action: scheme={}, term={}, title={}, location={}, attributes={}", scheme, term, title, location, attributes);
         this.category = new Category(scheme, term, title, location, attributes);
     }
 

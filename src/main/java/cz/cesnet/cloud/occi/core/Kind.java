@@ -53,4 +53,9 @@ public class Kind extends Category {
     public Set<Kind> getRelations() {
         return related.getSet();
     }
+
+    @Override
+    public String toString() {
+        return "Kind{" + "term=" + getTerm() + ", scheme=" + getScheme() + ", title=" + getTitle() + ", location=" + getLocation() + ", attributes=" + getAttributes() + ", related=" + related + '}';
+    }
 }

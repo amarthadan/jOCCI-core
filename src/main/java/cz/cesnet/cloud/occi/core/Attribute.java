@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 public class Attribute implements Identifiable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Attribute.class);
-
     private String name;
     private boolean required;
     private boolean immutable;
@@ -18,6 +17,9 @@ public class Attribute implements Identifiable {
     private String description;
 
     public Attribute(String name, boolean required, boolean immutable, String type, String pattern, String defaultValue, String description) {
+        LOGGER.debug("Creating attribute: name={}, required={}, immutable={}, type={}, pattern={}, defaultValue={}, description={}",
+                name, required, immutable, type, pattern, defaultValue, description);
+
         if (name == null) {
             throw new NullPointerException("Attribute name cannot be null.");
         }
@@ -25,8 +27,6 @@ public class Attribute implements Identifiable {
             throw new IllegalArgumentException("Attribute name cannot be empty.");
         }
 
-        LOGGER.debug("Creating attribute: name={}, required={}, immutable={}, type={}, pattern={}, defaultValue={}, description={}",
-                name, required, immutable, type, pattern, defaultValue, description);
         this.name = name;
         this.required = required;
         this.immutable = immutable;

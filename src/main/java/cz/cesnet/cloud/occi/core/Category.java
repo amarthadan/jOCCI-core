@@ -24,6 +24,8 @@ public class Category implements Identifiable {
     private final SetCover<Entity> entities = new SetCover<>();
 
     public Category(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
+        LOGGER.debug("Creating category: scheme={}, term={}, title={}, location={}, attributes={}", scheme, term, title, location, attributes);
+
         if (scheme == null) {
             throw new NullPointerException("Category scheme cannot be null.");
         }
@@ -34,7 +36,6 @@ public class Category implements Identifiable {
             throw new IllegalArgumentException("Category term cannot be empty.");
         }
 
-        LOGGER.debug("Creating category: scheme={}, term={}, title={}, attributes={}", scheme.toString(), term, title, attributes);
         this.scheme = scheme;
         this.term = term;
         this.title = title;
@@ -221,6 +222,6 @@ public class Category implements Identifiable {
 
     @Override
     public String toString() {
-        return "Category{" + "class=" + getClass().getName() + ", term=" + term + ", scheme=" + scheme.toString() + ", title=" + title + ", attributes=" + attributes + '}';
+        return "Category{" + "term=" + term + ", scheme=" + scheme + ", title=" + title + ", location=" + location + ", attributes=" + attributes + '}';
     }
 }

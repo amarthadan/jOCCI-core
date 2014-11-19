@@ -113,4 +113,9 @@ public class Collection {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return "Collection{" + "resources=" + resources + ", links=" + links + ", model=" + model + '}';
+    }
 }

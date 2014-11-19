@@ -58,6 +58,11 @@ public class Resource extends Entity {
     }
 
     @Override
+    public String toString() {
+        return "Resource{" + "class=" + getClass().getName() + ", id=" + getId() + ", kind=" + getKind() + ", title=" + getTitle() + ", mixins=" + getMixins() + ", attributes=" + getAttributes() + ", links" + links + '}';
+    }
+
+    @Override
     public void toText() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

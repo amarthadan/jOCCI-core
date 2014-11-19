@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TextParser implements Parser {
 
@@ -78,19 +80,24 @@ public class TextParser implements Parser {
     public static final Pattern PATTERN_ATTRIBUTES = Pattern.compile(REGEXP_ATTRIBUTES);
     public static final Pattern PATTERN_LINK = Pattern.compile(REGEXP_LINK);
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TextParser.class);
+
     @Override
     public Model parseModel(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+        LOGGER.debug("Parsing model...");
+
         switch (mediaType) {
             case TEXT_OCCI:
                 return parseModelFromHeaders(headers);
             case TEXT_PLAIN:
             default:
                 return parseModelFromBody(body);
-
         }
     }
 
     private Model parseModelFromBody(String body) throws ParsingException {
+        LOGGER.debug("Reading response body.");
+
         String replaced = body.replaceAll("Category:\\s*", "");
 
         String[] lines = replaced.split("[\\r\\n]+");
@@ -98,6 +105,8 @@ public class TextParser implements Parser {
     }
 
     private Model parseModelFromHeaders(Map<String, String> headers) throws ParsingException {
+        LOGGER.debug("Reading response headers.");
+
         if (!headers.containsKey("Category")) {
             throw new ParsingException("No header 'Category' among headers.");
         }
@@ -110,8 +119,11 @@ public class TextParser implements Parser {
         Model model = new Model();
 
         for (String line : lines) {
+            LOGGER.debug("Matching line '{}' against category pattern.", line);
             Matcher matcher = PATTERN_CATEGORY.matcher(line);
-            matcher.find();
+            if (!matcher.find()) {
+                throw new ParsingException("Invalid line: " + line);
+            }
             String term = matcher.group("term");
             String scheme = matcher.group("scheme");
             String categoryClass = matcher.group("class");
@@ -120,6 +132,7 @@ public class TextParser implements Parser {
             String location = matcher.group("location");
             String attributes = matcher.group("attributes");
             String actions = matcher.group("actions");
+            LOGGER.debug("Match: term={}, scheme={}, class={}, title={}, rel={}, location={}, attributes={}, actions={}", term, scheme, categoryClass, title, rel, location, attributes, actions);
 
             if (term == null || term.isEmpty()) {
                 throw new ParsingException("No term found.");
@@ -150,13 +163,16 @@ public class TextParser implements Parser {
     }
 
     private void addKind(String term, String scheme, String title, String rel, String location, String attributes, String actions, Model model) throws ParsingException {
-        Kind kind = getKind(term, scheme, title, location, attributes, actions, model);
+        LOGGER.debug("Adding kind...");
+        Kind kind = createKind(term, scheme, title, location, attributes);
+        connectActions(actions, kind, model);
 
         if (rel != null && !rel.isEmpty()) {
             if (!model.containsKind(rel)) {
                 throw new ParsingException("Unexpected relation " + rel + " in kind " + term + ".");
             }
             Kind k = model.getKind(rel);
+            LOGGER.debug("Creating relation between {} and {}.", kind, k);
             kind.addRelation(k);
         }
 
@@ -164,13 +180,16 @@ public class TextParser implements Parser {
     }
 
     private void addMixin(String term, String scheme, String title, String rel, String location, String attributes, String actions, Model model) throws ParsingException {
-        Mixin mixin = getMixin(term, scheme, title, location, attributes, actions, model);
+        LOGGER.debug("Mixin kind...");
+        Mixin mixin = createMixin(term, scheme, title, location, attributes);
+        connectActions(actions, mixin, model);
 
         if (rel != null && !rel.isEmpty()) {
             if (!model.containsMixin(rel)) {
                 throw new ParsingException("Unexpected relation " + rel + " in mixin " + term + ".");
             }
             Mixin m = model.getMixin(rel);
+            LOGGER.debug("Creating relation between {} and {}.", mixin, m);
             mixin.addRelation(m);
         }
 
@@ -260,6 +279,8 @@ public class TextParser implements Parser {
 
     @Override
     public Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+        LOGGER.debug("Parsing collection...");
+
         switch (mediaType) {
             case TEXT_OCCI:
                 return parseCollectionFromHeaders(headers);
@@ -271,6 +292,8 @@ public class TextParser implements Parser {
     }
 
     private Collection parseCollectionFromHeaders(Map<String, String> headers) throws ParsingException {
+        LOGGER.debug("Reading headers.");
+
         if (!headers.containsKey("Category")) {
             throw new ParsingException("No 'Category' header.");
         }
@@ -290,6 +313,8 @@ public class TextParser implements Parser {
     }
 
     private Collection parseCollectionFromBody(String body) throws ParsingException {
+        LOGGER.debug("Reading body.");
+
         String replaced = body.replaceAll("Category:\\s*", "");
         replaced = replaced.replaceAll("Link:\\s*", "");
         replaced = replaced.replaceAll("X-OCCI-Attribute:\\s*", "");
@@ -317,10 +342,12 @@ public class TextParser implements Parser {
 
                 switch (categoryClass) {
                     case "kind":
-                        kind = getKind(term, scheme, title, location, attributes, actions, null);
+                        kind = createKind(term, scheme, title, location, attributes);
+                        connectActions(actions, kind, null);
                         break;
                     case "mixin":
-                        Mixin mixin = getMixin(term, scheme, title, location, attributes, actions, null);
+                        Mixin mixin = createMixin(term, scheme, title, location, attributes);
+                        connectActions(actions, mixin, null);
                         mixins.add(mixin);
                         break;
                     default:
@@ -343,9 +370,7 @@ public class TextParser implements Parser {
                 String category = matcher.group("category");
                 String attributes = matcher.group("attributes");
 
-                System.out.println(uri + ", " + rel + ", " + self + ", " + category + ", " + attributes);
-
-                Link link = getLink(uri, rel, self, category, attributes);
+                Link link = createLink(uri, rel, self, category, attributes);
                 links.add(link);
             }
         }
@@ -403,7 +428,7 @@ public class TextParser implements Parser {
         return result;
     }
 
-    private Kind getKind(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
+    private Kind createKind(String term, String scheme, String title, String location, String attributes) throws ParsingException {
         try {
             Set<Attribute> parsedAttributes = parseAttributes(attributes);
             URI locationUri = null;
@@ -411,7 +436,6 @@ public class TextParser implements Parser {
                 locationUri = new URI(location);
             }
             Kind kind = new Kind(new URI(scheme), term, title, locationUri, parsedAttributes);
-            connectActions(actions, kind, model);
 
             return kind;
         } catch (URISyntaxException ex) {
@@ -419,7 +443,7 @@ public class TextParser implements Parser {
         }
     }
 
-    private Mixin getMixin(String term, String scheme, String title, String location, String attributes, String actions, Model model) throws ParsingException {
+    private Mixin createMixin(String term, String scheme, String title, String location, String attributes) throws ParsingException {
         try {
             URI locationUri = null;
             if (location != null) {
@@ -427,7 +451,6 @@ public class TextParser implements Parser {
             }
             Set<Attribute> parsedAttributes = parseAttributes(attributes);
             Mixin mixin = new Mixin(new URI(scheme), term, title, locationUri, parsedAttributes);
-            connectActions(actions, mixin, model);
 
             return mixin;
         } catch (URISyntaxException ex) {
@@ -435,7 +458,7 @@ public class TextParser implements Parser {
         }
     }
 
-    private Link getLink(String uri, String rel, String self, String category, String attributes) throws ParsingException {
+    private Link createLink(String uri, String rel, String self, String category, String attributes) throws ParsingException {
         try {
             String[] splitedCategory = category.split("#");
             if (splitedCategory.length != 2) {
@@ -471,6 +494,8 @@ public class TextParser implements Parser {
 
     @Override
     public List<URI> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+        LOGGER.debug("Parsing location...");
+
         switch (mediaType) {
             case TEXT_OCCI:
                 return parseLocationsFromHeaders(headers);
@@ -483,6 +508,8 @@ public class TextParser implements Parser {
     }
 
     private List<URI> parseLocationsFromHeaders(Map<String, String> headers) throws ParsingException {
+        LOGGER.debug("Reading response headers.");
+
         if (!headers.containsKey("Location")) {
             throw new ParsingException("No header 'Location' among headers.");
         }
@@ -492,6 +519,8 @@ public class TextParser implements Parser {
     }
 
     private List<URI> parseLocationsFromBody(String body) throws ParsingException {
+        LOGGER.debug("Reading response body.");
+
         String replaced = body.replaceAll("X-OCCI-Location:\\s*", "");
         String[] lines = replaced.split("[\\r\\n]+");
         return makeURIList(lines);

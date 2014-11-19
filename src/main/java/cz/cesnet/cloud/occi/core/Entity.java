@@ -8,18 +8,23 @@ import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class Entity implements Identifiable {
 
     public static final String ID_ATTRIBUTE_NAME = "occi.core.id";
     public static final String TITLE_ATTRIBUTE_NAME = "occi.core.title";
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
     private Kind kind;
     private Model model;
     private final SetCover<Mixin> mixins = new SetCover<>();
     private final AttributeMapCover attributes = new AttributeMapCover();
 
     public Entity(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
+        LOGGER.debug("Creating Entity: class={}, id={}, kind={}, title={}, model={}", getClass().getName(), id, kind, title, model);
+
         if (id == null) {
             throw new NullPointerException("Entity id cannot be null.");
         }

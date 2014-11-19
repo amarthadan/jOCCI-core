@@ -1,13 +1,19 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
+import java.util.Objects;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ActionInstance {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ActionInstance.class);
     private final AttributeMapCover attributes = new AttributeMapCover();
     private Action action;
 
     public ActionInstance(Action action) {
+        LOGGER.debug("Creating ActionInstance: action={}", action);
+
         if (action == null) {
             throw new NullPointerException("ActionInstance action cannot be null.");
         }
@@ -53,5 +59,36 @@ public class ActionInstance {
 
     public void clearAttributes() {
         attributes.clear();
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.attributes);
+        hash = 41 * hash + Objects.hashCode(this.action);
+        return hash;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ActionInstance other = (ActionInstance) obj;
+        if (!Objects.equals(this.attributes, other.attributes)) {
+            return false;
+        }
+        if (!Objects.equals(this.action, other.action)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        return "ActionInstance{" + "attributes=" + attributes + ", action=" + action + '}';
     }
 }
