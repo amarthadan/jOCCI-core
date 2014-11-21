@@ -83,6 +83,14 @@ public class Action implements Identifiable {
         return category.getAttributes();
     }
 
+    public URI getSchemeDefault() {
+        return Category.SCHEME_CORE_DEFAULT;
+    }
+
+    public String getTermDefault() {
+        return "action";
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;

@@ -5,6 +5,7 @@ import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
+import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -216,6 +217,14 @@ public abstract class Entity implements Identifiable {
 
     public Set<Mixin> getMixins() {
         return mixins.getSet();
+    }
+
+    public URI getSchemeDefault() {
+        return Category.SCHEME_CORE_DEFAULT;
+    }
+
+    public String getTermDefult() {
+        return "entity";
     }
 
     @Override

@@ -1,11 +1,13 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Category;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Resource;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.ComputeState;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Architecture;
+import java.net.URI;
 
 public class Compute extends Resource {
 
@@ -90,5 +92,15 @@ public class Compute extends Resource {
 
     public void setArchitecture(String architectureName) throws InvalidAttributeValueException {
         addAttribute(ARCHITECTURE_ATTRIBUTE_NAME, architectureName);
+    }
+
+    @Override
+    public URI getSchemeDefault() {
+        return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    }
+
+    @Override
+    public String getTermDefult() {
+        return "compute";
     }
 }

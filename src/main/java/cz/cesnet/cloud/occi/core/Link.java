@@ -8,6 +8,8 @@ public class Link extends Entity {
     public static final String SOURCE_ATTRIBUTE_NAME = "occi.core.source";
     public static final String TARGET_ATTRIBUTE_NAME = "occi.core.target";
 
+    private String relation;
+
     public Link(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
         super(id, kind, title, model);
     }
@@ -38,6 +40,19 @@ public class Link extends Entity {
 
     public void setTarget(String targetIdentifier) throws InvalidAttributeValueException {
         addAttribute(TARGET_ATTRIBUTE_NAME, targetIdentifier);
+    }
+
+    public String getRelation() {
+        return relation;
+    }
+
+    public void setRelation(String relation) {
+        this.relation = relation;
+    }
+
+    @Override
+    public String getTermDefult() {
+        return "link";
     }
 
     @Override

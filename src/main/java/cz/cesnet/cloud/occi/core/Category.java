@@ -13,7 +13,8 @@ import org.slf4j.LoggerFactory;
 public class Category implements Identifiable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
-    public static final URI DEFAULT_SCHEME = makeURI("http://schemas.ogf.org/occi/core#");
+    public static final URI SCHEME_CORE_DEFAULT = makeURI("http://schemas.ogf.org/occi/core#");
+    public static final URI SCHEME_INFRASTRUCTURE_DEFAULT = makeURI("http://schemas.ogf.org/occi/infrastructure#");
 
     private String term;
     private URI scheme;

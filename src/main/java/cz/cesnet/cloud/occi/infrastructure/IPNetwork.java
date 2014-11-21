@@ -4,8 +4,14 @@ import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Allocation;
+import java.net.URI;
+import java.net.URISyntaxException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IPNetwork extends Network {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(IPNetwork.class);
 
     public static final String ADDRESS_ATTRIBUTE_NAME = "occi.network.address";
     public static final String GATEWAY_ATTRIBUTE_NAME = "occi.network.gateway";
@@ -45,5 +51,20 @@ public class IPNetwork extends Network {
 
     public void setAllocation(String allocationName) throws InvalidAttributeValueException {
         addAttribute(ALLOCATION_ATTRIBUTE_NAME, allocationName);
+    }
+
+    @Override
+    public URI getSchemeDefault() {
+        try {
+            return new URI("http://schemas.ogf.org/occi/infrastructure/network#");
+        } catch (URISyntaxException ex) {
+            LOGGER.error("Wrong scheme URI", ex);
+            return null;
+        }
+    }
+
+    @Override
+    public String getTermDefult() {
+        return "ipnetworking";
     }
 }
