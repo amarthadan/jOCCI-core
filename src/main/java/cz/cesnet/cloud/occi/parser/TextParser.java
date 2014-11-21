@@ -180,7 +180,7 @@ public class TextParser implements Parser {
     }
 
     private void addMixin(String term, String scheme, String title, String rel, String location, String attributes, String actions, Model model) throws ParsingException {
-        LOGGER.debug("Mixin kind...");
+        LOGGER.debug("Adding mixin...");
         Mixin mixin = createMixin(term, scheme, title, location, attributes);
         connectActions(actions, mixin, model);
 
@@ -197,12 +197,14 @@ public class TextParser implements Parser {
     }
 
     private void connectActions(String actions, Category category, Model model) throws ParsingException {
+        LOGGER.debug("Connecting actions...");
         if (actions == null || actions.isEmpty()) {
             return;
         }
 
         String[] splitedActions = actions.split("\\s+");
         for (String actionIdentifier : splitedActions) {
+            LOGGER.debug("Action identifier: {}", actionIdentifier);
             Action action;
             if (model != null && model.containsAction(actionIdentifier)) {
                 action = model.getAction(actionIdentifier);
@@ -223,6 +225,7 @@ public class TextParser implements Parser {
     }
 
     private void addAction(String term, String scheme, String title, String location, String attributes, Model model) throws ParsingException {
+        LOGGER.debug("Adding action...");
         Set<Attribute> parsedAttributes = parseAttributes(attributes);
         String actionIdentifier = scheme + term;
         URI locationUri = null;
@@ -247,6 +250,7 @@ public class TextParser implements Parser {
     }
 
     private Set<Attribute> parseAttributes(String attributes) {
+        LOGGER.debug("Parsing attributes: {}", attributes);
         Set<Attribute> attributeSet = new HashSet<>();
         if (attributes == null || attributes.isEmpty()) {
             return attributeSet;
@@ -255,6 +259,7 @@ public class TextParser implements Parser {
         Matcher matcher = PATTERN_ATTRIBUTES.matcher(attributes);
         while (matcher.find()) {
             String attributeString = matcher.group();
+            LOGGER.debug("Found attribute represented by string: {}", attributeString);
             Attribute attribute = parseAttribute(attributeString);
             attributeSet.add(attribute);
         }
@@ -274,6 +279,7 @@ public class TextParser implements Parser {
             }
         }
 
+        LOGGER.debug("New attribute: {}", attribute);
         return attribute;
     }
 
@@ -330,6 +336,7 @@ public class TextParser implements Parser {
         List<String> rawAttributes = new ArrayList<>();
 
         for (String line : lines) {
+            LOGGER.debug("Matching line '{}' against category pattern.", line);
             Matcher matcher = PATTERN_CATEGORY.matcher(line);
             if (matcher.find()) {
                 String term = matcher.group("term");
@@ -339,6 +346,8 @@ public class TextParser implements Parser {
                 String location = matcher.group("location");
                 String attributes = matcher.group("attributes");
                 String actions = matcher.group("actions");
+
+                LOGGER.debug("Match: term={}, scheme={}, class={}, title={}, location={}, attributes={}, actions={}", term, scheme, categoryClass, title, location, attributes, actions);
 
                 switch (categoryClass) {
                     case "kind":
@@ -357,11 +366,13 @@ public class TextParser implements Parser {
                 continue;
             }
 
+            LOGGER.debug("Matching line '{}' against attribute pattern.", line);
             if (line.matches(REGEXP_ATTRIBUTE_REPR)) {
                 rawAttributes.add(line);
                 continue;
             }
 
+            LOGGER.debug("Matching line '{}' against link pattern.", line);
             matcher = PATTERN_LINK.matcher(line);
             if (matcher.find()) {
                 String uri = matcher.group("uri");
@@ -369,6 +380,8 @@ public class TextParser implements Parser {
                 String self = matcher.group("self");
                 String category = matcher.group("category");
                 String attributes = matcher.group("attributes");
+
+                LOGGER.debug("Match: uri={}, rel={}, self={}, category={}, attributes={}", uri, rel, self, category, attributes);
 
                 Link link = createLink(uri, rel, self, category, attributes);
                 links.add(link);
@@ -411,9 +424,11 @@ public class TextParser implements Parser {
     }
 
     private Map<String, String> parseAttributesWithValues(String[] attributes) throws ParsingException {
+        LOGGER.debug("Parsing attributes with values");
         Map<String, String> result = new HashMap<>();
 
         for (String attribute : attributes) {
+            LOGGER.debug("Attribute represented by string: {}", attribute);
             String[] parts = attribute.split("=");
             if (parts.length != 2) {
                 throw new ParsingException("Wrong attribute format.");
