@@ -45,13 +45,11 @@ public class Storage extends Resource {
         addAttribute(STATE_ATTRIBUTE_NAME, stateName);
     }
 
-    @Override
-    public URI getSchemeDefault() {
+    public static URI getSchemeDefault() {
         return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
     }
 
-    @Override
-    public String getTermDefult() {
+    public static String getTermDefult() {
         return "storage";
     }
 }

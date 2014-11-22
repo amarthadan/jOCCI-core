@@ -94,13 +94,11 @@ public class Compute extends Resource {
         addAttribute(ARCHITECTURE_ATTRIBUTE_NAME, architectureName);
     }
 
-    @Override
-    public URI getSchemeDefault() {
+    public static URI getSchemeDefault() {
         return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
     }
 
-    @Override
-    public String getTermDefult() {
+    public static String getTermDefult() {
         return "compute";
     }
 }

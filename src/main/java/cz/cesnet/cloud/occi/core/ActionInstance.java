@@ -1,11 +1,12 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
+import cz.cesnet.cloud.occi.type.Identifiable;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ActionInstance {
+public class ActionInstance implements Identifiable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionInstance.class);
     private final AttributeMapCover attributes = new AttributeMapCover();
@@ -31,6 +32,11 @@ public class ActionInstance {
         }
 
         this.action = action;
+    }
+
+    @Override
+    public String getIdentifier() {
+        return action.getIdentifier();
     }
 
     public void addAttribute(Attribute attribute, String value) {

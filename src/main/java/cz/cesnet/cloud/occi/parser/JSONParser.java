@@ -15,7 +15,7 @@ public class JSONParser implements Parser {
     }
 
     @Override
-    public Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+    public Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers, CollectionType collectionType) throws ParsingException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

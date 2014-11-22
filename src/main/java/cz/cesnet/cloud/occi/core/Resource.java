@@ -57,8 +57,7 @@ public class Resource extends Entity {
         return links.getSet();
     }
 
-    @Override
-    public String getTermDefult() {
+    public static String getTermDefult() {
         return "resource";
     }
 

@@ -53,8 +53,7 @@ public class IPNetwork extends Network {
         addAttribute(ALLOCATION_ATTRIBUTE_NAME, allocationName);
     }
 
-    @Override
-    public URI getSchemeDefault() {
+    public static URI getSchemeDefault() {
         try {
             return new URI("http://schemas.ogf.org/occi/infrastructure/network#");
         } catch (URISyntaxException ex) {
@@ -63,8 +62,7 @@ public class IPNetwork extends Network {
         }
     }
 
-    @Override
-    public String getTermDefult() {
+    public static String getTermDefult() {
         return "ipnetworking";
     }
 }

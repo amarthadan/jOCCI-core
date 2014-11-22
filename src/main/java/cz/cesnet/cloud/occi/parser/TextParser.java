@@ -3,8 +3,10 @@ package cz.cesnet.cloud.occi.parser;
 import cz.cesnet.cloud.occi.Collection;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.core.Action;
+import cz.cesnet.cloud.occi.core.ActionInstance;
 import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Category;
+import cz.cesnet.cloud.occi.core.Entity;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.core.Mixin;
@@ -20,6 +22,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
@@ -226,14 +229,15 @@ public class TextParser implements Parser {
 
     private void addAction(String term, String scheme, String title, String location, String attributes, Model model) throws ParsingException {
         LOGGER.debug("Adding action...");
-        Set<Attribute> parsedAttributes = parseAttributes(attributes);
         String actionIdentifier = scheme + term;
-        URI locationUri = null;
         try {
-            if (location != null) {
-                locationUri = new URI(location);
-            }
             if (model.containsAction(actionIdentifier)) {
+                Set<Attribute> parsedAttributes = parseAttributes(attributes);
+                URI locationUri = null;
+
+                if (location != null) {
+                    locationUri = new URI(location);
+                }
                 Action action = model.getAction(actionIdentifier);
                 action.setTitle(title);
                 action.setLocation(locationUri);
@@ -241,7 +245,7 @@ public class TextParser implements Parser {
                     action.addAttribute(attribute);
                 }
             } else {
-                Action action = new Action(new URI(scheme), term, title, locationUri, parsedAttributes);
+                Action action = createAction(scheme, term, title, location, attributes);
                 model.addAction(action);
             }
         } catch (URISyntaxException ex) {
@@ -284,20 +288,20 @@ public class TextParser implements Parser {
     }
 
     @Override
-    public Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+    public Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Parsing collection...");
 
         switch (mediaType) {
             case TEXT_OCCI:
-                return parseCollectionFromHeaders(headers);
+                return parseCollectionFromHeaders(headers, collectionType);
             case TEXT_PLAIN:
             default:
-                return parseCollectionFromBody(body);
+                return parseCollectionFromBody(body, collectionType);
 
         }
     }
 
-    private Collection parseCollectionFromHeaders(Map<String, String> headers) throws ParsingException {
+    private Collection parseCollectionFromHeaders(Map<String, String> headers, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Reading headers.");
 
         if (!headers.containsKey("Category")) {
@@ -315,10 +319,10 @@ public class TextParser implements Parser {
             lines.addAll(Arrays.asList(headers.get("Link").split(",")));
         }
 
-        return parseCollectionFromArray(lines.toArray(new String[0]));
+        return parseCollectionFromArray(lines.toArray(new String[0]), collectionType);
     }
 
-    private Collection parseCollectionFromBody(String body) throws ParsingException {
+    private Collection parseCollectionFromBody(String body, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Reading body.");
 
         String replaced = body.replaceAll("Category:\\s*", "");
@@ -326,11 +330,12 @@ public class TextParser implements Parser {
         replaced = replaced.replaceAll("X-OCCI-Attribute:\\s*", "");
         String[] lines = replaced.split("[\\r\\n]+");
 
-        return parseCollectionFromArray(lines);
+        return parseCollectionFromArray(lines, collectionType);
     }
 
-    private Collection parseCollectionFromArray(String[] lines) throws ParsingException {
+    private Collection parseCollectionFromArray(String[] lines, CollectionType collectionType) throws ParsingException {
         Kind kind = null;
+        ActionInstance actionInstance = null;
         Set<Mixin> mixins = new HashSet<>();
         Set<Link> links = new HashSet<>();
         List<String> rawAttributes = new ArrayList<>();
@@ -359,6 +364,9 @@ public class TextParser implements Parser {
                         connectActions(actions, mixin, null);
                         mixins.add(mixin);
                         break;
+                    case "action":
+                        Action action = createAction(scheme, term, title, location, attributes);
+                        actionInstance = new ActionInstance(action);
                     default:
                         throw new ParsingException("Unknown category class '" + categoryClass + "'.");
                 }
@@ -388,37 +396,75 @@ public class TextParser implements Parser {
             }
         }
 
-        if (kind == null) {
-            throw new ParsingException("No kind specification found.");
-        }
-
         Map<String, String> attributesWithValues = parseAttributesWithValues(rawAttributes.toArray(new String[0]));
-
-        if (!attributesWithValues.containsKey(Resource.ID_ATTRIBUTE_NAME)) {
-            throw new ParsingException("No id found. Cannot construct a resource.");
-        }
-
-        Resource resource = null;
-        try {
-            resource = new Resource(attributesWithValues.get(Resource.ID_ATTRIBUTE_NAME), kind);
-
-            attributesWithValues.remove(Resource.ID_ATTRIBUTE_NAME);
-            for (Mixin mixin : mixins) {
-                resource.addMixin(mixin);
-            }
-            for (Link link : links) {
-                link.setSource(resource);
-                resource.addLink(link);
-            }
-            for (String name : attributesWithValues.keySet()) {
-                resource.addAttribute(name, attributesWithValues.get(name));
-            }
-        } catch (InvalidAttributeValueException ex) {
-            throw new ParsingException("Invalid attribute value found", ex);
-        }
-
         Collection collection = new Collection();
-        collection.addResource(resource);
+
+        switch (collectionType) {
+            case RESOURCE:
+                if (kind == null) {
+                    throw new ParsingException("No kind specification found.");
+                }
+                if (!attributesWithValues.containsKey(Resource.ID_ATTRIBUTE_NAME)) {
+                    throw new ParsingException("No id found. Cannot construct a resource.");
+                }
+
+                Resource resource = null;
+                try {
+                    resource = new Resource(attributesWithValues.get(Entity.ID_ATTRIBUTE_NAME), kind);
+
+                    attributesWithValues.remove(Entity.ID_ATTRIBUTE_NAME);
+                    for (Mixin mixin : mixins) {
+                        resource.addMixin(mixin);
+                    }
+                    for (Link link : links) {
+                        link.setSource(resource);
+                        resource.addLink(link);
+                    }
+                    for (String name : attributesWithValues.keySet()) {
+                        resource.addAttribute(name, attributesWithValues.get(name));
+                    }
+                } catch (InvalidAttributeValueException ex) {
+                    throw new ParsingException("Invalid attribute value found", ex);
+                }
+                collection.addResource(resource);
+                break;
+            case LINK:
+                if (kind == null) {
+                    throw new ParsingException("No kind specification found.");
+                }
+                if (!attributesWithValues.containsKey(Resource.ID_ATTRIBUTE_NAME)) {
+                    throw new ParsingException("No id found. Cannot construct a resource.");
+                }
+
+                Link link = null;
+                try {
+                    link = new Link(attributesWithValues.get(Entity.ID_ATTRIBUTE_NAME), kind);
+
+                    attributesWithValues.remove(Entity.ID_ATTRIBUTE_NAME);
+                    for (Mixin mixin : mixins) {
+                        link.addMixin(mixin);
+                    }
+                    for (String name : attributesWithValues.keySet()) {
+                        link.addAttribute(name, attributesWithValues.get(name));
+                    }
+                } catch (InvalidAttributeValueException ex) {
+                    throw new ParsingException("Invalid attribute value found", ex);
+                }
+                collection.addLink(link);
+                break;
+            case ACTION:
+                if (actionInstance == null) {
+                    throw new ParsingException("No action specification found.");
+                }
+
+                for (String name : attributesWithValues.keySet()) {
+                    actionInstance.addAttribute(new Attribute(name), attributesWithValues.get(name));
+                }
+                collection.addAction(actionInstance);
+                break;
+            default:
+                throw new ParsingException("Unknown collection type'" + collectionType + "'.");
+        }
 
         return collection;
     }
@@ -475,17 +521,28 @@ public class TextParser implements Parser {
 
     private Link createLink(String uri, String rel, String self, String category, String attributes) throws ParsingException {
         try {
-            String[] splitedCategory = category.split("#");
-            if (splitedCategory.length != 2) {
-                throw new ParsingException("Invalid link category");
+            Kind kind;
+            if (category != null && !category.isEmpty()) {
+                String[] splitedCategory = category.split("#");
+                if (splitedCategory.length != 2) {
+                    throw new ParsingException("Invalid link category");
+                }
+                kind = new Kind(new URI(splitedCategory[0] + "#"), splitedCategory[1]);
+            } else {
+                kind = new Kind(Link.getSchemeDefault(), Link.getTermDefult());
             }
-            Kind kind = new Kind(new URI(splitedCategory[0] + "#"), splitedCategory[1]);
 
-            String[] splitedSelf = divideUriByLastSegment(self);
-            kind.setLocation(new URI(splitedSelf[1]));
+            Link link;
+            if (self != null && !self.isEmpty()) {
+                String[] splitedSelf = divideUriByLastSegment(self);
+                kind.setLocation(new URI(splitedSelf[1]));
+                link = new Link(splitedSelf[0], kind);
+            } else {
+                link = new Link(UUID.randomUUID().toString(), kind);
+            }
 
-            Link link = new Link(splitedSelf[0], kind);
             link.setTarget(uri);
+            link.setRelation(rel);
             Map<String, String> attributesWithValues = parseAttributesWithValues(attributes.split(";"));
             for (String name : attributesWithValues.keySet()) {
                 link.addAttribute(name, attributesWithValues.get(name));
@@ -553,5 +610,21 @@ public class TextParser implements Parser {
         }
 
         return locationsURI;
+    }
+
+    private Action createAction(String scheme, String term, String title, String location, String attributes) throws ParsingException {
+        Set<Attribute> parsedAttributes = parseAttributes(attributes);
+        URI locationUri = null;
+        Action action = null;
+        try {
+            if (location != null) {
+                locationUri = new URI(location);
+            }
+
+            action = new Action(new URI(scheme), term, title, locationUri, parsedAttributes);
+        } catch (URISyntaxException ex) {
+            throw new ParsingException("Invalid URI.");
+        }
+        return action;
     }
 }

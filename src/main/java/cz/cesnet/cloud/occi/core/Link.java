@@ -50,8 +50,7 @@ public class Link extends Entity {
         this.relation = relation;
     }
 
-    @Override
-    public String getTermDefult() {
+    public static String getTermDefult() {
         return "link";
     }
 

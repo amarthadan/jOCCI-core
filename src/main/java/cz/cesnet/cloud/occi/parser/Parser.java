@@ -11,7 +11,7 @@ public interface Parser {
 
     Model parseModel(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException;
 
-    Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException;
+    Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers, CollectionType collectionType) throws ParsingException;
 
     List<URI> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException;
 }

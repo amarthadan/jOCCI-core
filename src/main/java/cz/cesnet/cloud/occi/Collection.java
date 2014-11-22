@@ -1,6 +1,7 @@
 package cz.cesnet.cloud.occi;
 
 import cz.cesnet.cloud.occi.collection.SetCover;
+import cz.cesnet.cloud.occi.core.ActionInstance;
 import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.core.Resource;
 import java.util.Objects;
@@ -10,6 +11,7 @@ public class Collection {
 
     private final SetCover<Resource> resources = new SetCover<>();
     private final SetCover<Link> links = new SetCover<>();
+    private final SetCover<ActionInstance> actions = new SetCover<>();
     private Model model;
 
     public boolean containsResource(Resource resource) {
@@ -66,6 +68,34 @@ public class Collection {
 
     public Set<Link> getLinks() {
         return links.getSet();
+    }
+
+    public boolean containsAction(ActionInstance action) {
+        return actions.contains(action);
+    }
+
+    public boolean containsAction(String actionIdentifier) {
+        return actions.contains(actionIdentifier);
+    }
+
+    public boolean addAction(ActionInstance action) {
+        return actions.add(action);
+    }
+
+    public ActionInstance getAction(String actionIdentifier) {
+        return actions.get(actionIdentifier);
+    }
+
+    public boolean removeAction(ActionInstance action) {
+        return actions.remove(action);
+    }
+
+    public void clearActions() {
+        actions.clear();
+    }
+
+    public Set<ActionInstance> getActions() {
+        return actions.getSet();
     }
 
     /**

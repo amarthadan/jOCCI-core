@@ -219,11 +219,11 @@ public abstract class Entity implements Identifiable {
         return mixins.getSet();
     }
 
-    public URI getSchemeDefault() {
+    public static URI getSchemeDefault() {
         return Category.SCHEME_CORE_DEFAULT;
     }
 
-    public String getTermDefult() {
+    public static String getTermDefult() {
         return "entity";
     }
 

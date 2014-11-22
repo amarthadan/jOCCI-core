@@ -570,6 +570,7 @@ public class TextParserTest {
         l.addAttribute(NetworkInterface.MAC_ATTRIBUTE_NAME, "00:11:22:33:44:55");
         l.addAttribute(NetworkInterface.STATE_ATTRIBUTE_NAME, "active");
         l.setTarget("/network/123");
+        l.setRelation("http://schemas.ogf.org/occi/infrastructure#network");
         links.add(l);
 
         k = new Kind(new URI("http://schemas.ogf.org/occi/infrastructure#"), "storagelink", null, new URI("/link/storagelink/"), null);
@@ -578,6 +579,7 @@ public class TextParserTest {
         l.addAttribute(StorageLink.MOUNTPOINT_ATTRIBUTE_NAME, "/mnt/somewhere/");
         l.addAttribute(StorageLink.STATE_ATTRIBUTE_NAME, "active");
         l.setTarget("/storage/852");
+        l.setRelation("http://schemas.ogf.org/occi/infrastructure#storage");
         links.add(l);
 
         return links;
@@ -591,7 +593,7 @@ public class TextParserTest {
 
         Collection expResult = new Collection();
         expResult.addResource(getResource());
-        Collection result = instance.parseCollection(MediaType.TEXT_PLAIN, body, headers);
+        Collection result = instance.parseCollection(MediaType.TEXT_PLAIN, body, headers, CollectionType.RESOURCE);
         assertEquals(expResult, result);
         assertResourcesEqual(expResult.getResources(), result.getResources());
     }
@@ -614,7 +616,7 @@ public class TextParserTest {
         TextParser instance = new TextParser();
         Collection expResult = new Collection();
         expResult.addResource(getResource());
-        Collection result = instance.parseCollection(MediaType.TEXT_OCCI, body, headers);
+        Collection result = instance.parseCollection(MediaType.TEXT_OCCI, body, headers, CollectionType.RESOURCE);
         assertEquals(expResult, result);
         assertResourcesEqual(expResult.getResources(), result.getResources());
     }
@@ -708,6 +710,7 @@ public class TextParserTest {
         assertEquals(expected, result);
 
         assertEquals(expected.getTitle(), result.getTitle());
+        assertEquals(expected.getRelation(), result.getRelation());
         assertEquals(expected.getMixins(), result.getMixins());
         assertEquals(expected.getAttributes(), result.getAttributes());
     }
