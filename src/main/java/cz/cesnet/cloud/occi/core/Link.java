@@ -2,6 +2,8 @@ package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
+import cz.cesnet.cloud.occi.exception.RenderingException;
+import cz.cesnet.cloud.occi.renderer.TextRenderer;
 
 public class Link extends Entity {
 
@@ -55,12 +57,25 @@ public class Link extends Entity {
     }
 
     @Override
-    public void toText() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String toText() throws RenderingException {
+        StringBuilder sb = new StringBuilder("Link: ");
+        if (getTarget() == null || getTarget().isEmpty()) {
+            throw new RenderingException("Link " + this + " is missing a target attribute");
+        }
+
+        sb.append(TextRenderer.surroundString(getTarget(), "<", ">;"));
+
+        //TODO 'self' rendering
+        sb.append("category");
+        sb.append(TextRenderer.surroundString(getKind().getIdentifier()));
+
+        sb.append(attributesToOneLineText());
+
+        return sb.toString();
     }
 
     @Override
-    public void toJSON() {
+    public String toJSON() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

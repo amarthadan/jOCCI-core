@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import java.util.Objects;
 import org.slf4j.Logger;
@@ -137,5 +138,28 @@ public class Attribute implements Identifiable {
     @Override
     public String toString() {
         return "Attribute{" + "name=" + name + ", required=" + required + ", immutable=" + immutable + ", type=" + type + ", pattern=" + pattern + ", defaultValue=" + defaultValue + ", description=" + description + '}';
+    }
+
+    public String toText() {
+        StringBuilder sb = new StringBuilder(name);
+
+        StringBuilder properties = null;
+        if (required) {
+            properties = new StringBuilder("required");
+        }
+
+        if (immutable) {
+            if (properties == null) {
+                properties = new StringBuilder("immutable");
+            } else {
+                properties.append(" immutable");
+            }
+        }
+
+        if (properties != null) {
+            sb.append(TextRenderer.surroundString(properties.toString(), "{", "}"));
+        }
+
+        return sb.toString();
     }
 }

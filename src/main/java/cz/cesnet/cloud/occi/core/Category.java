@@ -1,6 +1,7 @@
 package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.SetCover;
+import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -224,5 +225,68 @@ public class Category implements Identifiable {
     @Override
     public String toString() {
         return "Category{" + "term=" + term + ", scheme=" + scheme + ", title=" + title + ", location=" + location + ", attributes=" + attributes + '}';
+    }
+
+    public String toText() {
+        StringBuilder sb = new StringBuilder("Category: ");
+        sb.append(term);
+        sb.append("scheme");
+        sb.append(TextRenderer.surroundString(scheme.toString()));
+        sb.append("class");
+        sb.append(TextRenderer.surroundString(this.getClass().getSimpleName().toLowerCase()));
+
+        if (title != null && !title.isEmpty()) {
+            sb.append("title");
+            sb.append(TextRenderer.surroundString(title));
+        }
+
+        if (this instanceof Kind) {
+            Kind kind = (Kind) this;
+            if (kind.getRelations().size() == 1) {
+                sb.append("rel");
+                for (Kind k : kind.getRelations()) {
+                    sb.append(TextRenderer.surroundString(k.getIdentifier()));
+                }
+            }
+        }
+
+        if (this instanceof Mixin) {
+            Mixin mixin = (Mixin) this;
+            if (mixin.getRelations().size() == 1) {
+                sb.append("rel");
+                for (Mixin m : mixin.getRelations()) {
+                    sb.append(TextRenderer.surroundString(m.getIdentifier()));
+                }
+            }
+        }
+
+        if (title != null && !title.isEmpty()) {
+            sb.append("title");
+            sb.append(TextRenderer.surroundString(title));
+        }
+
+        if (attributes != null && !attributes.getSet().isEmpty()) {
+            sb.append("attributes");
+            StringBuilder attrSB = new StringBuilder();
+            for (Attribute attribute : attributes.getSet()) {
+                attrSB.append(attribute.toText());
+                attrSB.append(" ");
+            }
+            attrSB.deleteCharAt(attrSB.length() - 1);
+            sb.append(TextRenderer.surroundString(attrSB.toString()));
+        }
+
+        if (actions != null && !actions.getSet().isEmpty()) {
+            sb.append("actions");
+            StringBuilder actionsSB = new StringBuilder();
+            for (Action action : actions.getSet()) {
+                actionsSB.append(action.getIdentifier());
+                actionsSB.append(" ");
+            }
+            actionsSB.deleteCharAt(actionsSB.length() - 1);
+            sb.append(TextRenderer.surroundString(actionsSB.toString()));
+        }
+
+        return sb.toString();
     }
 }

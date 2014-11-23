@@ -3,6 +3,7 @@ package cz.cesnet.cloud.occi.core;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
+import cz.cesnet.cloud.occi.exception.RenderingException;
 import java.util.Set;
 
 public class Resource extends Entity {
@@ -67,12 +68,32 @@ public class Resource extends Entity {
     }
 
     @Override
-    public void toText() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String toText() throws RenderingException {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getKind().toText());
+
+        for (Mixin m : getMixins()) {
+            sb.append("\n");
+            sb.append(m.toText());
+        }
+
+        String attributesString = attributesToPrefixText();
+        if (!attributesString.isEmpty()) {
+            sb.append("\n");
+            sb.append(attributesString);
+        }
+
+        for (Link l : getLinks()) {
+            sb.append("\n");
+            sb.append(l.toText());
+        }
+
+        return sb.toString();
     }
 
     @Override
-    public void toJSON() {
+    public String toJSON() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

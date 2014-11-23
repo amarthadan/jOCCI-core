@@ -5,6 +5,7 @@ import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
+import cz.cesnet.cloud.occi.exception.RenderingException;
 import java.net.URI;
 import java.util.Map;
 import java.util.Objects;
@@ -191,6 +192,14 @@ public abstract class Entity implements Identifiable {
         attributes.clear();
     }
 
+    protected String attributesToOneLineText() {
+        return attributes.toOneLineText();
+    }
+
+    protected String attributesToPrefixText() {
+        return attributes.toPrefixText();
+    }
+
     public boolean containsMixin(Mixin mixin) {
         return mixins.contains(mixin);
     }
@@ -258,7 +267,7 @@ public abstract class Entity implements Identifiable {
         return "Entity{" + "class=" + getClass().getName() + ", id=" + getId() + ", kind=" + kind + ", title=" + getTitle() + ", mixins=" + mixins + ", attributes=" + attributes + '}';
     }
 
-    public abstract void toText();
+    public abstract String toText() throws RenderingException;
 
-    public abstract void toJSON();
+    public abstract String toJSON();
 }

@@ -1,8 +1,12 @@
 package cz.cesnet.cloud.occi.collection;
 
 import cz.cesnet.cloud.occi.core.Attribute;
+import cz.cesnet.cloud.occi.parser.TextParser;
+import cz.cesnet.cloud.occi.renderer.TextRenderer;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -85,5 +89,49 @@ public class AttributeMapCover {
     @Override
     public String toString() {
         return "AttributeMapCover{" + attributes + '}';
+    }
+
+    private List<String> toList() {
+        List<String> list = new ArrayList<>();
+        for (Attribute attribute : attributes.keySet()) {
+            StringBuilder sb = new StringBuilder(attribute.getName());
+            String value = attributes.get(attribute);
+            if (value.matches(TextParser.REGEXP_NUMBER)) {
+                sb.append(TextRenderer.surroundString(value, "=\"", "\""));
+            } else {
+                sb.append(TextRenderer.surroundString(value, "=", ""));
+            }
+            list.add(sb.toString());
+        }
+
+        return list;
+    }
+
+    public String toPrefixText() {
+        String prefix = "X-OCCI-Attribute: ";
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : toList()) {
+            sb.append(prefix);
+            sb.append(s);
+            sb.append("\n");
+        }
+
+        if (!sb.toString().isEmpty()) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+
+        return sb.toString();
+    }
+
+    public String toOneLineText() {
+        StringBuilder sb = new StringBuilder();
+
+        for (String s : toList()) {
+            sb.append(s);
+            sb.append(";");
+        }
+
+        return sb.toString();
     }
 }
