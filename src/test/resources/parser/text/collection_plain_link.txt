@@ -1,0 +1,12 @@
+Category: networkinterface;scheme="http://schemas.ogf.org/occi/infrastructure#";class="kind";
+Category: os_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Operating System Template";location="/mixins/os_tpl/"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";title="IP Network Mixin";location="/mixins/ipnetwork/";attributes="occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state"
+Category: resource_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Resource Template";location="/mixins/resource_tpl/"
+Category: larger;scheme="https://occi.localhost/occi/infrastructure/resource_tpl#";class="mixin";title="Larger Instance - 4 cores and 10 GB of RAM";rel="http://schemas.ogf.org/occi/infrastructure#resource_tpl";location="/mixins/larger/";attributes="occi.compute.architecture occi.compute.cores{immutable required} occi.compute.speed occi.compute.memory{immutable}"
+Category: debianvm;scheme="https://occi.localhost/occi/infrastructure/os_tpl#";class="mixin";title="debianvm";rel="http://schemas.ogf.org/occi/infrastructure#os_tpl";location="/mixins/debianvm/"
+X-OCCI-Attribute: occi.core.id="87f3bfc3-42d4-4474-b45c-757e55e093e9"
+X-OCCI-Attribute: occi.networkinterface.interface="eth0";
+X-OCCI-Attribute: occi.networkinterface.mac="00:11:22:33:44:55";
+X-OCCI-Attribute: occi.networkinterface.state="active";
+X-OCCI-Attribute: occi.core.source="/vms/foo/vm1"
+X-OCCI-Attribute: occi.core.target="/network/123"

@@ -3,7 +3,9 @@ package cz.cesnet.cloud.occi.parser;
 import cz.cesnet.cloud.occi.Collection;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.core.Action;
+import cz.cesnet.cloud.occi.core.ActionInstance;
 import cz.cesnet.cloud.occi.core.Attribute;
+import cz.cesnet.cloud.occi.core.Entity;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.core.Mixin;
@@ -479,64 +481,6 @@ public class TextParserTest {
         assertEquals(expResult, result);
     }
 
-    //    private Resource createResource() {
-//        Kind k = new Kind("http://schemas.ogf.org/occi/infrastructure#", "compute", "compute resource", "/compute/", null);
-//        Mixin m = new Mixin("https://occi.localhost/occi/infrastructure/os_tpl#", "debian6", "debian", "/mixin/os_tpl/debian6/", null);
-//        Resource r = null;
-//        try {
-//            r = new Resource("87f3bfc3-42d4-4474-b45c-757e55e093e9", k);
-//            r.addMixin(m);
-//            r.setTitle("compute1");
-//            r.addAttribute(Compute.ARCHITECTURE_ATTRIBUTE_NAME, "x86");
-//            r.addAttribute(Compute.HOSTNAME_ATTRIBUTE_NAME, "compute1.example.org");
-//            r.addAttribute(Compute.MEMORY_ATTRIBUTE_NAME, "1.7");
-//            r.addAttribute(Compute.SPEED_ATTRIBUTE_NAME, "1.0");
-//            r.addAttribute(Compute.STATE_ATTRIBUTE_NAME, "active");
-//        } catch (InvalidAttributeValueException ex) {
-//            Logger.getLogger(TextParserTest.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//
-//        return r;
-//    }
-//    @Test
-//    public void testParseResourcePlain() throws Exception {
-//        String body = readFile(RESOURCE_PATH + "resource_plain.txt");
-//        Map<String, String> headers = null;
-//        TextParser instance = new TextParser();
-//        Resource expResult = createResource();
-//        Resource result = instance.parseResource(MediaType.TEXT_PLAIN, body, headers);
-//        assertEquals(expResult, result);
-//    }
-    private Map<String, String> createHeadersWithResource() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Status Code", "200 OK");
-        headers.put("Cache-Control", "no-cache");
-        headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\",debian6;scheme=\"http://occi.example.org/occi/infrastructure/os_tpl#\";class=\"mixin\";location=\"/mixin/os_tpl/debian6/\";title=\"debian\"");
-        headers.put("Connection", "keep-alive");
-        headers.put("Content-Length", "0");
-        headers.put("Content-Type", "text/occi; charset=utf-8");
-        headers.put("Date", "Thu, 06 Nov 2014 19:11:38 GMT");
-        headers.put("Server", "WEBrick/1.3.1 (Ruby/2.0.0/2014-09-19)");
-        headers.put("Via", "1.1 vegur");
-        headers.put("X-Frame-Options", "SAMEORIGIN");
-        headers.put("X-Occi-Attribute", "occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\",occi.core.title=\"compute1\",occi.compute.architecture=\"x86\",occi.compute.hostname=\"compute1.example.org\",occi.compute.memory=1.7,occi.compute.speed=1.0,occi.compute.state=\"active\"");
-        headers.put("X-Request-Id", "3191d404-a8f5-4bda-97d6-1069e71fc418");
-        headers.put("X-Runtime", "0.025947");
-        headers.put("X-XSS-Protection", "1; mode=block");
-        headers.put("x-content-type-options", "nosniff");
-
-        return headers;
-    }
-
-//    @Test
-//    public void testParseResourceOcci() throws Exception {
-//        String body = null;
-//        Map<String, String> headers = createHeadersWithResource();
-//        TextParser instance = new TextParser();
-//        Resource expResult = createResource();
-//        Resource result = instance.parseResource(MediaType.TEXT_OCCI, body, headers);
-//        assertEquals(expResult, result);
-//    }
     private Resource getResource() throws InvalidAttributeValueException, URISyntaxException {
         Kind k = new Kind(new URI("http://schemas.ogf.org/occi/infrastructure#"), "compute", "compute resource", new URI("/compute/"), null);
         Resource r = new Resource("87f3bfc3-42d4-4474-b45c-757e55e093e9", k);
@@ -585,6 +529,36 @@ public class TextParserTest {
         return links;
     }
 
+    private Link getLink() throws InvalidAttributeValueException, URISyntaxException {
+        Kind k = new Kind(new URI("http://schemas.ogf.org/occi/infrastructure#"), "networkinterface", null, null, null);
+        Link l = new Link("87f3bfc3-42d4-4474-b45c-757e55e093e9", k);
+        l.addAttribute(NetworkInterface.INTERFACE_ATTRIBUTE_NAME, "eth0");
+        l.addAttribute(NetworkInterface.MAC_ATTRIBUTE_NAME, "00:11:22:33:44:55");
+        l.addAttribute(NetworkInterface.STATE_ATTRIBUTE_NAME, "active");
+        l.setSource("/vms/foo/vm1");
+        l.setTarget("/network/123");
+
+        List<Mixin> mixins = getFiveMixins();
+        for (Mixin mixin : mixins) {
+            l.addMixin(mixin);
+        }
+
+        return l;
+    }
+
+    private ActionInstance getAction() throws InvalidAttributeValueException, URISyntaxException {
+        Action a = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/storage/action#"), "backup", "Backup Storage", null, null);
+        ActionInstance ai = new ActionInstance(a);
+        ai.addAttribute(new Attribute(Entity.ID_ATTRIBUTE_NAME), "87f3bfc3-42d4-4474-b45c-757e55e093e9");
+        ai.addAttribute(new Attribute(NetworkInterface.INTERFACE_ATTRIBUTE_NAME), "eth0");
+        ai.addAttribute(new Attribute(NetworkInterface.MAC_ATTRIBUTE_NAME), "00:11:22:33:44:55");
+        ai.addAttribute(new Attribute(NetworkInterface.STATE_ATTRIBUTE_NAME), "active");
+        ai.addAttribute(new Attribute(Link.SOURCE_ATTRIBUTE_NAME), "/vms/foo/vm1");
+        ai.addAttribute(new Attribute(Link.TARGET_ATTRIBUTE_NAME), "/network/123");
+
+        return ai;
+    }
+
     @Test
     public void testParseCollectionPlainResource() throws Exception {
         String body = readFile(RESOURCE_PATH + "collection_plain_resource.txt");
@@ -600,7 +574,28 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionPlainLink() throws Exception {
-        fail();
+        String body = readFile(RESOURCE_PATH + "collection_plain_link.txt");
+        Map<String, String> headers = null;
+        TextParser instance = new TextParser();
+
+        Collection expResult = new Collection();
+        expResult.addLink(getLink());
+        Collection result = instance.parseCollection(MediaType.TEXT_PLAIN, body, headers, CollectionType.LINK);
+        assertEquals(expResult, result);
+        assertLinksEqual(expResult.getLinks(), result.getLinks());
+    }
+
+    @Test
+    public void testParseCollectionPlainAction() throws Exception {
+        String body = readFile(RESOURCE_PATH + "collection_plain_action.txt");
+        Map<String, String> headers = null;
+        TextParser instance = new TextParser();
+
+        Collection expResult = new Collection();
+        expResult.addAction(getAction());
+        Collection result = instance.parseCollection(MediaType.TEXT_PLAIN, body, headers, CollectionType.ACTION);
+        assertEquals(expResult, result);
+        assertActionInstancesEqual(expResult.getActions(), result.getActions());
     }
 
     @Test
@@ -623,7 +618,34 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionOcciLink() throws Exception {
-        fail();
+        String categoryHeader = readFile(RESOURCE_PATH + "collection_occi_link_category.txt");
+        String attributeHeader = readFile(RESOURCE_PATH + "collection_occi_link_attribute.txt");
+        String body = null;
+        Map<String, String> headers = createDefaultHeaders();
+        headers.put("Category", categoryHeader);
+        headers.put("X-Occi-Attribute", attributeHeader);
+        TextParser instance = new TextParser();
+        Collection expResult = new Collection();
+        expResult.addLink(getLink());
+        Collection result = instance.parseCollection(MediaType.TEXT_OCCI, body, headers, CollectionType.LINK);
+        assertEquals(expResult, result);
+        assertLinksEqual(expResult.getLinks(), result.getLinks());
+    }
+
+    @Test
+    public void testParseCollectionOcciAction() throws Exception {
+        String categoryHeader = readFile(RESOURCE_PATH + "collection_occi_action_category.txt");
+        String attributeHeader = readFile(RESOURCE_PATH + "collection_occi_action_attribute.txt");
+        String body = null;
+        Map<String, String> headers = createDefaultHeaders();
+        headers.put("Category", categoryHeader);
+        headers.put("X-Occi-Attribute", attributeHeader);
+        TextParser instance = new TextParser();
+        Collection expResult = new Collection();
+        expResult.addAction(getAction());
+        Collection result = instance.parseCollection(MediaType.TEXT_OCCI, body, headers, CollectionType.ACTION);
+        assertEquals(expResult, result);
+        assertActionInstancesEqual(expResult.getActions(), result.getActions());
     }
 
     private void assertKindsEqual(Set<Kind> expected, Set<Kind> result) {
@@ -689,6 +711,32 @@ public class TextParserTest {
         assertEquals(expected.getTitle(), result.getTitle());
         assertEquals(expected.getLocation(), result.getLocation());
         assertAttributesEqual(expected.getAttributes(), result.getAttributes());
+    }
+
+    private void assertActionInstancesEqual(Set<ActionInstance> expected, Set<ActionInstance> result) {
+        assertEquals(expected.size(), result.size());
+
+        List<ActionInstance> expectedList = new ArrayList<>();
+        expectedList.addAll(expected);
+        List<ActionInstance> resultList = new ArrayList<>();
+        resultList.addAll(result);
+        for (int i = 0; i < expectedList.size(); i++) {
+            assertActionInstanceDeepEquals(expectedList.get(i), resultList.get(i));
+        }
+    }
+
+    private void assertActionInstanceDeepEquals(ActionInstance expected, ActionInstance result) {
+        System.out.println("comparing " + expected + " with " + result);
+        assertEquals(expected, result);
+
+        assertActionDeepEquals(expected.getAction(), result.getAction());
+        for (Attribute expAttr : expected.getAttributes().keySet()) {
+            if (!result.getAttributes().containsKey(expAttr)) {
+                fail();
+            }
+            assertEquals(expected.getAttributes().get(expAttr), result.getAttributes().get(expAttr));
+        }
+        assertEquals(expected.getAttributes(), result.getAttributes());
     }
 
     private void assertLinksEqual(Set<Link> expected, Set<Link> result) {

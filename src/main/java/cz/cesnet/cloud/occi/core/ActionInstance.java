@@ -2,6 +2,7 @@ package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
+import java.util.Map;
 import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,6 +62,10 @@ public class ActionInstance implements Identifiable {
 
     public String getValue(String attributeName) {
         return attributes.getValue(attributeName);
+    }
+
+    public Map<Attribute, String> getAttributes() {
+        return attributes.getAttributes();
     }
 
     public void clearAttributes() {

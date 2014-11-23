@@ -52,7 +52,7 @@ public class TextParser implements Parser {
     public static final String REGEXP_ATTRIBUTE_PROPERTIES = "\\{(?:required immutable|immutable required|required|immutable)\\}";
     public static final String REGEXP_ATTRIBUTE_DEF = "(?:" + REGEXP_ATTRIBUTE_NAME + ")(?:" + REGEXP_ATTRIBUTE_PROPERTIES + ")?";
     public static final String REGEXP_ATTRIBUTE_LIST = REGEXP_ATTRIBUTE_DEF + "(\\s+" + REGEXP_ATTRIBUTE_DEF + ")*";
-    public static final String REGEXP_ATTRIBUTE_REPR = REGEXP_ATTRIBUTE_NAME + "=(\"" + REGEXP_QUOTED_STRING + "\"|" + REGEXP_NUMBER + "|" + REGEXP_BOOL + ")";
+    public static final String REGEXP_ATTRIBUTE_REPR = REGEXP_ATTRIBUTE_NAME + "=(\"" + REGEXP_QUOTED_STRING + "\"|" + REGEXP_NUMBER + "|" + REGEXP_BOOL + ");?";
 
     public static final String REGEXP_ACTION = REGEXP_TYPE_IDENTIFIER;
     public static final String REGEXP_ACTION_LIST = REGEXP_ACTION + "(\\s+" + REGEXP_ACTION + ")*";
@@ -367,6 +367,7 @@ public class TextParser implements Parser {
                     case "action":
                         Action action = createAction(scheme, term, title, location, attributes);
                         actionInstance = new ActionInstance(action);
+                        break;
                     default:
                         throw new ParsingException("Unknown category class '" + categoryClass + "'.");
                 }
@@ -482,6 +483,9 @@ public class TextParser implements Parser {
 
             String name = parts[0];
             String value = parts[1].replaceAll("\"", "");
+            if (value.endsWith(";")) {
+                value = value.substring(0, value.length() - 1);
+            }
 
             result.put(name, value);
         }
