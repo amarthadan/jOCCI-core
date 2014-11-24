@@ -60,12 +60,21 @@ public class Link extends Entity {
     public String toText() throws RenderingException {
         StringBuilder sb = new StringBuilder("Link: ");
         if (getTarget() == null || getTarget().isEmpty()) {
-            throw new RenderingException("Link " + this + " is missing a target attribute");
+            throw new RenderingException("Link " + this + " is missing a target attribute.");
         }
 
         sb.append(TextRenderer.surroundString(getTarget(), "<", ">;"));
 
-        //TODO 'self' rendering
+        if (getKind().getLocation() == null) {
+            throw new RenderingException("Link's kind " + getKind() + " is missing a location.");
+        }
+        if (getId() == null || getId().isEmpty()) {
+            throw new RenderingException("Link " + this + " is missing an id attribute.");
+        }
+
+        sb.append("self");
+        sb.append(TextRenderer.surroundString(getKind().getLocation().toString() + "/" + getId()));
+
         sb.append("category");
         sb.append(TextRenderer.surroundString(getKind().getIdentifier()));
 

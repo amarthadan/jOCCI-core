@@ -1,0 +1,6 @@
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";title="IP Network Mixin"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";location="/mixins/ipnetwork/"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";attributes="occi.network.gateway occi.network.address occi.network.allocation occi.network.state"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";actions="http://schemas.ogf.org/occi/infrastructure/compute/action#start http://schemas.ogf.org/occi/infrastructure/compute/action#stop"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";title="IP Network Mixin";location="/mixins/ipnetwork/";attributes="occi.network.gateway{immutable} occi.network.address{required} occi.network.allocation{required immutable} occi.network.state";actions="http://schemas.ogf.org/occi/infrastructure/compute/action#start http://schemas.ogf.org/occi/infrastructure/compute/action#stop"

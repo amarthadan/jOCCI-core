@@ -230,15 +230,11 @@ public class Category implements Identifiable {
     public String toText() {
         StringBuilder sb = new StringBuilder("Category: ");
         sb.append(term);
+        sb.append(";");
         sb.append("scheme");
         sb.append(TextRenderer.surroundString(scheme.toString()));
         sb.append("class");
         sb.append(TextRenderer.surroundString(this.getClass().getSimpleName().toLowerCase()));
-
-        if (title != null && !title.isEmpty()) {
-            sb.append("title");
-            sb.append(TextRenderer.surroundString(title));
-        }
 
         if (this instanceof Kind) {
             Kind kind = (Kind) this;
@@ -265,6 +261,11 @@ public class Category implements Identifiable {
             sb.append(TextRenderer.surroundString(title));
         }
 
+        if (location != null) {
+            sb.append("location");
+            sb.append(TextRenderer.surroundString(location.toString()));
+        }
+
         if (attributes != null && !attributes.getSet().isEmpty()) {
             sb.append("attributes");
             StringBuilder attrSB = new StringBuilder();
@@ -285,6 +286,10 @@ public class Category implements Identifiable {
             }
             actionsSB.deleteCharAt(actionsSB.length() - 1);
             sb.append(TextRenderer.surroundString(actionsSB.toString()));
+        }
+
+        if (sb.charAt(sb.length() - 1) == ';') {
+            sb.deleteCharAt(sb.length() - 1);
         }
 
         return sb.toString();

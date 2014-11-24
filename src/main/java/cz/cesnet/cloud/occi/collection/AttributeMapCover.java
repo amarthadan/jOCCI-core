@@ -97,9 +97,9 @@ public class AttributeMapCover {
             StringBuilder sb = new StringBuilder(attribute.getName());
             String value = attributes.get(attribute);
             if (value.matches(TextParser.REGEXP_NUMBER)) {
-                sb.append(TextRenderer.surroundString(value, "=\"", "\""));
-            } else {
                 sb.append(TextRenderer.surroundString(value, "=", ""));
+            } else {
+                sb.append(TextRenderer.surroundString(value, "=\"", "\""));
             }
             list.add(sb.toString());
         }

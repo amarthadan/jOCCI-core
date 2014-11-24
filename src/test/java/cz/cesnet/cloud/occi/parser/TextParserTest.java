@@ -2,6 +2,7 @@ package cz.cesnet.cloud.occi.parser;
 
 import cz.cesnet.cloud.occi.Collection;
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.TestHelper;
 import cz.cesnet.cloud.occi.core.Action;
 import cz.cesnet.cloud.occi.core.ActionInstance;
 import cz.cesnet.cloud.occi.core.Attribute;
@@ -14,11 +15,8 @@ import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.Compute;
 import cz.cesnet.cloud.occi.infrastructure.NetworkInterface;
 import cz.cesnet.cloud.occi.infrastructure.StorageLink;
-import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -32,12 +30,6 @@ import org.junit.Test;
 public class TextParserTest {
 
     private static final String RESOURCE_PATH = "src/test/resources/parser/text/";
-
-    private String readFile(String filename) throws IOException {
-        File f = new File(filename);
-        String fileContent = new String(Files.readAllBytes(f.toPath()));
-        return fileContent;
-    }
 
     private List<Kind> getMinimalKind() throws URISyntaxException {
         List<Kind> kinds = new ArrayList<>();
@@ -248,7 +240,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelPlainKindsMinimal() throws Exception {
-        String body = readFile(RESOURCE_PATH + "model_plain_kinds_minimal.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_kinds_minimal.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(getMinimalKind(), null);
@@ -259,7 +251,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelPlainKindsFull() throws Exception {
-        String body = readFile(RESOURCE_PATH + "model_plain_kinds_full.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_kinds_full.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(getFiveKinds(), null);
@@ -270,7 +262,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelPlainMixinsMinimal() throws Exception {
-        String body = readFile(RESOURCE_PATH + "model_plain_mixins_minimal.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_mixins_minimal.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithMixins(getMinimalMixin(), null);
@@ -281,7 +273,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelPlainMixinsFull() throws Exception {
-        String body = readFile(RESOURCE_PATH + "model_plain_mixins_full.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_mixins_full.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithMixins(getFiveMixins(), null);
@@ -292,7 +284,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelPlainActionsMinimal() throws Exception {
-        String body = readFile(RESOURCE_PATH + "model_plain_actions_minimal.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_actions_minimal.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithActions(getMinimalAction(), null);
@@ -303,7 +295,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelPlainActionsFull() throws Exception {
-        String body = readFile(RESOURCE_PATH + "model_plain_actions_full.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_actions_full.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithActions(getFiveActions(), null);
@@ -314,7 +306,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelPlainAll() throws Exception {
-        String body = readFile(RESOURCE_PATH + "model_plain_all.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_all.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(getFiveKinds(), null);
@@ -348,7 +340,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelOcciKindsMinimal() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "model_occi_kinds_minimal.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_kinds_minimal.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -361,7 +353,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelOcciKindsFull() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "model_occi_kinds_full.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_kinds_full.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -374,7 +366,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelOcciMixinsMinimal() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "model_occi_mixins_minimal.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_mixins_minimal.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -387,7 +379,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelOcciMixinsFull() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "model_occi_mixins_full.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_mixins_full.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -400,7 +392,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelOcciActionsMinimal() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "model_occi_actions_minimal.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_actions_minimal.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -413,7 +405,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelOcciActionsFull() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "model_occi_actions_full.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_actions_full.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -426,7 +418,7 @@ public class TextParserTest {
 
     @Test
     public void testParseModelOcciAll() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "model_occi_all.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_all.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -452,7 +444,7 @@ public class TextParserTest {
 
     @Test
     public void testParseLocationsPlain() throws Exception {
-        String body = readFile(RESOURCE_PATH + "locations_plain.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "locations_plain.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         List<URI> expResult = getLocations();
@@ -462,7 +454,7 @@ public class TextParserTest {
 
     @Test
     public void testParseLocationsUriList() throws Exception {
-        String body = readFile(RESOURCE_PATH + "locations_uri-list.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "locations_uri-list.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
         List<URI> expResult = getLocations();
@@ -561,7 +553,7 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionPlainResource() throws Exception {
-        String body = readFile(RESOURCE_PATH + "collection_plain_resource.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "collection_plain_resource.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
 
@@ -574,7 +566,7 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionPlainLink() throws Exception {
-        String body = readFile(RESOURCE_PATH + "collection_plain_link.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "collection_plain_link.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
 
@@ -587,7 +579,7 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionPlainAction() throws Exception {
-        String body = readFile(RESOURCE_PATH + "collection_plain_action.txt");
+        String body = TestHelper.readFile(RESOURCE_PATH + "collection_plain_action.txt");
         Map<String, String> headers = null;
         TextParser instance = new TextParser();
 
@@ -600,9 +592,9 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionOcciResource() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "collection_occi_resource_category.txt");
-        String attributeHeader = readFile(RESOURCE_PATH + "collection_occi_resource_attribute.txt");
-        String linkHeader = readFile(RESOURCE_PATH + "collection_occi_resource_link.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_resource_category.txt");
+        String attributeHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_resource_attribute.txt");
+        String linkHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_resource_link.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -618,8 +610,8 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionOcciLink() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "collection_occi_link_category.txt");
-        String attributeHeader = readFile(RESOURCE_PATH + "collection_occi_link_attribute.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_link_category.txt");
+        String attributeHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_link_attribute.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);
@@ -634,8 +626,8 @@ public class TextParserTest {
 
     @Test
     public void testParseCollectionOcciAction() throws Exception {
-        String categoryHeader = readFile(RESOURCE_PATH + "collection_occi_action_category.txt");
-        String attributeHeader = readFile(RESOURCE_PATH + "collection_occi_action_attribute.txt");
+        String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_action_category.txt");
+        String attributeHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_action_attribute.txt");
         String body = null;
         Map<String, String> headers = createDefaultHeaders();
         headers.put("Category", categoryHeader);

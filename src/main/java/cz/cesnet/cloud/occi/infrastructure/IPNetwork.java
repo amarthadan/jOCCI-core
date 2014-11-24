@@ -63,6 +63,6 @@ public class IPNetwork extends Network {
     }
 
     public static String getTermDefult() {
-        return "ipnetworking";
+        return "ipnetwork";
     }
 }
