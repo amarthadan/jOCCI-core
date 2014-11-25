@@ -62,8 +62,13 @@ public class Link extends Entity {
         if (getTarget() == null || getTarget().isEmpty()) {
             throw new RenderingException("Link " + this + " is missing a target attribute.");
         }
-
         sb.append(TextRenderer.surroundString(getTarget(), "<", ">;"));
+
+        if (relation == null || relation.isEmpty()) {
+            throw new RenderingException("Link " + this + " is missing a relation.");
+        }
+        sb.append("rel");
+        sb.append(TextRenderer.surroundString(relation));
 
         if (getKind().getLocation() == null) {
             throw new RenderingException("Link's kind " + getKind() + " is missing a location.");
@@ -71,7 +76,6 @@ public class Link extends Entity {
         if (getId() == null || getId().isEmpty()) {
             throw new RenderingException("Link " + this + " is missing an id attribute.");
         }
-
         sb.append("self");
         sb.append(TextRenderer.surroundString(getKind().getLocation().toString() + "/" + getId()));
 

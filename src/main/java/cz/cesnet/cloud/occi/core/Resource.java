@@ -11,6 +11,7 @@ public class Resource extends Entity {
     public static final String SUMMARY_ATTRIBUTE_NAME = "occi.core.summary";
 
     private final SetCover<Link> links = new SetCover<>();
+    private final SetCover<Action> actions = new SetCover<>();
 
     public Resource(String id, Kind kind, String title, Model model, String summary) throws InvalidAttributeValueException {
         super(id, kind, title, model);
@@ -56,6 +57,34 @@ public class Resource extends Entity {
 
     public Set<Link> getLinks() {
         return links.getSet();
+    }
+
+    public boolean containsAction(Action action) {
+        return actions.contains(action);
+    }
+
+    public boolean containsAction(String actionIdentifier) {
+        return actions.contains(actionIdentifier);
+    }
+
+    public boolean addAction(Action action) {
+        return actions.add(action);
+    }
+
+    public Action getAction(String actionIdentifier) {
+        return actions.get(actionIdentifier);
+    }
+
+    public boolean removeAction(Action action) {
+        return actions.remove(action);
+    }
+
+    public void clearActions() {
+        actions.clear();
+    }
+
+    public Set<Action> getActions() {
+        return actions.getSet();
     }
 
     public static String getTermDefult() {

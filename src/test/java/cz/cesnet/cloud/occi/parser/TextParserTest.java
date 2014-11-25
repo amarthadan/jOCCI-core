@@ -494,7 +494,20 @@ public class TextParserTest {
             r.addLink(link);
         }
 
+        List<Action> actions = getActions();
+        for (Action action : actions) {
+            r.addAction(action);
+        }
+
         return r;
+    }
+
+    private List<Action> getActions() throws URISyntaxException {
+        List<Action> actions = new ArrayList<>();
+        actions.add(new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start"));
+        actions.add(new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "stop"));
+
+        return actions;
     }
 
     private List<Link> getLinks() throws URISyntaxException, InvalidAttributeValueException {
@@ -774,6 +787,7 @@ public class TextParserTest {
         assertEquals(expected.getTitle(), result.getTitle());
         assertEquals(expected.getMixins(), result.getMixins());
         assertEquals(expected.getAttributes(), result.getAttributes());
+        assertEquals(expected.getActions(), result.getActions());
         assertLinksEqual(expected.getLinks(), result.getLinks());
     }
 

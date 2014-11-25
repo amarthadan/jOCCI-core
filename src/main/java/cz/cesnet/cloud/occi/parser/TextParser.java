@@ -338,6 +338,7 @@ public class TextParser implements Parser {
         ActionInstance actionInstance = null;
         Set<Mixin> mixins = new HashSet<>();
         Set<Link> links = new HashSet<>();
+        Set<Action> actionLinks = new HashSet<>();
         List<String> rawAttributes = new ArrayList<>();
 
         for (String line : lines) {
@@ -392,8 +393,13 @@ public class TextParser implements Parser {
 
                 LOGGER.debug("Match: uri={}, rel={}, self={}, category={}, attributes={}", uri, rel, self, category, attributes);
 
-                Link link = createLink(uri, rel, self, category, attributes);
-                links.add(link);
+                if (uri.contains("?action=")) {
+                    Action action = createAction(rel);
+                    actionLinks.add(action);
+                } else {
+                    Link link = createLink(uri, rel, self, category, attributes);
+                    links.add(link);
+                }
             }
         }
 
@@ -420,6 +426,9 @@ public class TextParser implements Parser {
                     for (Link link : links) {
                         link.setSource(resource);
                         resource.addLink(link);
+                    }
+                    for (Action action : actionLinks) {
+                        resource.addAction(action);
                     }
                     for (String name : attributesWithValues.keySet()) {
                         resource.addAttribute(name, attributesWithValues.get(name));
@@ -614,6 +623,19 @@ public class TextParser implements Parser {
         }
 
         return locationsURI;
+    }
+
+    private Action createAction(String rel) throws ParsingException {
+        if (rel == null || rel.isEmpty()) {
+            throw new ParsingException("Link for action is missing 'rel' element.");
+        }
+
+        String[] splited = rel.split("#");
+        if (splited.length != 2) {
+            throw new ParsingException("Invalid relation specification: " + rel);
+        }
+
+        return createAction(splited[0] + "#", splited[1], null, null, null);
     }
 
     private Action createAction(String scheme, String term, String title, String location, String attributes) throws ParsingException {
