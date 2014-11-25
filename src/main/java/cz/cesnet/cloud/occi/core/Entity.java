@@ -35,7 +35,9 @@ public abstract class Entity implements Identifiable {
         }
 
         privateAddAttribute(ID_ATTRIBUTE_NAME, id);
-        privateAddAttribute(TITLE_ATTRIBUTE_NAME, title);
+        if (title != null && !title.isEmpty()) {
+            privateAddAttribute(TITLE_ATTRIBUTE_NAME, title);
+        }
         this.kind = kind;
         this.model = model;
     }

@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import java.net.URI;
 import java.util.Collection;
@@ -116,5 +117,17 @@ public class Action implements Identifiable {
     @Override
     public String toString() {
         return "Action{" + "category=" + category + '}';
+    }
+
+    public String toText(String resourceLocation) {
+        StringBuilder sb = new StringBuilder("Link: ");
+
+        String descriptor = resourceLocation + "?action=" + getTerm();
+        sb.append(TextRenderer.surroundString(descriptor, "<", ">;"));
+
+        sb.append("rel");
+        sb.append(TextRenderer.surroundString(getScheme().toString() + getTerm()));
+
+        return sb.toString();
     }
 }

@@ -70,14 +70,16 @@ public class Link extends Entity {
         sb.append("rel");
         sb.append(TextRenderer.surroundString(relation));
 
-        if (getKind().getLocation() == null) {
-            throw new RenderingException("Link's kind " + getKind() + " is missing a location.");
+        /*if (getKind().getLocation() == null) {
+         throw new RenderingException("Link's kind " + getKind() + " is missing a location.");
+         }
+         if (getId() == null || getId().isEmpty()) {
+         throw new RenderingException("Link " + this + " is missing an id attribute.");
+         }*/
+        if (getKind().getLocation() != null && getId() != null && !getId().isEmpty()) {
+            sb.append("self");
+            sb.append(TextRenderer.surroundString(getKind().getLocation().toString() + getId()));
         }
-        if (getId() == null || getId().isEmpty()) {
-            throw new RenderingException("Link " + this + " is missing an id attribute.");
-        }
-        sb.append("self");
-        sb.append(TextRenderer.surroundString(getKind().getLocation().toString() + "/" + getId()));
 
         sb.append("category");
         sb.append(TextRenderer.surroundString(getKind().getIdentifier()));

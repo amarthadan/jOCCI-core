@@ -118,6 +118,11 @@ public class Resource extends Entity {
             sb.append(l.toText());
         }
 
+        for (Action a : getActions()) {
+            sb.append("\n");
+            sb.append(a.toText(getKind().getLocation().toString() + getId()));
+        }
+
         return sb.toString();
     }
 

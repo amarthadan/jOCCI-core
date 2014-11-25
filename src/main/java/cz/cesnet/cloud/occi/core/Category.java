@@ -236,6 +236,11 @@ public class Category implements Identifiable {
         sb.append("class");
         sb.append(TextRenderer.surroundString(this.getClass().getSimpleName().toLowerCase()));
 
+        if (title != null && !title.isEmpty()) {
+            sb.append("title");
+            sb.append(TextRenderer.surroundString(title));
+        }
+
         if (this instanceof Kind) {
             Kind kind = (Kind) this;
             if (kind.getRelations().size() == 1) {
@@ -254,11 +259,6 @@ public class Category implements Identifiable {
                     sb.append(TextRenderer.surroundString(m.getIdentifier()));
                 }
             }
-        }
-
-        if (title != null && !title.isEmpty()) {
-            sb.append("title");
-            sb.append(TextRenderer.surroundString(title));
         }
 
         if (location != null) {
