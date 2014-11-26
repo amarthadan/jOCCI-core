@@ -93,7 +93,9 @@ public class AttributeMapCover {
 
     private List<String> toList() {
         List<String> list = new ArrayList<>();
-        for (Attribute attribute : attributes.keySet()) {
+        List<Attribute> attributeList = new ArrayList<>(attributes.keySet());
+        Collections.sort(attributeList);
+        for (Attribute attribute : attributeList) {
             StringBuilder sb = new StringBuilder(attribute.getName());
             String value = attributes.get(attribute);
             if (value.matches(TextParser.REGEXP_NUMBER)) {

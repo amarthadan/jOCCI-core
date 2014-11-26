@@ -62,8 +62,9 @@ public class KindTest {
     @Test
     public void testToText() throws Exception {
         String[] lines = TestHelper.readFile(RESOURCE_PATH + "kind.txt").split("\n");
-        Attribute at1 = new Attribute(Entity.TITLE_ATTRIBUTE_NAME);
-        Attribute at2 = new Attribute(Entity.ID_ATTRIBUTE_NAME);
+        Attribute at1 = new Attribute(Entity.ID_ATTRIBUTE_NAME);
+        Attribute at2 = new Attribute(Entity.TITLE_ATTRIBUTE_NAME);
+
         Action a1 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start");
         Action a2 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "stop");
 

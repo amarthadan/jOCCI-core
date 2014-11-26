@@ -13,7 +13,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public abstract class Entity implements Identifiable {
+public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     public static final String ID_ATTRIBUTE_NAME = "occi.core.id";
     public static final String TITLE_ATTRIBUTE_NAME = "occi.core.title";
@@ -272,4 +272,9 @@ public abstract class Entity implements Identifiable {
     public abstract String toText() throws RenderingException;
 
     public abstract String toJSON();
+
+    @Override
+    public int compareTo(Entity e) {
+        return getIdentifier().compareTo(e.getIdentifier());
+    }
 }

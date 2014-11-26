@@ -5,13 +5,16 @@ import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Category implements Identifiable {
+public class Category implements Identifiable, Comparable<Category> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
     public static final URI SCHEME_CORE_DEFAULT = makeURI("http://schemas.ogf.org/occi/core#");
@@ -269,7 +272,9 @@ public class Category implements Identifiable {
         if (attributes != null && !attributes.getSet().isEmpty()) {
             sb.append("attributes");
             StringBuilder attrSB = new StringBuilder();
-            for (Attribute attribute : attributes.getSet()) {
+            List<Attribute> attributeList = new ArrayList<>(attributes.getSet());
+            Collections.sort(attributeList);
+            for (Attribute attribute : attributeList) {
                 attrSB.append(attribute.toText());
                 attrSB.append(" ");
             }
@@ -280,7 +285,9 @@ public class Category implements Identifiable {
         if (actions != null && !actions.getSet().isEmpty()) {
             sb.append("actions");
             StringBuilder actionsSB = new StringBuilder();
-            for (Action action : actions.getSet()) {
+            List<Action> actionList = new ArrayList<>(actions.getSet());
+            Collections.sort(actionList);
+            for (Action action : actionList) {
                 actionsSB.append(action.getIdentifier());
                 actionsSB.append(" ");
             }
@@ -293,5 +300,10 @@ public class Category implements Identifiable {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Category c) {
+        return getIdentifier().compareTo(c.getIdentifier());
     }
 }

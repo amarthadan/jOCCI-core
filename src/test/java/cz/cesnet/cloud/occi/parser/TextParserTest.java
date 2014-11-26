@@ -7,18 +7,13 @@ import cz.cesnet.cloud.occi.TestHelper;
 import cz.cesnet.cloud.occi.core.Action;
 import cz.cesnet.cloud.occi.core.ActionInstance;
 import cz.cesnet.cloud.occi.core.Attribute;
-import cz.cesnet.cloud.occi.core.Entity;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.core.Mixin;
 import cz.cesnet.cloud.occi.core.Resource;
-import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
-import cz.cesnet.cloud.occi.infrastructure.Compute;
-import cz.cesnet.cloud.occi.infrastructure.NetworkInterface;
-import cz.cesnet.cloud.occi.infrastructure.StorageLink;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -396,8 +391,10 @@ public class TextParserTest {
 
         List<Kind> expectedList = new ArrayList<>();
         expectedList.addAll(expected);
+        Collections.sort(expectedList);
         List<Kind> resultList = new ArrayList<>();
         resultList.addAll(result);
+        Collections.sort(resultList);
         for (int i = 0; i < expectedList.size(); i++) {
             assertKindDeepEquals(expectedList.get(i), resultList.get(i));
         }
@@ -418,8 +415,10 @@ public class TextParserTest {
 
         List<Mixin> expectedList = new ArrayList<>();
         expectedList.addAll(expected);
+        Collections.sort(expectedList);
         List<Mixin> resultList = new ArrayList<>();
         resultList.addAll(result);
+        Collections.sort(resultList);
         for (int i = 0; i < expectedList.size(); i++) {
             assertMixinDeepEquals(expectedList.get(i), resultList.get(i));
         }
@@ -440,8 +439,10 @@ public class TextParserTest {
 
         List<Action> expectedList = new ArrayList<>();
         expectedList.addAll(expected);
+        Collections.sort(expectedList);
         List<Action> resultList = new ArrayList<>();
         resultList.addAll(result);
+        Collections.sort(resultList);
         for (int i = 0; i < expectedList.size(); i++) {
             assertActionDeepEquals(expectedList.get(i), resultList.get(i));
         }
@@ -461,8 +462,10 @@ public class TextParserTest {
 
         List<ActionInstance> expectedList = new ArrayList<>();
         expectedList.addAll(expected);
+        Collections.sort(expectedList);
         List<ActionInstance> resultList = new ArrayList<>();
         resultList.addAll(result);
+        Collections.sort(resultList);
         for (int i = 0; i < expectedList.size(); i++) {
             assertActionInstanceDeepEquals(expectedList.get(i), resultList.get(i));
         }
@@ -487,9 +490,11 @@ public class TextParserTest {
 
         List<Link> expectedList = new ArrayList<>();
         expectedList.addAll(expected);
+        Collections.sort(expectedList);
         System.out.println("expected links: " + expectedList);
         List<Link> resultList = new ArrayList<>();
         resultList.addAll(result);
+        Collections.sort(resultList);
         System.out.println("result links: " + resultList);
         for (int i = 0; i < expectedList.size(); i++) {
             assertLinkDeepEquals(expectedList.get(i), resultList.get(i));
@@ -511,8 +516,10 @@ public class TextParserTest {
 
         List<Resource> expectedList = new ArrayList<>();
         expectedList.addAll(expected);
+        Collections.sort(expectedList);
         List<Resource> resultList = new ArrayList<>();
         resultList.addAll(result);
+        Collections.sort(resultList);
         for (int i = 0; i < expectedList.size(); i++) {
             assertResourceDeepEquals(expectedList.get(i), resultList.get(i));
         }
@@ -534,8 +541,10 @@ public class TextParserTest {
 
         List<Attribute> expectedList = new ArrayList<>();
         expectedList.addAll(expected);
+        Collections.sort(expectedList);
         List<Attribute> resultList = new ArrayList<>();
         resultList.addAll(result);
+        Collections.sort(resultList);
         for (int i = 0; i < expectedList.size(); i++) {
             assertAttributeDeepEquals(expectedList.get(i), resultList.get(i));
         }

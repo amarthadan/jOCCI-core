@@ -4,6 +4,9 @@ import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Set;
 
 public class Resource extends Entity {
@@ -102,7 +105,9 @@ public class Resource extends Entity {
 
         sb.append(getKind().toText());
 
-        for (Mixin m : getMixins()) {
+        List<Mixin> mixinList = new ArrayList<>(getMixins());
+        Collections.sort(mixinList);
+        for (Mixin m : mixinList) {
             sb.append("\n");
             sb.append(m.toText());
         }
@@ -113,12 +118,16 @@ public class Resource extends Entity {
             sb.append(attributesString);
         }
 
-        for (Link l : getLinks()) {
+        List<Link> linkList = new ArrayList<>(getLinks());
+        Collections.sort(linkList);
+        for (Link l : linkList) {
             sb.append("\n");
             sb.append(l.toText());
         }
 
-        for (Action a : getActions()) {
+        List<Action> actionList = new ArrayList<>(getActions());
+        Collections.sort(actionList);
+        for (Action a : actionList) {
             sb.append("\n");
             sb.append(a.toText(getKind().getLocation().toString() + getId()));
         }

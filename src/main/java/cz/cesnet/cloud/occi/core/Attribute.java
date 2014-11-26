@@ -6,7 +6,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Attribute implements Identifiable {
+public class Attribute implements Identifiable, Comparable<Attribute> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Attribute.class);
     private String name;
@@ -161,5 +161,10 @@ public class Attribute implements Identifiable {
         }
 
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Attribute a) {
+        return getIdentifier().compareTo(a.getIdentifier());
     }
 }

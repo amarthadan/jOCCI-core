@@ -23,7 +23,7 @@ public class AttributeMapCoverTest {
 
     @Test
     public void testToPrefixText() {
-        String line = "X-OCCI-Attribute: occi.compute.hostname=\"compute1.example.org\"\nX-OCCI-Attribute: occi.core.title=\"compute1\"\nX-OCCI-Attribute: occi.compute.memory=1.7\nX-OCCI-Attribute: occi.compute.speed=1.0\nX-OCCI-Attribute: occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\"\nX-OCCI-Attribute: occi.compute.architecture=\"x86\"";
+        String line = "X-OCCI-Attribute: occi.compute.architecture=\"x86\"\nX-OCCI-Attribute: occi.compute.hostname=\"compute1.example.org\"\nX-OCCI-Attribute: occi.compute.memory=1.7\nX-OCCI-Attribute: occi.compute.speed=1.0\nX-OCCI-Attribute: occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\"\nX-OCCI-Attribute: occi.core.title=\"compute1\"";
 
         System.out.println(attrMap.toPrefixText());
         assertEquals(line, attrMap.toPrefixText());
@@ -31,7 +31,7 @@ public class AttributeMapCoverTest {
 
     @Test
     public void testToOneLineText() {
-        String line = "occi.compute.hostname=\"compute1.example.org\";occi.core.title=\"compute1\";occi.compute.memory=1.7;occi.compute.speed=1.0;occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\";occi.compute.architecture=\"x86\";";
+        String line = "occi.compute.architecture=\"x86\";occi.compute.hostname=\"compute1.example.org\";occi.compute.memory=1.7;occi.compute.speed=1.0;occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\";occi.core.title=\"compute1\";";
 
         assertEquals(line, attrMap.toOneLineText());
     }

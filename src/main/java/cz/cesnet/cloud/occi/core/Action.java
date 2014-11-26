@@ -9,7 +9,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Action implements Identifiable {
+public class Action implements Identifiable, Comparable<Action> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Action.class);
     private Category category;
@@ -129,5 +129,10 @@ public class Action implements Identifiable {
         sb.append(TextRenderer.surroundString(getScheme().toString() + getTerm()));
 
         return sb.toString();
+    }
+
+    @Override
+    public int compareTo(Action a) {
+        return getIdentifier().compareTo(a.getIdentifier());
     }
 }

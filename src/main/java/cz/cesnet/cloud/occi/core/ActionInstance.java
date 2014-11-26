@@ -7,7 +7,7 @@ import java.util.Objects;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ActionInstance implements Identifiable {
+public class ActionInstance implements Identifiable, Comparable<ActionInstance> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionInstance.class);
     private final AttributeMapCover attributes = new AttributeMapCover();
@@ -101,5 +101,10 @@ public class ActionInstance implements Identifiable {
     @Override
     public String toString() {
         return "ActionInstance{" + "attributes=" + attributes + ", action=" + action + '}';
+    }
+
+    @Override
+    public int compareTo(ActionInstance a) {
+        return getIdentifier().compareTo(a.getIdentifier());
     }
 }
