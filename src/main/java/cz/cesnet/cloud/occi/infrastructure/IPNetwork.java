@@ -62,7 +62,7 @@ public class IPNetwork extends Network {
         }
     }
 
-    public static String getTermDefult() {
+    public static String getTermDefault() {
         return "ipnetwork";
     }
 }

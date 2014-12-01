@@ -90,7 +90,11 @@ public class Resource extends Entity {
         return actions.getSet();
     }
 
-    public static String getTermDefult() {
+    public String getLocation() {
+        return getKind().getLocation().toString() + getId();
+    }
+
+    public static String getTermDefault() {
         return "resource";
     }
 
@@ -122,7 +126,7 @@ public class Resource extends Entity {
         Collections.sort(linkList);
         for (Link l : linkList) {
             sb.append("\n");
-            sb.append(l.toText());
+            sb.append(l.toInlineText());
         }
 
         List<Action> actionList = new ArrayList<>(getActions());

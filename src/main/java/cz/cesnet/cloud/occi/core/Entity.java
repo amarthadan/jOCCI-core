@@ -7,6 +7,7 @@ import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import java.net.URI;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -194,8 +195,8 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         attributes.clear();
     }
 
-    protected String attributesToOneLineText() {
-        return attributes.toOneLineText();
+    protected String attributesToOneLineText(List<String> exclude) {
+        return attributes.toOneLineText(exclude);
     }
 
     protected String attributesToPrefixText() {
@@ -234,7 +235,7 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         return Category.SCHEME_CORE_DEFAULT;
     }
 
-    public static String getTermDefult() {
+    public static String getTermDefault() {
         return "entity";
     }
 

@@ -54,7 +54,7 @@ public class NetworkInterface extends Link {
         return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
     }
 
-    public static String getTermDefult() {
+    public static String getTermDefault() {
         return "networkinterface";
     }
 }

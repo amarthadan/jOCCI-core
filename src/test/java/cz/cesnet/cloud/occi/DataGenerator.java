@@ -24,6 +24,7 @@ public class DataGenerator {
     public static List<Kind> getMinimalKind() throws URISyntaxException {
         List<Kind> kinds = new ArrayList<>();
         Kind kind = new Kind(new URI("http://schemas.ogf.org/occi/core#"), "entity");
+        kind.setLocation(new URI("/entity/"));
         kinds.add(kind);
 
         return kinds;
@@ -98,6 +99,7 @@ public class DataGenerator {
     public static List<Mixin> getMinimalMixin() throws URISyntaxException {
         List<Mixin> mixins = new ArrayList<>();
         Mixin ostpl = new Mixin(new URI("http://schemas.ogf.org/occi/infrastructure#"), "os_tpl");
+        ostpl.setLocation(new URI("/mixins/os_tpl/"));
         mixins.add(ostpl);
 
         return mixins;
@@ -162,22 +164,22 @@ public class DataGenerator {
         attributes.clear();
         Attribute a = new Attribute("method");
         attributes.add(a);
-        Action ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "restart", "Restart Compute instance", null, attributes);
+        Action ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "restart", "Restart Compute instance", attributes);
         actions.add(ac);
 
         attributes.clear();
         a = new Attribute("method");
         attributes.add(a);
-        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "suspend", "Suspend Compute instance", null, attributes);
+        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "suspend", "Suspend Compute instance", attributes);
         actions.add(ac);
 
-        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/network/action#"), "up", "Activate network", null, null);
+        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/network/action#"), "up", "Activate network", null);
         actions.add(ac);
 
-        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/network/action#"), "down", "Deactivate network", null, null);
+        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/network/action#"), "down", "Deactivate network", null);
         actions.add(ac);
 
-        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/storage/action#"), "backup", "Backup Storage", null, null);
+        ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/storage/action#"), "backup", "Backup Storage", null);
         actions.add(ac);
 
         return actions;
@@ -271,7 +273,7 @@ public class DataGenerator {
     }
 
     public static ActionInstance getAction() throws InvalidAttributeValueException, URISyntaxException {
-        Action a = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/storage/action#"), "backup", "Backup Storage", null, null);
+        Action a = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/storage/action#"), "backup", "Backup Storage", null);
         ActionInstance ai = new ActionInstance(a);
         ai.addAttribute(new Attribute(Entity.ID_ATTRIBUTE_NAME), "87f3bfc3-42d4-4474-b45c-757e55e093e9");
         ai.addAttribute(new Attribute(NetworkInterface.INTERFACE_ATTRIBUTE_NAME), "eth0");

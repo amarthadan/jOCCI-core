@@ -14,13 +14,13 @@ public class Action implements Identifiable, Comparable<Action> {
     private static final Logger LOGGER = LoggerFactory.getLogger(Action.class);
     private Category category;
 
-    public Action(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
-        LOGGER.debug("Creating action: scheme={}, term={}, title={}, location={}, attributes={}", scheme, term, title, location, attributes);
-        this.category = new Category(scheme, term, title, location, attributes);
+    public Action(URI scheme, String term, String title, Collection<Attribute> attributes) {
+        LOGGER.debug("Creating action: scheme={}, term={}, title={}, attributes={}", scheme, term, title, attributes);
+        this.category = new Category(scheme, term, title, null, attributes);
     }
 
     public Action(URI scheme, String term) {
-        this(scheme, term, null, null, null);
+        this(scheme, term, null, null);
     }
 
     public URI getScheme() {
@@ -50,14 +50,6 @@ public class Action implements Identifiable, Comparable<Action> {
 
     public void setTitle(String title) {
         category.setTitle(title);
-    }
-
-    public URI getLocation() {
-        return category.getLocation();
-    }
-
-    public void setLocation(URI location) {
-        category.setLocation(location);
     }
 
     public boolean containsAttribute(Attribute attribute) {

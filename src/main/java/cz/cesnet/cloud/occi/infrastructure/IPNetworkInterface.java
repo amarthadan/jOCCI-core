@@ -62,7 +62,7 @@ public class IPNetworkInterface extends NetworkInterface {
         }
     }
 
-    public static String getTermDefult() {
+    public static String getTermDefault() {
         return "ipnetworkinterface";
     }
 }

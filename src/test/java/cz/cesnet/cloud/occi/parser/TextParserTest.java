@@ -453,7 +453,6 @@ public class TextParserTest {
         assertEquals(expected, result);
 
         assertEquals(expected.getTitle(), result.getTitle());
-        assertEquals(expected.getLocation(), result.getLocation());
         assertAttributesEqual(expected.getAttributes(), result.getAttributes());
     }
 

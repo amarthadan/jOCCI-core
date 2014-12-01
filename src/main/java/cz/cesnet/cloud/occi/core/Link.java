@@ -4,6 +4,9 @@ import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import cz.cesnet.cloud.occi.renderer.TextRenderer;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class Link extends Entity {
 
@@ -25,11 +28,11 @@ public class Link extends Entity {
     }
 
     public void setSource(Resource source) throws InvalidAttributeValueException {
-        addAttribute(SOURCE_ATTRIBUTE_NAME, source.getIdentifier());
+        addAttribute(SOURCE_ATTRIBUTE_NAME, source.getLocation());
     }
 
-    public void setSource(String sourceIdentifier) throws InvalidAttributeValueException {
-        addAttribute(SOURCE_ATTRIBUTE_NAME, sourceIdentifier);
+    public void setSource(String sourceLocation) throws InvalidAttributeValueException {
+        addAttribute(SOURCE_ATTRIBUTE_NAME, sourceLocation);
     }
 
     public String getTarget() {
@@ -52,12 +55,33 @@ public class Link extends Entity {
         this.relation = relation;
     }
 
-    public static String getTermDefult() {
+    public static String getTermDefault() {
         return "link";
     }
 
     @Override
-    public String toText() throws RenderingException {
+    public String toText() {
+        StringBuilder sb = new StringBuilder();
+
+        sb.append(getKind().toText());
+
+        List<Mixin> mixinList = new ArrayList<>(getMixins());
+        Collections.sort(mixinList);
+        for (Mixin m : mixinList) {
+            sb.append("\n");
+            sb.append(m.toText());
+        }
+
+        String attributesString = attributesToPrefixText();
+        if (!attributesString.isEmpty()) {
+            sb.append("\n");
+            sb.append(attributesString);
+        }
+
+        return sb.toString();
+    }
+
+    public String toInlineText() throws RenderingException {
         StringBuilder sb = new StringBuilder("Link: ");
         if (getTarget() == null || getTarget().isEmpty()) {
             throw new RenderingException("Link " + this + " is missing a target attribute.");
@@ -70,12 +94,6 @@ public class Link extends Entity {
         sb.append("rel");
         sb.append(TextRenderer.surroundString(relation));
 
-        /*if (getKind().getLocation() == null) {
-         throw new RenderingException("Link's kind " + getKind() + " is missing a location.");
-         }
-         if (getId() == null || getId().isEmpty()) {
-         throw new RenderingException("Link " + this + " is missing an id attribute.");
-         }*/
         if (getKind().getLocation() != null && getId() != null && !getId().isEmpty()) {
             sb.append("self");
             sb.append(TextRenderer.surroundString(getKind().getLocation().toString() + getId()));
@@ -84,7 +102,12 @@ public class Link extends Entity {
         sb.append("category");
         sb.append(TextRenderer.surroundString(getKind().getIdentifier()));
 
-        sb.append(attributesToOneLineText());
+        List<String> exclude = new ArrayList<>();
+        exclude.add(Link.SOURCE_ATTRIBUTE_NAME);
+        exclude.add(Link.TARGET_ATTRIBUTE_NAME);
+        exclude.add(Entity.ID_ATTRIBUTE_NAME);
+
+        sb.append(attributesToOneLineText(exclude));
 
         return sb.toString();
     }

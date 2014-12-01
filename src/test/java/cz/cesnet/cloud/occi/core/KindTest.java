@@ -18,27 +18,27 @@ public class KindTest {
         attributes.add(new Attribute("aaa"));
         attributes.add(new Attribute("bbb"));
         attributes.add(new Attribute("ccc"));
-        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefult(), "title", new URI("/location/"), attributes);
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault(), "title", new URI("/location/"), attributes);
 
         assertEquals(kind.getAttributes(), attributes);
         assertEquals(kind.getLocation(), new URI("/location/"));
         assertEquals(kind.getScheme(), Category.SCHEME_CORE_DEFAULT);
-        assertEquals(kind.getTerm(), Entity.getTermDefult());
+        assertEquals(kind.getTerm(), Entity.getTermDefault());
         assertEquals(kind.getTitle(), "title");
     }
 
     @Test
     public void testMinimalConstructor() throws URISyntaxException {
-        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefult());
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
 
         assertEquals(kind.getScheme(), Category.SCHEME_CORE_DEFAULT);
-        assertEquals(kind.getTerm(), Entity.getTermDefult());
+        assertEquals(kind.getTerm(), Entity.getTermDefault());
     }
 
     @Test
     public void testInvalidConstructor() throws URISyntaxException {
         try {
-            Kind kind = new Kind(null, Entity.getTermDefult());
+            Kind kind = new Kind(null, Entity.getTermDefault());
             fail();
         } catch (NullPointerException ex) {
             //cool
@@ -68,7 +68,7 @@ public class KindTest {
         Action a1 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start");
         Action a2 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "stop");
 
-        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefult());
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
         assertEquals(kind.toText(), lines[0]);
 
         kind.setTitle("Entity");
@@ -83,7 +83,7 @@ public class KindTest {
         kind.addAttribute(at2);
         assertEquals(kind.toText(), lines[3]);
 
-        kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefult());
+        kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
         kind.addAction(a1);
         kind.addAction(a2);
         assertEquals(kind.toText(), lines[4]);

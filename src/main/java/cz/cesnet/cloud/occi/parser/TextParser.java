@@ -149,13 +149,19 @@ public class TextParser implements Parser {
 
             switch (categoryClass) {
                 case "kind":
+                    if (location == null || location.isEmpty()) {
+                        throw new ParsingException("No location found.");
+                    }
                     addKind(term, scheme, title, rel, location, attributes, actions, model);
                     break;
                 case "mixin":
+                    if (location == null || location.isEmpty()) {
+                        throw new ParsingException("No location found.");
+                    }
                     addMixin(term, scheme, title, rel, location, attributes, actions, model);
                     break;
                 case "action":
-                    addAction(term, scheme, title, location, attributes, model);
+                    addAction(term, scheme, title, attributes, model);
                     break;
                 default:
                     throw new ParsingException("Unknown class type.");
@@ -227,29 +233,20 @@ public class TextParser implements Parser {
         }
     }
 
-    private void addAction(String term, String scheme, String title, String location, String attributes, Model model) throws ParsingException {
+    private void addAction(String term, String scheme, String title, String attributes, Model model) throws ParsingException {
         LOGGER.debug("Adding action...");
         String actionIdentifier = scheme + term;
-        try {
-            if (model.containsAction(actionIdentifier)) {
-                Set<Attribute> parsedAttributes = parseAttributes(attributes);
-                URI locationUri = null;
+        if (model.containsAction(actionIdentifier)) {
+            Set<Attribute> parsedAttributes = parseAttributes(attributes);
 
-                if (location != null) {
-                    locationUri = new URI(location);
-                }
-                Action action = model.getAction(actionIdentifier);
-                action.setTitle(title);
-                action.setLocation(locationUri);
-                for (Attribute attribute : parsedAttributes) {
-                    action.addAttribute(attribute);
-                }
-            } else {
-                Action action = createAction(scheme, term, title, location, attributes);
-                model.addAction(action);
+            Action action = model.getAction(actionIdentifier);
+            action.setTitle(title);
+            for (Attribute attribute : parsedAttributes) {
+                action.addAttribute(attribute);
             }
-        } catch (URISyntaxException ex) {
-            throw new ParsingException("Invalid shceme or location.", ex);
+        } else {
+            Action action = createAction(scheme, term, title, attributes);
+            model.addAction(action);
         }
     }
 
@@ -297,7 +294,6 @@ public class TextParser implements Parser {
             case TEXT_PLAIN:
             default:
                 return parseCollectionFromBody(body, collectionType);
-
         }
     }
 
@@ -366,7 +362,7 @@ public class TextParser implements Parser {
                         mixins.add(mixin);
                         break;
                     case "action":
-                        Action action = createAction(scheme, term, title, location, attributes);
+                        Action action = createAction(scheme, term, title, attributes);
                         actionInstance = new ActionInstance(action);
                         break;
                     default:
@@ -542,7 +538,7 @@ public class TextParser implements Parser {
                 }
                 kind = new Kind(new URI(splitedCategory[0] + "#"), splitedCategory[1]);
             } else {
-                kind = new Kind(Link.getSchemeDefault(), Link.getTermDefult());
+                kind = new Kind(Link.getSchemeDefault(), Link.getTermDefault());
             }
 
             Link link;
@@ -635,19 +631,14 @@ public class TextParser implements Parser {
             throw new ParsingException("Invalid relation specification: " + rel);
         }
 
-        return createAction(splited[0] + "#", splited[1], null, null, null);
+        return createAction(splited[0] + "#", splited[1], null, null);
     }
 
-    private Action createAction(String scheme, String term, String title, String location, String attributes) throws ParsingException {
+    private Action createAction(String scheme, String term, String title, String attributes) throws ParsingException {
         Set<Attribute> parsedAttributes = parseAttributes(attributes);
-        URI locationUri = null;
         Action action = null;
         try {
-            if (location != null) {
-                locationUri = new URI(location);
-            }
-
-            action = new Action(new URI(scheme), term, title, locationUri, parsedAttributes);
+            action = new Action(new URI(scheme), term, title, parsedAttributes);
         } catch (URISyntaxException ex) {
             throw new ParsingException("Invalid URI.");
         }

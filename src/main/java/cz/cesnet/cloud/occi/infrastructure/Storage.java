@@ -49,7 +49,7 @@ public class Storage extends Resource {
         return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
     }
 
-    public static String getTermDefult() {
+    public static String getTermDefault() {
         return "storage";
     }
 }

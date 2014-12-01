@@ -1,1 +1,1 @@
-Category: entity;scheme="http://schemas.ogf.org/occi/core#";class="kind"
+Category: entity;scheme="http://schemas.ogf.org/occi/core#";class="kind";location="/entity/"

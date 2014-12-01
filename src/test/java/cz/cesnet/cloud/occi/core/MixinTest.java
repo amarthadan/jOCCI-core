@@ -19,27 +19,27 @@ public class MixinTest {
         attributes.add(new Attribute("aaa"));
         attributes.add(new Attribute("bbb"));
         attributes.add(new Attribute("ccc"));
-        Mixin mixin = new Mixin(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefult(), "title", new URI("/location/"), attributes);
+        Mixin mixin = new Mixin(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault(), "title", new URI("/location/"), attributes);
 
         assertEquals(mixin.getAttributes(), attributes);
         assertEquals(mixin.getLocation(), new URI("/location/"));
         assertEquals(mixin.getScheme(), Category.SCHEME_CORE_DEFAULT);
-        assertEquals(mixin.getTerm(), Entity.getTermDefult());
+        assertEquals(mixin.getTerm(), Entity.getTermDefault());
         assertEquals(mixin.getTitle(), "title");
     }
 
     @Test
     public void testMinimalConstructor() throws URISyntaxException {
-        Mixin mixin = new Mixin(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefult());
+        Mixin mixin = new Mixin(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
 
         assertEquals(mixin.getScheme(), Category.SCHEME_CORE_DEFAULT);
-        assertEquals(mixin.getTerm(), Entity.getTermDefult());
+        assertEquals(mixin.getTerm(), Entity.getTermDefault());
     }
 
     @Test
     public void testInvalidConstructor() throws URISyntaxException {
         try {
-            Mixin mixin = new Mixin(null, Entity.getTermDefult());
+            Mixin mixin = new Mixin(null, Entity.getTermDefault());
             fail();
         } catch (NullPointerException ex) {
             //cool
@@ -70,7 +70,7 @@ public class MixinTest {
         Action a1 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start");
         Action a2 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "stop");
 
-        Mixin mixin = new Mixin(IPNetwork.getSchemeDefault(), IPNetwork.getTermDefult());
+        Mixin mixin = new Mixin(IPNetwork.getSchemeDefault(), IPNetwork.getTermDefault());
         assertEquals(mixin.toText(), lines[0]);
 
         mixin.setTitle("IP Network Mixin");
@@ -87,7 +87,7 @@ public class MixinTest {
         mixin.addAttribute(at4);
         assertEquals(mixin.toText(), lines[3]);
 
-        mixin = new Mixin(IPNetwork.getSchemeDefault(), IPNetwork.getTermDefult());
+        mixin = new Mixin(IPNetwork.getSchemeDefault(), IPNetwork.getTermDefault());
         mixin.addAction(a1);
         mixin.addAction(a2);
         assertEquals(mixin.toText(), lines[4]);

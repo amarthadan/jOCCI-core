@@ -16,10 +16,9 @@ public class ActionTest {
         attributes.add(new Attribute("aaa"));
         attributes.add(new Attribute("bbb"));
         attributes.add(new Attribute("ccc"));
-        Action action = new Action(Compute.getSchemeDefault(), "start", "Start", new URI("/location/"), attributes);
+        Action action = new Action(Compute.getSchemeDefault(), "start", "Start", attributes);
 
         assertEquals(action.getAttributes(), attributes);
-        assertEquals(action.getLocation(), new URI("/location/"));
         assertEquals(action.getScheme(), Compute.getSchemeDefault());
         assertEquals(action.getTerm(), "start");
         assertEquals(action.getTitle(), "Start");
@@ -36,7 +35,7 @@ public class ActionTest {
     @Test
     public void testInvalidConstructor() throws URISyntaxException {
         try {
-            Action action = new Action(null, Entity.getTermDefult());
+            Action action = new Action(null, Entity.getTermDefault());
             fail();
         } catch (NullPointerException ex) {
             //cool
