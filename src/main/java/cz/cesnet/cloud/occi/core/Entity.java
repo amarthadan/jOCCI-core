@@ -44,7 +44,7 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     public Entity(String id, Kind kind) throws InvalidAttributeValueException {
-        this(id, kind, "", null);
+        this(id, kind, null, null);
     }
 
     public String getId() {

@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import static org.junit.Assert.fail;
 import org.junit.Test;
 import org.junit.Before;
 
@@ -16,12 +17,14 @@ public class CategoryTest {
     public void testInvalidSetTerm() {
         try {
             category.setTerm(null);
+            fail();
         } catch (NullPointerException ex) {
             //cool
         }
 
         try {
             category.setTerm("");
+            fail();
         } catch (IllegalArgumentException ex) {
             //cool
         }
@@ -31,6 +34,7 @@ public class CategoryTest {
     public void testInvalidSetScheme() {
         try {
             category.setScheme(null);
+            fail();
         } catch (NullPointerException ex) {
             //cool
         }
