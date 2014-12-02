@@ -99,8 +99,8 @@ public class Collection {
     }
 
     /**
-     * Sets model for the whole collection (all the resources and links in the
-     * collection)
+     * Sets model for the whole collection (all the resources, links and actions
+     * in the collection)
      *
      * @param model
      */
@@ -111,6 +111,9 @@ public class Collection {
         }
         for (Resource resource : resources.getSet(true)) {
             resource.setModel(model);
+        }
+        for (ActionInstance ai : actions.getSet(true)) {
+            ai.setModel(model);
         }
     }
 

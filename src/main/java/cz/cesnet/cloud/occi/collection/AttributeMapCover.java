@@ -64,6 +64,10 @@ public class AttributeMapCover {
         attributes.clear();
     }
 
+    public int size() {
+        return attributes.size();
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
@@ -112,6 +116,7 @@ public class AttributeMapCover {
             list.add(sb.toString());
         }
 
+        Collections.sort(list);
         return list;
     }
 

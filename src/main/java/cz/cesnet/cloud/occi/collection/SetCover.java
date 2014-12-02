@@ -1,7 +1,6 @@
 package cz.cesnet.cloud.occi.collection;
 
 import cz.cesnet.cloud.occi.type.Identifiable;
-import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -28,7 +27,7 @@ public class SetCover<E extends Identifiable> {
 
     public boolean add(E element) {
         if (element == null) {
-            throw new NullPointerException("Cannot add null " + getElementClassName() + " .");
+            throw new NullPointerException("Cannot add null element.");
         }
 
         return set.add(element);
@@ -36,7 +35,7 @@ public class SetCover<E extends Identifiable> {
 
     public boolean addAll(Collection<E> elements) {
         if (elements.contains(null)) {
-            throw new NullPointerException("Cannot add null " + getElementClassName() + " .");
+            throw new NullPointerException("Cannot add null element.");
         }
 
         return set.addAll(elements);
@@ -52,7 +51,7 @@ public class SetCover<E extends Identifiable> {
 
     public boolean remove(E element) {
         if (element == null) {
-            throw new NullPointerException("Cannot remove null " + getElementClassName() + " .");
+            throw new NullPointerException("Cannot remove null element.");
         }
 
         return set.remove(element);
@@ -84,8 +83,8 @@ public class SetCover<E extends Identifiable> {
         }
     }
 
-    private String getElementClassName() {
-        return ((Class) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0]).getName();
+    public int size() {
+        return set.size();
     }
 
     @Override

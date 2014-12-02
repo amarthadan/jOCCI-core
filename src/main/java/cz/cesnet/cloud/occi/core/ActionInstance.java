@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import java.util.Map;
@@ -12,6 +13,7 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionInstance.class);
     private final AttributeMapCover attributes = new AttributeMapCover();
     private Action action;
+    private Model model;
 
     public ActionInstance(Action action) {
         LOGGER.debug("Creating ActionInstance: action={}", action);
@@ -38,6 +40,14 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     @Override
     public String getIdentifier() {
         return action.getIdentifier();
+    }
+
+    public Model getModel() {
+        return model;
+    }
+
+    public void setModel(Model model) {
+        this.model = model;
     }
 
     public void addAttribute(Attribute attribute, String value) {
