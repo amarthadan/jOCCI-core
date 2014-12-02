@@ -1,4 +1,11 @@
-Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
-Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";self="/link/networkinterface/456";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
-Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";occi.networkinterface.interface="eth0";occi.networkinterface.mac="00:11:22:33:44:55";occi.networkinterface.state="active";
-Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";self="/link/networkinterface/456";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";occi.networkinterface.interface="eth0";occi.networkinterface.mac="00:11:22:33:44:55";occi.networkinterface.state="active";
+Category: console;scheme="http://schemas.ogf.org/occi/infrastructure/compute#";class="kind";title="Link to the VM's console";rel="http://schemas.ogf.org/occi/core#link";location="/console/"
+Category: os_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Operating System Template";location="/mixins/os_tpl/"
+Category: resource_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Resource Template";location="/mixins/resource_tpl/"
+Category: ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";title="IP Network Mixin";location="/mixins/ipnetwork/";attributes="occi.network.address occi.network.allocation occi.network.gateway occi.network.state"
+X-OCCI-Attribute: occi.compute.architecture="x86"
+X-OCCI-Attribute: occi.compute.hostname="compute1.example.org"
+X-OCCI-Attribute: occi.compute.memory=1.7
+X-OCCI-Attribute: occi.compute.speed=1.0
+X-OCCI-Attribute: occi.compute.state="active"
+X-OCCI-Attribute: occi.core.id="87f3bfc3-42d4-4474-b45c-757e55e093e9"
+X-OCCI-Attribute: occi.core.title="compute1"

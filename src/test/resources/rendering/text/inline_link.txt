@@ -1,0 +1,4 @@
+Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
+Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";self="/link/networkinterface/456";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";
+Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";occi.networkinterface.interface="eth0";occi.networkinterface.mac="00:11:22:33:44:55";occi.networkinterface.state="active";
+Link: </network/123>;rel="http://schemas.ogf.org/occi/infrastructure#network";self="/link/networkinterface/456";category="http://schemas.ogf.org/occi/infrastructure#networkinterface";occi.networkinterface.interface="eth0";occi.networkinterface.mac="00:11:22:33:44:55";occi.networkinterface.state="active";
