@@ -614,7 +614,7 @@ public class TextParser implements Parser {
             try {
                 locationsURI.add(new URI(location));
             } catch (URISyntaxException ex) {
-                throw new ParsingException("Invalid location: " + location + ".");
+                throw new ParsingException("Invalid location: " + location + ".", ex);
             }
         }
 
@@ -640,7 +640,7 @@ public class TextParser implements Parser {
         try {
             action = new Action(new URI(scheme), term, title, parsedAttributes);
         } catch (URISyntaxException ex) {
-            throw new ParsingException("Invalid URI.");
+            throw new ParsingException("Invalid URI.", ex);
         }
         return action;
     }
