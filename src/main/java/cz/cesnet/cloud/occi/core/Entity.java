@@ -7,6 +7,7 @@ import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -107,6 +108,12 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     public void addAttribute(String attributeIdentifier, String value) throws InvalidAttributeValueException {
         privateAddAttribute(attributeIdentifier, value);
+    }
+
+    public void addAttributes(Map<String, String> attributes) throws InvalidAttributeValueException {
+        for (String name : attributes.keySet()) {
+            privateAddAttribute(name, attributes.get(name));
+        }
     }
 
     private boolean isValidAttributeValue(String attributeIdentifier, String value) {
@@ -213,6 +220,10 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     public boolean addMixin(Mixin mixin) {
         return mixins.add(mixin);
+    }
+
+    public boolean addMixins(Collection<Mixin> mixins) {
+        return this.mixins.addAll(mixins);
     }
 
     public Mixin getMixin(String mixinIdentifier) {

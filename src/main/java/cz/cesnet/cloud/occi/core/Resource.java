@@ -5,14 +5,17 @@ import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import org.slf4j.LoggerFactory;
 
 public class Resource extends Entity {
 
     public static final String SUMMARY_ATTRIBUTE_NAME = "occi.core.summary";
 
+    private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Resource.class);
     private final SetCover<Link> links = new SetCover<>();
     private final SetCover<Action> actions = new SetCover<>();
 
@@ -43,7 +46,27 @@ public class Resource extends Entity {
     }
 
     public boolean addLink(Link link) {
+        if (link.getSource() == null) {
+            try {
+                link.setSource(this);
+            } catch (InvalidAttributeValueException ex) {
+                LOGGER.error("This should not be happening!");
+            }
+        }
         return links.add(link);
+    }
+
+    public boolean addLinks(Collection<Link> links) {
+        for (Link link : links) {
+            if (link.getSource() == null) {
+                try {
+                    link.setSource(this);
+                } catch (InvalidAttributeValueException ex) {
+                    LOGGER.error("This should not be happening!");
+                }
+            }
+        }
+        return this.links.addAll(links);
     }
 
     public Link getLink(String linkIdentifier) {
@@ -72,6 +95,10 @@ public class Resource extends Entity {
 
     public boolean addAction(Action action) {
         return actions.add(action);
+    }
+
+    public boolean addActions(Collection<Action> actions) {
+        return this.actions.addAll(actions);
     }
 
     public Action getAction(String actionIdentifier) {

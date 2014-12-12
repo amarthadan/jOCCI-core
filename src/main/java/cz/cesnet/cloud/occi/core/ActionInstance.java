@@ -54,6 +54,12 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
         attributes.add(attribute, value);
     }
 
+    public void addAttributes(Map<String, String> attributes) {
+        for (String name : attributes.keySet()) {
+            addAttribute(new Attribute(name), attributes.get(name));
+        }
+    }
+
     public void removeAttribute(Attribute attribute) {
         attributes.remove(attribute);
     }
