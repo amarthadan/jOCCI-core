@@ -9,6 +9,7 @@ public class Kind extends Category {
 
     private final SetCover<Kind> related = new SetCover<>();
     private String entityType;
+    private Kind parentKind = null;
 
     public Kind(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
         super(scheme, term, title, location, attributes);
@@ -24,6 +25,14 @@ public class Kind extends Category {
 
     public void setEntityType(String entityType) {
         this.entityType = entityType;
+    }
+
+    public Kind getParentKind() {
+        return parentKind;
+    }
+
+    public void setParentKind(Kind parentKind) {
+        this.parentKind = parentKind;
     }
 
     public boolean relatesTo(Kind kind) {

@@ -250,6 +250,10 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         return "entity";
     }
 
+    public static String getIdentifierDefault() {
+        return getSchemeDefault().toString() + getTermDefault();
+    }
+
     @Override
     public int hashCode() {
         int hash = 7;

@@ -3,7 +3,12 @@ package cz.cesnet.cloud.occi;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.core.Action;
 import cz.cesnet.cloud.occi.core.Kind;
+import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.core.Mixin;
+import cz.cesnet.cloud.occi.core.Resource;
+import cz.cesnet.cloud.occi.exception.AmbiguousIdentifierException;
+import cz.cesnet.cloud.occi.parser.CollectionType;
+import java.net.URI;
 import java.util.Objects;
 import java.util.Set;
 
@@ -95,6 +100,57 @@ public class Model {
 
     public Set<Action> getActions() {
         return actions.getSet();
+    }
+
+    public Kind findKindByIdentifier(URI identifier) {
+        String identigfierString = identifier.toString();
+        for (Kind kind : kinds.getSet()) {
+            if (kind.getIdentifier().equals(identigfierString)) {
+                return kind;
+            }
+        }
+
+        return null;
+    }
+
+    public Kind findKindByTerm(String term) throws AmbiguousIdentifierException {
+        Kind foundKind = null;
+        for (Kind kind : kinds.getSet()) {
+            if (kind.getTerm().equals(term)) {
+                if (foundKind != null) {
+                    throw new AmbiguousIdentifierException("term '" + term + "' is ambiguous");
+                }
+                foundKind = kind;
+            }
+        }
+
+        return foundKind;
+    }
+
+    public CollectionType findKindType(Kind kind) {
+        while (kind != null) {
+            if (kind.getIdentifier().equals(Resource.getIdentifierDefault())) {
+                return CollectionType.RESOURCE;
+            }
+            if (kind.getIdentifier().equals(Link.getIdentifierDefault())) {
+                return CollectionType.LINK;
+            }
+            kind = kind.getParentKind();
+        }
+
+        return null;
+    }
+
+    public CollectionType findKindType(String location) {
+        Kind kind = null;
+        for (Kind k : kinds.getSet()) {
+            if (k.getLocation().toString().equals(location)) {
+                kind = k;
+                break;
+            }
+        }
+
+        return findKindType(kind);
     }
 
     @Override

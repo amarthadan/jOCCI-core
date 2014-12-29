@@ -98,6 +98,12 @@ public class Collection {
         return actions.getSet();
     }
 
+    public void merge(Collection collection) {
+        resources.addAll(collection.getResources());
+        links.addAll(collection.getLinks());
+        actions.addAll(collection.getActions());
+    }
+
     /**
      * Sets model for the whole collection (all the resources, links and actions
      * in the collection)

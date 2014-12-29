@@ -195,6 +195,7 @@ public class TextParser implements Parser {
             }
             Kind k = model.getKind(rel);
             LOGGER.debug("Creating relation between {} and {}.", kind, k);
+            kind.setParentKind(k);
             kind.addRelation(k);
         }
 
@@ -761,7 +762,7 @@ public class TextParser implements Parser {
         return action;
     }
 
-    private String[] divideUriByLastSegment(String uri) {
+    public static String[] divideUriByLastSegment(String uri) {
         String[] parts = new String[2];
         parts[0] = uri.substring(uri.lastIndexOf('/') + 1);
         parts[1] = uri.substring(0, uri.lastIndexOf('/') + 1);
