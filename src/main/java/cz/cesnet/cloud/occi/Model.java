@@ -102,7 +102,7 @@ public class Model {
         return actions.getSet();
     }
 
-    public Kind findKindByIdentifier(URI identifier) {
+    public Kind findKind(URI identifier) {
         String identigfierString = identifier.toString();
         for (Kind kind : kinds.getSet()) {
             if (kind.getIdentifier().equals(identigfierString)) {
@@ -113,7 +113,7 @@ public class Model {
         return null;
     }
 
-    public Kind findKindByTerm(String term) throws AmbiguousIdentifierException {
+    public Kind findKind(String term) throws AmbiguousIdentifierException {
         Kind foundKind = null;
         for (Kind kind : kinds.getSet()) {
             if (kind.getTerm().equals(term)) {
@@ -151,6 +151,90 @@ public class Model {
         }
 
         return findKindType(kind);
+    }
+
+    //TODO: refactor findMixin methods
+    public Mixin findMixin(URI identifier) {
+        String identigfierString = identifier.toString();
+        for (Mixin mixin : mixins.getSet()) {
+            if (mixin.getIdentifier().equals(identigfierString)) {
+                return mixin;
+            }
+        }
+
+        return null;
+    }
+
+    public Mixin findMixin(String term) throws AmbiguousIdentifierException {
+        Mixin foundMixin = null;
+        for (Mixin mixin : mixins.getSet()) {
+            if (mixin.getTerm().equals(term)) {
+                if (foundMixin != null) {
+                    throw new AmbiguousIdentifierException("term '" + term + "' is ambiguous");
+                }
+                foundMixin = mixin;
+            }
+        }
+
+        return foundMixin;
+    }
+
+    public Mixin findMixin(String term, String rel) throws AmbiguousIdentifierException {
+        Mixin relMixin = findMixin(rel);
+        if (relMixin == null) {
+            return null;
+        }
+
+        Mixin foundMixin = null;
+        for (Mixin mixin : mixins.getSet()) {
+            if (mixin.getTerm().equals(term) && mixin.relatesTo(relMixin)) {
+                if (foundMixin != null) {
+                    throw new AmbiguousIdentifierException("term '" + term + "' is ambiguous");
+                }
+                foundMixin = mixin;
+            }
+        }
+
+        return foundMixin;
+    }
+
+    public Mixin findMixin(String term, URI rel) throws AmbiguousIdentifierException {
+        Mixin foundMixin = null;
+        for (Mixin mixin : mixins.getSet()) {
+            if (mixin.getTerm().equals(term) && mixin.relatesTo(rel.toString())) {
+                if (foundMixin != null) {
+                    throw new AmbiguousIdentifierException("term '" + term + "' is ambiguous");
+                }
+                foundMixin = mixin;
+            }
+        }
+
+        return foundMixin;
+    }
+
+    public Action findAction(String term) throws AmbiguousIdentifierException {
+        Action foundAction = null;
+        for (Action action : actions.getSet()) {
+            if (action.getTerm().equals(term)) {
+                if (foundAction != null) {
+                    throw new AmbiguousIdentifierException("term '" + term + "' is ambiguous");
+                }
+                foundAction = action;
+            }
+        }
+
+        return foundAction;
+    }
+
+    public Action findAction(URI identifier) {
+        String identigfierString = identifier.toString();
+        for (Action action : actions.getSet()) {
+            if (action.getIdentifier().equals(identigfierString)) {
+                return action;
+            }
+        }
+
+        return null;
     }
 
     @Override

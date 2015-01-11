@@ -202,8 +202,8 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         attributes.clear();
     }
 
-    protected String attributesToOneLineText(List<String> exclude) {
-        return attributes.toOneLineText(exclude);
+    protected String attributesToOneLineText() {
+        return attributes.toOneLineText();
     }
 
     protected String attributesToPrefixText() {
@@ -248,10 +248,6 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     public static String getTermDefault() {
         return "entity";
-    }
-
-    public static String getIdentifierDefault() {
-        return getSchemeDefault().toString() + getTermDefault();
     }
 
     @Override

@@ -115,16 +115,6 @@ public class AttributeMapCoverTest {
     }
 
     @Test
-    public void testToOneLineTextWithList() {
-        String line = "occi.compute.hostname=\"compute1.example.org\";occi.compute.memory=1.7;occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\";occi.core.title=\"compute1\";";
-        List<String> exclude = new ArrayList<>();
-        exclude.add("occi.compute.architecture");
-        exclude.add("occi.compute.speed");
-
-        assertEquals(line, attrMap.toOneLineText(exclude));
-    }
-
-    @Test
     public void testToOneLineText() {
         String line = "occi.compute.architecture=\"x86\";occi.compute.hostname=\"compute1.example.org\";occi.compute.memory=1.7;occi.compute.speed=1.0;occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\";occi.core.title=\"compute1\";";
 

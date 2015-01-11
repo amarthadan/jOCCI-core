@@ -40,11 +40,11 @@ public class Link extends Entity {
     }
 
     public void setTarget(Resource target) throws InvalidAttributeValueException {
-        addAttribute(TARGET_ATTRIBUTE_NAME, target.getIdentifier());
+        addAttribute(TARGET_ATTRIBUTE_NAME, target.getLocation());
     }
 
-    public void setTarget(String targetIdentifier) throws InvalidAttributeValueException {
-        addAttribute(TARGET_ATTRIBUTE_NAME, targetIdentifier);
+    public void setTarget(String targetLocation) throws InvalidAttributeValueException {
+        addAttribute(TARGET_ATTRIBUTE_NAME, targetLocation);
     }
 
     public String getRelation() {
@@ -57,6 +57,10 @@ public class Link extends Entity {
 
     public static String getTermDefault() {
         return "link";
+    }
+
+    public static String getIdentifierDefault() {
+        return getSchemeDefault().toString() + getTermDefault();
     }
 
     @Override
@@ -102,12 +106,7 @@ public class Link extends Entity {
         sb.append("category");
         sb.append(TextRenderer.surroundString(getKind().getIdentifier()));
 
-        List<String> exclude = new ArrayList<>();
-        exclude.add(Link.SOURCE_ATTRIBUTE_NAME);
-        exclude.add(Link.TARGET_ATTRIBUTE_NAME);
-        exclude.add(Entity.ID_ATTRIBUTE_NAME);
-
-        sb.append(attributesToOneLineText(exclude));
+        sb.append(attributesToOneLineText());
 
         return sb.toString();
     }

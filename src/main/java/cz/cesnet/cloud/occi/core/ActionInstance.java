@@ -2,9 +2,14 @@ package cz.cesnet.cloud.occi.core;
 
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
+import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,6 +91,44 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
 
     public void clearAttributes() {
         attributes.clear();
+    }
+
+    public String toText() {
+        StringBuilder sb = new StringBuilder("Category: ");
+        sb.append(action.getTerm());
+        sb.append(";");
+        sb.append("scheme");
+        sb.append(TextRenderer.surroundString(action.getScheme().toString()));
+        sb.append("class");
+        sb.append(TextRenderer.surroundString(action.getClass().getSimpleName().toLowerCase()));
+
+        String title = action.getTitle();
+        if (title != null && !title.isEmpty()) {
+            sb.append("title");
+            sb.append(TextRenderer.surroundString(title));
+        }
+
+        Set<Attribute> actionAttributes = action.getAttributes();
+        if (actionAttributes != null && !actionAttributes.isEmpty()) {
+            sb.append("attributes");
+            StringBuilder attrSB = new StringBuilder();
+            List<Attribute> attributeList = new ArrayList<>(actionAttributes);
+            Collections.sort(attributeList);
+            for (Attribute attribute : attributeList) {
+                attrSB.append(attribute.toText());
+                attrSB.append(" ");
+            }
+            attrSB.deleteCharAt(attrSB.length() - 1);
+            sb.append(TextRenderer.surroundString(attrSB.toString()));
+        }
+
+        String attributesString = attributes.toPrefixText();
+        if (!attributesString.isEmpty()) {
+            sb.append("\n");
+            sb.append(attributesString);
+        }
+
+        return sb.toString();
     }
 
     @Override

@@ -95,17 +95,12 @@ public class AttributeMapCover {
         return "AttributeMapCover{" + attributes + '}';
     }
 
-    private List<String> toList(List<String> exclude) {
+    private List<String> toList() {
         List<String> list = new ArrayList<>();
         List<Attribute> attributeList = new ArrayList<>(attributes.keySet());
         Collections.sort(attributeList);
         for (Attribute attribute : attributeList) {
             String name = attribute.getName();
-            if (exclude != null) {
-                if (exclude.contains(name)) {
-                    continue;
-                }
-            }
             StringBuilder sb = new StringBuilder(name);
             String value = attributes.get(attribute);
             if (value.matches(TextParser.REGEXP_NUMBER)) {
@@ -124,7 +119,7 @@ public class AttributeMapCover {
         String prefix = "X-OCCI-Attribute: ";
         StringBuilder sb = new StringBuilder();
 
-        for (String s : toList(null)) {
+        for (String s : toList()) {
             sb.append(prefix);
             sb.append(s);
             sb.append("\n");
@@ -137,19 +132,15 @@ public class AttributeMapCover {
         return sb.toString();
     }
 
-    public String toOneLineText(List<String> exclude) {
+    public String toOneLineText() {
         StringBuilder sb = new StringBuilder();
 
-        for (String s : toList(exclude)) {
+        for (String s : toList()) {
 
             sb.append(s);
             sb.append(";");
         }
 
         return sb.toString();
-    }
-
-    public String toOneLineText() {
-        return toOneLineText(null);
     }
 }

@@ -1,0 +1,7 @@
+Category: backup;scheme="http://schemas.ogf.org/occi/infrastructure/storage/action#";class="action";title="Backup Storage";
+X-OCCI-Attribute: occi.core.id="87f3bfc3-42d4-4474-b45c-757e55e093e9"
+X-OCCI-Attribute: occi.core.source="/vms/foo/vm1"
+X-OCCI-Attribute: occi.core.target="/network/123"
+X-OCCI-Attribute: occi.networkinterface.interface="eth0"
+X-OCCI-Attribute: occi.networkinterface.mac="00:11:22:33:44:55"
+X-OCCI-Attribute: occi.networkinterface.state="active"

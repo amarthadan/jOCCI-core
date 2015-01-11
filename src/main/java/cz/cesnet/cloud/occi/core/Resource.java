@@ -125,6 +125,10 @@ public class Resource extends Entity {
         return "resource";
     }
 
+    public static String getIdentifierDefault() {
+        return getSchemeDefault().toString() + getTermDefault();
+    }
+
     @Override
     public String toString() {
         return "Resource{" + "class=" + getClass().getName() + ", id=" + getId() + ", kind=" + getKind() + ", title=" + getTitle() + ", mixins=" + getMixins() + ", attributes=" + getAttributes() + ", links" + links + '}';
