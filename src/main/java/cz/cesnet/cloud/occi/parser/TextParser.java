@@ -435,8 +435,6 @@ public class TextParser implements Parser {
                     lookForLinks(line, links, actionLinks);
                 }
 
-                System.out.println(kind);
-
                 attributesWithValues = parseAttributesWithValues(rawAttributes.toArray(new String[0]));
                 if (!attributesWithValues.containsKey(Resource.ID_ATTRIBUTE_NAME)) {
                     throw new ParsingException("No id found. Cannot construct a resource.");
