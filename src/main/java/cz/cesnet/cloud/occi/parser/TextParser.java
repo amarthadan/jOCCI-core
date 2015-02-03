@@ -133,6 +133,8 @@ public class TextParser implements Parser {
 
     private Model parseModelFromArray(String[] lines) throws ParsingException {
         Model model = new Model();
+        Map<String, List<Kind>> kindMapping = new HashMap<>();
+        Map<String, List<Mixin>> mixinMapping = new HashMap<>();
 
         for (String line : lines) {
             LOGGER.debug("Matching line '{}' against category pattern.", line);
@@ -162,13 +164,13 @@ public class TextParser implements Parser {
                     if (location == null || location.isEmpty()) {
                         throw new ParsingException("No location found.");
                     }
-                    model = addKind(matcher, model);
+                    model = addKind(matcher, kindMapping, model);
                     break;
                 case "mixin":
                     if (location == null || location.isEmpty()) {
                         throw new ParsingException("No location found.");
                     }
-                    model = addMixin(matcher, model);
+                    model = addMixin(matcher, mixinMapping, model);
                     break;
                 case "action":
                     model = addAction(matcher, model);
@@ -178,10 +180,26 @@ public class TextParser implements Parser {
             }
         }
 
+        for (String identifier : kindMapping.keySet()) {
+            List<Kind> list = kindMapping.get(identifier);
+            LOGGER.debug(identifier + ":");
+            for (Kind k : list) {
+                LOGGER.debug(k.toString());
+            }
+        }
+        
+        if (!kindMapping.isEmpty()) {
+            throw new ParsingException("Unknown kind relations found: " + kindMapping);
+        }
+
+        if (!mixinMapping.isEmpty()) {
+            throw new ParsingException("Unknown mixins relations found: " + mixinMapping);
+        }
+
         return model;
     }
 
-    private Model addKind(Matcher matcher, Model model) throws ParsingException {
+    private Model addKind(Matcher matcher, Map<String, List<Kind>> mapping, Model model) throws ParsingException {
         LOGGER.debug("Adding kind...");
         String actions = matcher.group(GROUP_ACTIONS);
         String rel = matcher.group(GROUP_REL);
@@ -192,19 +210,37 @@ public class TextParser implements Parser {
 
         if (rel != null && !rel.isEmpty()) {
             if (!model.containsKind(rel)) {
-                throw new ParsingException("Unexpected relation " + rel + " in kind " + term + ".");
+                LOGGER.debug("Unexpected relation " + rel + " in kind " + term + ". Storing for later mapping");
+                if (mapping.containsKey(rel)) {
+                    List<Kind> kinds = mapping.get(rel);
+                    kinds.add(kind);
+                } else {
+                    List<Kind> kinds = new ArrayList<>();
+                    kinds.add(kind);
+                    mapping.put(rel, kinds);
+                }
+            } else {
+                Kind k = model.getKind(rel);
+                LOGGER.debug("Creating relation between {} and {}.", kind, k);
+                kind.setParentKind(k);
+                kind.addRelation(k);
             }
-            Kind k = model.getKind(rel);
-            LOGGER.debug("Creating relation between {} and {}.", kind, k);
-            kind.setParentKind(k);
-            kind.addRelation(k);
+        }
+
+        String identifier = kind.getIdentifier();
+        if (mapping.containsKey(identifier)) {
+            List<Kind> kinds = mapping.remove(identifier);
+            for (Kind k : kinds) {
+                k.setParentKind(kind);
+                k.addRelation(kind);
+            }
         }
 
         model.addKind(kind);
         return model;
     }
 
-    private Model addMixin(Matcher matcher, Model model) throws ParsingException {
+    private Model addMixin(Matcher matcher, Map<String, List<Mixin>> mapping, Model model) throws ParsingException {
         LOGGER.debug("Adding mixin...");
         String actions = matcher.group(GROUP_ACTIONS);
         String rel = matcher.group(GROUP_REL);
@@ -215,11 +251,28 @@ public class TextParser implements Parser {
 
         if (rel != null && !rel.isEmpty()) {
             if (!model.containsMixin(rel)) {
-                throw new ParsingException("Unexpected relation " + rel + " in mixin " + term + ".");
+                LOGGER.debug("Unexpected relation " + rel + " in mixin " + term + ". Storing for later mapping");
+                if (mapping.containsKey(rel)) {
+                    List<Mixin> mixins = mapping.get(rel);
+                    mixins.add(mixin);
+                } else {
+                    List<Mixin> mixins = new ArrayList<>();
+                    mixins.add(mixin);
+                    mapping.put(rel, mixins);
+                }
+            } else {
+                Mixin m = model.getMixin(rel);
+                LOGGER.debug("Creating relation between {} and {}.", mixin, m);
+                mixin.addRelation(m);
             }
-            Mixin m = model.getMixin(rel);
-            LOGGER.debug("Creating relation between {} and {}.", mixin, m);
-            mixin.addRelation(m);
+        }
+
+        String identifier = mixin.getIdentifier();
+        if (mapping.containsKey(identifier)) {
+            List<Mixin> mixins = mapping.remove(identifier);
+            for (Mixin m : mixins) {
+                m.addRelation(mixin);
+            }
         }
 
         model.addMixin(mixin);

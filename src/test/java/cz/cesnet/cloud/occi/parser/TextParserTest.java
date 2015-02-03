@@ -116,15 +116,6 @@ public class TextParserTest {
             //cool
         }
 
-        //kind with unknown rel
-        try {
-            String body = "Category: resource;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Resource\";rel=\"http://schemas.ogf.org/occi/core#entity\";location=\"/resource/\";attributes=\"occi.core.summary\"";
-            instance.parseModel(MediaType.TEXT_PLAIN, body, null);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
         //kind with illegal scheme
         try {
             String body = "Category: entity;scheme=\"/\\/_)#@564...,p,pkl\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"";
@@ -182,15 +173,6 @@ public class TextParserTest {
         //mixin with empty location
         try {
             String body = "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"";
-            instance.parseModel(MediaType.TEXT_PLAIN, body, null);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
-        //mixin with unknown rel
-        try {
-            String body = "Category: debianvm;scheme=\"https://occi.localhost/occi/infrastructure/os_tpl#\";class=\"mixin\";title=\"debianvm\";rel=\"http://schemas.ogf.org/occi/infrastructure#os_tpl\";location=\"/mixins/debianvm/\"";
             instance.parseModel(MediaType.TEXT_PLAIN, body, null);
             fail();
         } catch (ParsingException ex) {
@@ -403,15 +385,6 @@ public class TextParserTest {
             //cool
         }
 
-        //kind with unknown rel
-        try {
-            headers.put("Category", "Category: resource;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Resource\";rel=\"http://schemas.ogf.org/occi/core#entity\";location=\"/resource/\";attributes=\"occi.core.summary\"");
-            instance.parseModel(MediaType.TEXT_OCCI, null, headers);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
         //kind with illegal scheme
         try {
             headers.put("Category", "Category: entity;scheme=\"/\\/_)#@564...,p,pkl\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
@@ -474,15 +447,6 @@ public class TextParserTest {
         //mixin with empty location
         try {
             headers.put("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
-            instance.parseModel(MediaType.TEXT_OCCI, null, headers);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
-        //mixin with unknown rel
-        try {
-            headers.put("Category", "Category: debianvm;scheme=\"https://occi.localhost/occi/infrastructure/os_tpl#\";class=\"mixin\";title=\"debianvm\";rel=\"http://schemas.ogf.org/occi/infrastructure#os_tpl\";location=\"/mixins/debianvm/\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
