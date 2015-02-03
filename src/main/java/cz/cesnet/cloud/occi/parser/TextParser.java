@@ -113,6 +113,7 @@ public class TextParser implements Parser {
     private Model parseModelFromBody(String body) throws ParsingException {
         LOGGER.debug("Reading response body.");
 
+        body = body.trim();
         String replaced = body.replaceAll("Category:\\s*", "");
 
         String[] lines = replaced.split("[\\r\\n]+");
@@ -342,6 +343,7 @@ public class TextParser implements Parser {
     private List<URI> parseLocationsFromBody(String body) throws ParsingException {
         LOGGER.debug("Reading response body.");
 
+        body = body.trim();
         String replaced = body.replaceAll("X-OCCI-Location:\\s*", "");
         String[] lines = replaced.split("[\\r\\n]+");
         return makeURIList(lines);
@@ -398,6 +400,7 @@ public class TextParser implements Parser {
     private Collection parseCollectionFromBody(String body, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Reading body.");
 
+        body = body.trim();
         String replaced = body.replaceAll("Category:\\s*", "");
         replaced = replaced.replaceAll("Link:\\s*", "");
         replaced = replaced.replaceAll("X-OCCI-Attribute:\\s*", "");
