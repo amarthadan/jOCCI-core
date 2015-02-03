@@ -53,7 +53,7 @@ public class TextParser implements Parser {
     public static final String REGEXP_URI = "(?x-mi:([a-zA-Z][\\-+.a-zA-Z\\d]*):(?:((?:[\\-_.!~*'()a-zA-Z\\d;?:@&=+$,]|%[a-fA-F\\d]{2})(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)|(?:(?:\\/\\/(?:(?:(?:((?:[\\-_.!~*'()a-zA-Z\\d;:&=+$,]|%[a-fA-F\\d]{2})*)@)?(?:((?:(?:[a-zA-Z0-9\\-.]|%[0-9a-fA-F][0-9a-fA-F])+|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(?:(?:[a-fA-F\\d]{1,4}:)*[a-fA-F\\d]{1,4})?::(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}))?)\\]))(?::(\\d*))?))?|((?:[\\-_.!~*'()a-zA-Z\\d$,;:@&=+]|%[a-fA-F\\d]{2})+))|(?!\\/\\/))(\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?)(?:\\?((?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*))?)(?:\\#((?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*))?)";
     public static final String REGEXP_URI_REF = "(?:[a-zA-Z][\\-+.a-zA-Z\\d]*:(?:(?:\\/\\/(?:(?:(?:[\\-_.!~*'()a-zA-Z\\d;:&=+$,]|%[a-fA-F\\d]{2})*@)?(?:(?:[a-zA-Z0-9\\-.]|%[0-9a-fA-F][0-9a-fA-F])+|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(?:(?:[a-fA-F\\d]{1,4}:)*[a-fA-F\\d]{1,4})?::(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}))?)\\])(?::\\d*)?|(?:[\\-_.!~*'()a-zA-Z\\d$,;:@&=+]|%[a-fA-F\\d]{2})+)(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?|\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)(?:\\?(?:(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*))?|(?:[\\-_.!~*'()a-zA-Z\\d;?:@&=+$,]|%[a-fA-F\\d]{2})(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)|(?:\\/\\/(?:(?:(?:[\\-_.!~*'()a-zA-Z\\d;:&=+$,]|%[a-fA-F\\d]{2})*@)?(?:(?:[a-zA-Z0-9\\-.]|%[0-9a-fA-F][0-9a-fA-F])+|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}|\\[(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})|(?:(?:[a-fA-F\\d]{1,4}:)*[a-fA-F\\d]{1,4})?::(?:(?:[a-fA-F\\d]{1,4}:)*(?:[a-fA-F\\d]{1,4}|\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}))?)\\])(?::\\d*)?|(?:[\\-_.!~*'()a-zA-Z\\d$,;:@&=+]|%[a-fA-F\\d]{2})+)(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?|\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*|(?:[\\-_.!~*'()a-zA-Z\\d;@&=+$,]|%[a-fA-F\\d]{2})+(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*(?:\\/(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*(?:;(?:[\\-_.!~*'()a-zA-Z\\d:@&=+$,]|%[a-fA-F\\d]{2})*)*)*)?)(?:\\?(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)?)?(?:#(?:[\\-_.!~*'()a-zA-Z\\d;\\/?:@&=+$,\\[\\]]|%[a-fA-F\\d]{2})*)?";
 
-    public static final String REGEXP_TERM = REGEXP_LOALPHA + "(" + REGEXP_LOALPHA + "|" + REGEXP_DIGIT + "|-|_)*";
+    public static final String REGEXP_TERM = "(" + REGEXP_ALPHA + "|" + REGEXP_DIGIT + ")(" + REGEXP_LOALPHA + "|" + REGEXP_DIGIT + "|-|_)*";
     public static final String REGEXP_SCHEME = REGEXP_URI + "#";
     public static final String REGEXP_TYPE_IDENTIFIER = REGEXP_SCHEME + REGEXP_TERM;
     public static final String REGEXP_CLASS = "\\b(?<!\\|)action(?!\\|)\\b|\\b(?<!\\|)mixin(?!\\|)\\b|\\b(?<!\\|)kind(?!\\|)\\b";
@@ -180,16 +180,29 @@ public class TextParser implements Parser {
             }
         }
 
-        for (String identifier : kindMapping.keySet()) {
-            List<Kind> list = kindMapping.get(identifier);
-            LOGGER.debug(identifier + ":");
-            for (Kind k : list) {
-                LOGGER.debug(k.toString());
-            }
-        }
-        
         if (!kindMapping.isEmpty()) {
-            throw new ParsingException("Unknown kind relations found: " + kindMapping);
+            List<Kind> defaultKinds = createDefaultKinds();
+            for (Kind kind : defaultKinds) {
+                if (model.containsKind(kind)) {
+                    continue;
+                }
+
+                model.addKind(kind);
+
+                for (String identifier : kindMapping.keySet()) {
+                    if (identifier.equals(kind.getIdentifier())) {
+                        List<Kind> kinds = kindMapping.remove(identifier);
+                        for (Kind k : kinds) {
+                            k.setParentKind(kind);
+                            k.addRelation(kind);
+                        }
+                    }
+                }
+            }
+
+            if (!kindMapping.isEmpty()) {
+                throw new ParsingException("Unknown kind relations found: " + kindMapping);
+            }
         }
 
         if (!mixinMapping.isEmpty()) {
@@ -367,6 +380,33 @@ public class TextParser implements Parser {
         return attribute;
     }
 
+    private List<Kind> createDefaultKinds() {
+        List<Kind> defaultKinds = new ArrayList<>();
+
+        Set<Attribute> attributes = new HashSet<>();
+        attributes.add(new Attribute(Entity.ID_ATTRIBUTE_NAME, true, true));
+        attributes.add(new Attribute(Entity.TITLE_ATTRIBUTE_NAME, false, false));
+        Kind entity = new Kind(Entity.getSchemeDefault(), Entity.getTermDefault(), "Entity", URI.create("/entity/"), attributes);
+        defaultKinds.add(entity);
+
+        attributes = new HashSet<>();
+        attributes.add(new Attribute(Resource.SUMMARY_ATTRIBUTE_NAME, false, false));
+        Kind resource = new Kind(Resource.getSchemeDefault(), Resource.getTermDefault(), "Resource", URI.create("/resource/"), attributes);
+        resource.setParentKind(entity);
+        resource.addRelation(entity);
+        defaultKinds.add(resource);
+
+        attributes = new HashSet<>();
+        attributes.add(new Attribute(Link.SOURCE_ATTRIBUTE_NAME, true, false));
+        attributes.add(new Attribute(Link.TARGET_ATTRIBUTE_NAME, true, false));
+        Kind link = new Kind(Link.getSchemeDefault(), Link.getTermDefault(), "Link", URI.create("/link/"), attributes);
+        link.setParentKind(entity);
+        link.addRelation(entity);
+        defaultKinds.add(link);
+
+        return defaultKinds;
+    }
+
     @Override
     public List<URI> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
         LOGGER.debug("Parsing location...");
@@ -464,7 +504,7 @@ public class TextParser implements Parser {
 
     private Collection parseCollectionFromArray(String[] lines, CollectionType collectionType) throws ParsingException {
         Collection collection = new Collection();
-        Kind kind = null;
+        Kind kind;
         Set<Mixin> mixins = new HashSet<>();
         List<String> rawAttributes = new ArrayList<>();
         Map<String, String> attributesWithValues = null;

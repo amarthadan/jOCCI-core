@@ -8,7 +8,6 @@ import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import java.net.URI;
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
