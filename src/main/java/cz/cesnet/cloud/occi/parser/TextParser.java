@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.parser;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.Collection;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.core.Action;
@@ -98,15 +99,16 @@ public class TextParser implements Parser {
     private static final Logger LOGGER = LoggerFactory.getLogger(TextParser.class);
 
     @Override
-    public Model parseModel(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+    public Model parseModel(String mediaType, String body, Headers headers) throws ParsingException {
         LOGGER.debug("Parsing model...");
 
         switch (mediaType) {
-            case TEXT_OCCI:
+            case MediaType.TEXT_OCCI:
                 return parseModelFromHeaders(headers);
-            case TEXT_PLAIN:
-            default:
+            case MediaType.TEXT_PLAIN:
                 return parseModelFromBody(body);
+            default:
+                throw new ParsingException("Unknown media type '" + mediaType + "'.");
         }
     }
 
@@ -120,14 +122,14 @@ public class TextParser implements Parser {
         return parseModelFromArray(lines);
     }
 
-    private Model parseModelFromHeaders(Map<String, String> headers) throws ParsingException {
+    private Model parseModelFromHeaders(Headers headers) throws ParsingException {
         LOGGER.debug("Reading response headers.");
 
         if (!headers.containsKey("Category")) {
             throw new ParsingException("No header 'Category' among headers.");
         }
 
-        String[] categories = headers.get("Category").split(",");
+        String[] categories = headers.getFirst("Category").split(",");
         return parseModelFromArray(categories);
     }
 
@@ -408,28 +410,28 @@ public class TextParser implements Parser {
     }
 
     @Override
-    public List<URI> parseLocations(MediaType mediaType, String body, Map<String, String> headers) throws ParsingException {
+    public List<URI> parseLocations(String mediaType, String body, Headers headers) throws ParsingException {
         LOGGER.debug("Parsing location...");
 
         switch (mediaType) {
-            case TEXT_OCCI:
+            case MediaType.TEXT_OCCI:
                 return parseLocationsFromHeaders(headers);
-            case TEXT_URI_LIST:
-            case TEXT_PLAIN:
-            default:
+            case MediaType.TEXT_URI_LIST:
+            case MediaType.TEXT_PLAIN:
                 return parseLocationsFromBody(body);
-
+            default:
+                throw new ParsingException("Unknown media type '" + mediaType + "'.");
         }
     }
 
-    private List<URI> parseLocationsFromHeaders(Map<String, String> headers) throws ParsingException {
+    private List<URI> parseLocationsFromHeaders(Headers headers) throws ParsingException {
         LOGGER.debug("Reading response headers.");
 
         if (!headers.containsKey("Location")) {
             throw new ParsingException("No header 'Location' among headers.");
         }
 
-        String[] locations = headers.get("Location").split(",");
+        String[] locations = headers.getFirst("Location").split(",");
         return makeURIList(locations);
     }
 
@@ -457,19 +459,20 @@ public class TextParser implements Parser {
     }
 
     @Override
-    public Collection parseCollection(MediaType mediaType, String body, Map<String, String> headers, CollectionType collectionType) throws ParsingException {
+    public Collection parseCollection(String mediaType, String body, Headers headers, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Parsing collection...");
 
         switch (mediaType) {
-            case TEXT_OCCI:
+            case MediaType.TEXT_OCCI:
                 return parseCollectionFromHeaders(headers, collectionType);
-            case TEXT_PLAIN:
-            default:
+            case MediaType.TEXT_PLAIN:
                 return parseCollectionFromBody(body, collectionType);
+            default:
+                throw new ParsingException("Unknown media type '" + mediaType + "'.");
         }
     }
 
-    private Collection parseCollectionFromHeaders(Map<String, String> headers, CollectionType collectionType) throws ParsingException {
+    private Collection parseCollectionFromHeaders(Headers headers, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Reading headers.");
 
         if (!headers.containsKey("Category")) {
@@ -477,14 +480,14 @@ public class TextParser implements Parser {
         }
 
         List<String> lines = new ArrayList<>();
-        lines.addAll(Arrays.asList(headers.get("Category").split(",")));
+        lines.addAll(Arrays.asList(headers.getFirst("Category").split(",")));
 
         if (headers.containsKey("X-Occi-Attribute")) {
-            lines.addAll(Arrays.asList(headers.get("X-Occi-Attribute").split(",")));
+            lines.addAll(Arrays.asList(headers.getFirst("X-Occi-Attribute").split(",")));
         }
 
         if (headers.containsKey("Link")) {
-            lines.addAll(Arrays.asList(headers.get("Link").split(",")));
+            lines.addAll(Arrays.asList(headers.getFirst("Link").split(",")));
         }
 
         return parseCollectionFromArray(lines.toArray(new String[0]), collectionType);

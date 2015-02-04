@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.parser;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.Collection;
 import cz.cesnet.cloud.occi.DataGenerator;
 import cz.cesnet.cloud.occi.Model;
@@ -15,9 +16,7 @@ import cz.cesnet.cloud.occi.exception.ParsingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
@@ -75,7 +74,7 @@ public class TextParserTest {
     @Test
     public void testParseModelPlainKindsMinimal() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_kinds_minimal.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(DataGenerator.getMinimalKind(), null);
         Model result = instance.parseModel(MediaType.TEXT_PLAIN, body, headers);
@@ -86,7 +85,7 @@ public class TextParserTest {
     @Test
     public void testParseModelPlainKindsFull() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_kinds_full.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(DataGenerator.getFiveKinds(), null);
         Model result = instance.parseModel(MediaType.TEXT_PLAIN, body, headers);
@@ -138,7 +137,7 @@ public class TextParserTest {
     @Test
     public void testParseModelPlainMixinsMinimal() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_mixins_minimal.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithMixins(DataGenerator.getMinimalMixin(), null);
         Model result = instance.parseModel(MediaType.TEXT_PLAIN, body, headers);
@@ -149,7 +148,7 @@ public class TextParserTest {
     @Test
     public void testParseModelPlainMixinsFull() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_mixins_full.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithMixins(DataGenerator.getFiveMixins(), null);
         Model result = instance.parseModel(MediaType.TEXT_PLAIN, body, headers);
@@ -201,7 +200,7 @@ public class TextParserTest {
     @Test
     public void testParseModelPlainActionsMinimal() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_actions_minimal.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithActions(DataGenerator.getMinimalAction(), null);
         Model result = instance.parseModel(MediaType.TEXT_PLAIN, body, headers);
@@ -212,7 +211,7 @@ public class TextParserTest {
     @Test
     public void testParseModelPlainActionsFull() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_actions_full.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithActions(DataGenerator.getFiveActions(), null);
         Model result = instance.parseModel(MediaType.TEXT_PLAIN, body, headers);
@@ -237,7 +236,7 @@ public class TextParserTest {
     @Test
     public void testParseModelPlainAll() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "model_plain_all.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(DataGenerator.getFiveKinds(), null);
         expResult = populateModelWithMixins(DataGenerator.getFiveMixins(), expResult);
@@ -317,21 +316,21 @@ public class TextParserTest {
 
     }
 
-    private Map<String, String> createDefaultHeaders() {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Status Code", "200 OK");
-        headers.put("Cache-Control", "no-cache");
-        headers.put("Connection", "keep-alive");
-        headers.put("Content-Length", "0");
-        headers.put("Content-Type", "text/occi; charset=utf-8");
-        headers.put("Date", "Thu, 06 Nov 2014 19:11:38 GMT");
-        headers.put("Server", "WEBrick/1.3.1 (Ruby/2.0.0/2014-09-19)");
-        headers.put("Via", "1.1 vegur");
-        headers.put("X-Frame-Options", "SAMEORIGIN");
-        headers.put("X-Request-Id", "3191d404-a8f5-4bda-97d6-1069e71fc418");
-        headers.put("X-Runtime", "0.025947");
-        headers.put("X-XSS-Protection", "1; mode=block");
-        headers.put("x-content-type-options", "nosniff");
+    private Headers createDefaultHeaders() {
+        Headers headers = new Headers();
+        headers.add("Status Code", "200 OK");
+        headers.add("Cache-Control", "no-cache");
+        headers.add("Connection", "keep-alive");
+        headers.add("Content-Length", "0");
+        headers.add("Content-Type", "text/occi; charset=utf-8");
+        headers.add("Date", "Thu, 06 Nov 2014 19:11:38 GMT");
+        headers.add("Server", "WEBrick/1.3.1 (Ruby/2.0.0/2014-09-19)");
+        headers.add("Via", "1.1 vegur");
+        headers.add("X-Frame-Options", "SAMEORIGIN");
+        headers.add("X-Request-Id", "3191d404-a8f5-4bda-97d6-1069e71fc418");
+        headers.add("X-Runtime", "0.025947");
+        headers.add("X-XSS-Protection", "1; mode=block");
+        headers.add("x-content-type-options", "nosniff");
 
         return headers;
     }
@@ -340,8 +339,8 @@ public class TextParserTest {
     public void testParseModelOcciKindsMinimal() throws Exception {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_kinds_minimal.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(DataGenerator.getMinimalKind(), null);
         Model result = instance.parseModel(MediaType.TEXT_OCCI, body, headers);
@@ -353,8 +352,8 @@ public class TextParserTest {
     public void testParseModelOcciKindsFull() throws Exception {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_kinds_full.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(DataGenerator.getFiveKinds(), null);
         Model result = instance.parseModel(MediaType.TEXT_OCCI, body, headers);
@@ -365,11 +364,11 @@ public class TextParserTest {
     @Test
     public void testInvalidParseModelOcciKind() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = createDefaultHeaders();
+        Headers headers = createDefaultHeaders();
 
         //kind without location
         try {
-            headers.put("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -378,7 +377,7 @@ public class TextParserTest {
 
         //kind with empty location
         try {
-            headers.put("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";location=\"\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";location=\"\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -387,7 +386,7 @@ public class TextParserTest {
 
         //kind with illegal scheme
         try {
-            headers.put("Category", "Category: entity;scheme=\"/\\/_)#@564...,p,pkl\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"/\\/_)#@564...,p,pkl\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -396,7 +395,7 @@ public class TextParserTest {
 
         //kind with illegal location
         try {
-            headers.put("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";location=\"/\\/_)#@564...,p,pkl\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";location=\"/\\/_)#@564...,p,pkl\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -408,8 +407,8 @@ public class TextParserTest {
     public void testParseModelOcciMixinsMinimal() throws Exception {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_mixins_minimal.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
         TextParser instance = new TextParser();
         Model expResult = populateModelWithMixins(DataGenerator.getMinimalMixin(), null);
         Model result = instance.parseModel(MediaType.TEXT_OCCI, body, headers);
@@ -421,8 +420,8 @@ public class TextParserTest {
     public void testParseModelOcciMixinsFull() throws Exception {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_mixins_full.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
         TextParser instance = new TextParser();
         Model expResult = populateModelWithMixins(DataGenerator.getFiveMixins(), null);
         Model result = instance.parseModel(MediaType.TEXT_OCCI, body, headers);
@@ -433,11 +432,11 @@ public class TextParserTest {
     @Test
     public void testInvalidParseModelOcciMixin() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = createDefaultHeaders();
+        Headers headers = createDefaultHeaders();
 
         //mixin without location
         try {
-            headers.put("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
+            headers.add("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -446,7 +445,7 @@ public class TextParserTest {
 
         //mixin with empty location
         try {
-            headers.put("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
+            headers.add("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -455,7 +454,7 @@ public class TextParserTest {
 
         //mixin with illegal scheme
         try {
-            headers.put("Category", "Category: ipnetwork;scheme=\"/\\/_)#@564...,p,pkl\";class=\"mixin\";title=\"IP Network Mixin\";location=\"/mixins/ipnetwork/\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
+            headers.add("Category", "Category: ipnetwork;scheme=\"/\\/_)#@564...,p,pkl\";class=\"mixin\";title=\"IP Network Mixin\";location=\"/mixins/ipnetwork/\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -464,7 +463,7 @@ public class TextParserTest {
 
         //mixin with illegal location
         try {
-            headers.put("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"/\\/_)#@564...,p,pkl\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
+            headers.add("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"/\\/_)#@564...,p,pkl\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -476,8 +475,8 @@ public class TextParserTest {
     public void testParseModelOcciActionsMinimal() throws Exception {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_actions_minimal.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
         TextParser instance = new TextParser();
         Model expResult = populateModelWithActions(DataGenerator.getMinimalAction(), null);
         Model result = instance.parseModel(MediaType.TEXT_OCCI, body, headers);
@@ -489,8 +488,8 @@ public class TextParserTest {
     public void testParseModelOcciActionsFull() throws Exception {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_actions_full.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
         TextParser instance = new TextParser();
         Model expResult = populateModelWithActions(DataGenerator.getFiveActions(), null);
         Model result = instance.parseModel(MediaType.TEXT_OCCI, body, headers);
@@ -501,11 +500,11 @@ public class TextParserTest {
     @Test
     public void testInvalidParseModelOcciAction() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = createDefaultHeaders();
+        Headers headers = createDefaultHeaders();
 
         //action with illegal scheme
         try {
-            headers.put("Category", "Category: restart;scheme=\"/\\/_)#@564...,p,pkl\";class=\"action\";title=\"Restart Compute instance\";attributes=\"method\"");
+            headers.add("Category", "Category: restart;scheme=\"/\\/_)#@564...,p,pkl\";class=\"action\";title=\"Restart Compute instance\";attributes=\"method\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -517,8 +516,8 @@ public class TextParserTest {
     public void testParseModelOcciAll() throws Exception {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "model_occi_all.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
         TextParser instance = new TextParser();
         Model expResult = populateModelWithKinds(DataGenerator.getFiveKinds(), null);
         expResult = populateModelWithMixins(DataGenerator.getFiveMixins(), expResult);
@@ -533,7 +532,7 @@ public class TextParserTest {
     @Test
     public void testInvalidParseModelOcci() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = createDefaultHeaders();
+        Headers headers = createDefaultHeaders();
 
         //missing category header
         try {
@@ -544,7 +543,7 @@ public class TextParserTest {
         }
 
         try {
-            headers.put("Category", "nonmatching_line");
+            headers.add("Category", "nonmatching_line");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -553,7 +552,7 @@ public class TextParserTest {
 
         //without term
         try {
-            headers.put("Category", "Category: ;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: ;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -562,7 +561,7 @@ public class TextParserTest {
 
         //without scheme
         try {
-            headers.put("Category", "Category: entity;class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -571,7 +570,7 @@ public class TextParserTest {
 
         //with empty scheme
         try {
-            headers.put("Category", "Category: entity;scheme=\"\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"\";class=\"kind\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -580,7 +579,7 @@ public class TextParserTest {
 
         //without class
         try {
-            headers.put("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -589,7 +588,7 @@ public class TextParserTest {
 
         //with empty class
         try {
-            headers.put("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -598,7 +597,7 @@ public class TextParserTest {
 
         //with unknown class
         try {
-            headers.put("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"nonexisting_class\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
+            headers.add("Category", "Category: entity;scheme=\"http://schemas.ogf.org/occi/core#\";class=\"nonexisting_class\";title=\"Entity\";location=\"/entity/\";attributes=\"occi.core.id occi.core.title\"");
             instance.parseModel(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -610,7 +609,7 @@ public class TextParserTest {
     @Test
     public void testParseLocationsPlain() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "locations_plain.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         List<URI> expResult = DataGenerator.getLocations();
         List<URI> result = instance.parseLocations(MediaType.TEXT_PLAIN, body, headers);
@@ -635,7 +634,7 @@ public class TextParserTest {
     @Test
     public void testParseLocationsUriList() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "locations_uri-list.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
         List<URI> expResult = DataGenerator.getLocations();
         List<URI> result = instance.parseLocations(MediaType.TEXT_URI_LIST, body, headers);
@@ -660,8 +659,8 @@ public class TextParserTest {
     @Test
     public void testParseLocationsOcci() throws Exception {
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Location", "http://rocci-server-1-1-x.herokuapp.com:80/compute/87f3bfc3-42d4-4474-b45c-757e55e093e9,http://rocci-server-1-1-x.herokuapp.com:80/compute/17679ebd-975f-4ea0-b42b-47405178c360,http://rocci-server-1-1-x.herokuapp.com:80/compute/509afbd3-abff-427c-9b25-7913d17e5102");
+        Headers headers = createDefaultHeaders();
+        headers.add("Location", "http://rocci-server-1-1-x.herokuapp.com:80/compute/87f3bfc3-42d4-4474-b45c-757e55e093e9,http://rocci-server-1-1-x.herokuapp.com:80/compute/17679ebd-975f-4ea0-b42b-47405178c360,http://rocci-server-1-1-x.herokuapp.com:80/compute/509afbd3-abff-427c-9b25-7913d17e5102");
         TextParser instance = new TextParser();
         List<URI> expResult = DataGenerator.getLocations();
         List<URI> result = instance.parseLocations(MediaType.TEXT_OCCI, body, headers);
@@ -671,7 +670,7 @@ public class TextParserTest {
     @Test
     public void testInvalidParseLocationsOcci() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = createDefaultHeaders();
+        Headers headers = createDefaultHeaders();
 
         try {
             instance.parseLocations(MediaType.TEXT_OCCI, null, headers);
@@ -681,7 +680,7 @@ public class TextParserTest {
         }
 
         try {
-            headers.put("Location", "http://rocci-server-1-1-x.herokuapp.com:80/compute/87f3bfc3-42d4-4474-b45c-757e55e093e9,!@#$%^&||}?:{}|,http://rocci-server-1-1-x.herokuapp.com:80/compute/509afbd3-abff-427c-9b25-7913d17e5102");
+            headers.add("Location", "http://rocci-server-1-1-x.herokuapp.com:80/compute/87f3bfc3-42d4-4474-b45c-757e55e093e9,!@#$%^&||}?:{}|,http://rocci-server-1-1-x.herokuapp.com:80/compute/509afbd3-abff-427c-9b25-7913d17e5102");
             instance.parseLocations(MediaType.TEXT_OCCI, null, headers);
             fail();
         } catch (ParsingException ex) {
@@ -692,7 +691,7 @@ public class TextParserTest {
     @Test
     public void testParseCollectionPlainResource() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "collection_plain_resource.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
 
         Collection expResult = new Collection();
@@ -826,7 +825,7 @@ public class TextParserTest {
     @Test
     public void testParseCollectionPlainLink() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "collection_plain_link.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
 
         Collection expResult = new Collection();
@@ -911,7 +910,7 @@ public class TextParserTest {
     @Test
     public void testParseCollectionPlainAction() throws Exception {
         String body = TestHelper.readFile(RESOURCE_PATH + "collection_plain_action.txt");
-        Map<String, String> headers = null;
+        Headers headers = null;
         TextParser instance = new TextParser();
 
         Collection expResult = new Collection();
@@ -959,10 +958,10 @@ public class TextParserTest {
         String attributeHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_resource_attribute.txt");
         String linkHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_resource_link.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
-        headers.put("X-Occi-Attribute", attributeHeader);
-        headers.put("Link", linkHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
+        headers.add("X-Occi-Attribute", attributeHeader);
+        headers.add("Link", linkHeader);
         TextParser instance = new TextParser();
         Collection expResult = new Collection();
         expResult.addResource(DataGenerator.getResource());
@@ -974,10 +973,10 @@ public class TextParserTest {
     @Test
     public void testInvalidParseCollectionOcciResource() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = new HashMap<>();
+        Headers headers = new Headers();
 
         try {
-            headers.put("Category", "no kind specification on the first line");
+            headers.add("Category", "no kind specification on the first line");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -986,7 +985,7 @@ public class TextParserTest {
 
         //unknown class
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"unknown_class\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"unknown_class\";location=\"/compute/\";title=\"compute resource\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -995,7 +994,7 @@ public class TextParserTest {
 
         //invalid kind scheme
         try {
-            headers.put("Category", "compute;scheme=\"!@#$%^&||}?:{}|\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("Category", "compute;scheme=\"!@#$%^&||}?:{}|\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -1004,7 +1003,7 @@ public class TextParserTest {
 
         //invalid kind location
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"!@#$%^&||}?:{}|\";title=\"compute resource\"");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"!@#$%^&||}?:{}|\";title=\"compute resource\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -1013,7 +1012,7 @@ public class TextParserTest {
 
         //unknown class
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"\n"
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"\n"
                     + "os_tpl;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"unknown_class\";title=\"Operating System Template\";location=\"/mixins/os_tpl/\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
@@ -1023,7 +1022,7 @@ public class TextParserTest {
 
         //invalid mixin scheme
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"\n"
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"\n"
                     + "os_tpl;scheme=\"!@#$%^&||}?:{}|\";class=\"mixin\";title=\"Operating System Template\";location=\"/mixins/os_tpl/\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
@@ -1033,7 +1032,7 @@ public class TextParserTest {
 
         //invalid mixin location
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\""
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\""
                     + "os_tpl;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"mixin\";title=\"Operating System Template\";location=\"!@#$%^&||}?:{}|\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
@@ -1043,8 +1042,8 @@ public class TextParserTest {
 
         //missing action link rel
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
-            headers.put("Link", "</compute/123?action=start>");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("Link", "</compute/123?action=start>");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -1053,8 +1052,8 @@ public class TextParserTest {
 
         //invalid action link relation
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
-            headers.put("Link", "</compute/123?action=start>;rel=\"!@$%^&||}?:{}|\"");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("Link", "</compute/123?action=start>;rel=\"!@$%^&||}?:{}|\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -1063,8 +1062,8 @@ public class TextParserTest {
 
         //invalid link category
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
-            headers.put("Link", "</network/123>;rel=\"http://schemas.ogf.org/occi/infrastructure#network\";self=\"/link/networkinterface/456\";category=\"!@$%^&||}?:{}|\";occi.networkinterface.interface=\"eth0\";occi.networkinterface.mac=\"00:11:22:33:44:55\";occi.networkinterface.state=\"active\";");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("Link", "</network/123>;rel=\"http://schemas.ogf.org/occi/infrastructure#network\";self=\"/link/networkinterface/456\";category=\"!@$%^&||}?:{}|\";occi.networkinterface.interface=\"eth0\";occi.networkinterface.mac=\"00:11:22:33:44:55\";occi.networkinterface.state=\"active\";");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -1073,8 +1072,8 @@ public class TextParserTest {
 
         //invalid link location
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
-            headers.put("Link", "</network/123>;rel=\"http://schemas.ogf.org/occi/infrastructure#network\";self=\"!@$%^&||}?:{}|\";category=\"http://schemas.ogf.org/occi/infrastructure#networkinterface\";occi.networkinterface.interface=\"eth0\";occi.networkinterface.mac=\"00:11:22:33:44:55\";occi.networkinterface.state=\"active\";");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("Link", "</network/123>;rel=\"http://schemas.ogf.org/occi/infrastructure#network\";self=\"!@$%^&||}?:{}|\";category=\"http://schemas.ogf.org/occi/infrastructure#networkinterface\";occi.networkinterface.interface=\"eth0\";occi.networkinterface.mac=\"00:11:22:33:44:55\";occi.networkinterface.state=\"active\";");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -1083,8 +1082,8 @@ public class TextParserTest {
 
         //missing id attribute
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
-            headers.put("X-Occi-Attribute", "occi.core.title=\"compute1\"");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("X-Occi-Attribute", "occi.core.title=\"compute1\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.RESOURCE);
             fail();
         } catch (ParsingException ex) {
@@ -1097,9 +1096,9 @@ public class TextParserTest {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_link_category.txt");
         String attributeHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_link_attribute.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
-        headers.put("X-Occi-Attribute", attributeHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
+        headers.add("X-Occi-Attribute", attributeHeader);
         TextParser instance = new TextParser();
         Collection expResult = new Collection();
         expResult.addLink(DataGenerator.getLink());
@@ -1111,10 +1110,10 @@ public class TextParserTest {
     @Test
     public void testInvalidParseCollectionOcciLink() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = new HashMap<>();
+        Headers headers = new Headers();
 
         try {
-            headers.put("Category", "no kind specification on the first line");
+            headers.add("Category", "no kind specification on the first line");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.LINK);
             fail();
         } catch (ParsingException ex) {
@@ -1123,7 +1122,7 @@ public class TextParserTest {
 
         //unknown class
         try {
-            headers.put("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"unknown_class\";");
+            headers.add("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"unknown_class\";");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.LINK);
             fail();
         } catch (ParsingException ex) {
@@ -1132,7 +1131,7 @@ public class TextParserTest {
 
         //invalid kind scheme
         try {
-            headers.put("Category", "networkinterface;scheme=\"!@$%^&||}?:{}|\";class=\"kind\";");
+            headers.add("Category", "networkinterface;scheme=\"!@$%^&||}?:{}|\";class=\"kind\";");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.LINK);
             fail();
         } catch (ParsingException ex) {
@@ -1141,7 +1140,7 @@ public class TextParserTest {
 
         //unknown class
         try {
-            headers.put("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";\n"
+            headers.add("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";\n"
                     + "os_tpl;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"unknown_class\";title=\"Operating System Template\";location=\"/mixins/os_tpl/\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.LINK);
             fail();
@@ -1151,7 +1150,7 @@ public class TextParserTest {
 
         //invalid mixin scheme
         try {
-            headers.put("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";\n"
+            headers.add("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";\n"
                     + "os_tpl;scheme=\"!@#$%^&||}?:{}|\";class=\"mixin\";title=\"Operating System Template\";location=\"/mixins/os_tpl/\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.LINK);
             fail();
@@ -1161,7 +1160,7 @@ public class TextParserTest {
 
         //invalid mixin location
         try {
-            headers.put("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";\n"
+            headers.add("Category", "networkinterface;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";\n"
                     + "os_tpl;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"mixin\";title=\"Operating System Template\";location=\"!@#$%^&||}?:{}|\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.LINK);
             fail();
@@ -1171,8 +1170,8 @@ public class TextParserTest {
 
         //missing id attribute
         try {
-            headers.put("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
-            headers.put("X-Occi-Attribute", "occi.networkinterface.interface=\"eth0\";");
+            headers.add("Category", "compute;scheme=\"http://schemas.ogf.org/occi/infrastructure#\";class=\"kind\";location=\"/compute/\";title=\"compute resource\"");
+            headers.add("X-Occi-Attribute", "occi.networkinterface.interface=\"eth0\";");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.LINK);
             fail();
         } catch (ParsingException ex) {
@@ -1185,9 +1184,9 @@ public class TextParserTest {
         String categoryHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_action_category.txt");
         String attributeHeader = TestHelper.readFile(RESOURCE_PATH + "collection_occi_action_attribute.txt");
         String body = null;
-        Map<String, String> headers = createDefaultHeaders();
-        headers.put("Category", categoryHeader);
-        headers.put("X-Occi-Attribute", attributeHeader);
+        Headers headers = createDefaultHeaders();
+        headers.add("Category", categoryHeader);
+        headers.add("X-Occi-Attribute", attributeHeader);
         TextParser instance = new TextParser();
         Collection expResult = new Collection();
         expResult.addAction(DataGenerator.getAction());
@@ -1199,10 +1198,10 @@ public class TextParserTest {
     @Test
     public void testInvalidParseCollectionOcciAction() {
         TextParser instance = new TextParser();
-        Map<String, String> headers = new HashMap<>();
+        Headers headers = new Headers();
 
         try {
-            headers.put("Category", "no action specification on the first line");
+            headers.add("Category", "no action specification on the first line");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.ACTION);
             fail();
         } catch (ParsingException ex) {
@@ -1211,7 +1210,7 @@ public class TextParserTest {
 
         //unknown class
         try {
-            headers.put("Category", "backup;scheme=\"http://schemas.ogf.org/occi/infrastructure/storage/action#\";class=\"unknown_class\";title=\"Backup Storage\"");
+            headers.add("Category", "backup;scheme=\"http://schemas.ogf.org/occi/infrastructure/storage/action#\";class=\"unknown_class\";title=\"Backup Storage\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.ACTION);
             fail();
         } catch (ParsingException ex) {
@@ -1220,7 +1219,7 @@ public class TextParserTest {
 
         //invalid action scheme
         try {
-            headers.put("Category", "backup;scheme=\"!@#$%^&||}?:{}|\";class=\"action\";title=\"Backup Storage\"");
+            headers.add("Category", "backup;scheme=\"!@#$%^&||}?:{}|\";class=\"action\";title=\"Backup Storage\"");
             instance.parseCollection(MediaType.TEXT_OCCI, null, headers, CollectionType.ACTION);
             fail();
         } catch (ParsingException ex) {
