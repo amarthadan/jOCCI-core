@@ -7,6 +7,10 @@ import cz.cesnet.cloud.occi.exception.ParsingException;
 import java.net.URI;
 import java.util.List;
 
+/**
+ *
+ * @author Michal Kimle <kimle.michal@gmail.com>
+ */
 public class JSONParser implements Parser {
 
     @Override

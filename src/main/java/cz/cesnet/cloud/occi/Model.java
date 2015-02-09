@@ -12,100 +12,207 @@ import java.net.URI;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Class representing an OCCI model.
+ *
+ * @author Michal Kimle <kimle.michal@gmail.com>
+ */
 public class Model {
 
     private final SetCover<Kind> kinds = new SetCover<>();
     private final SetCover<Mixin> mixins = new SetCover<>();
     private final SetCover<Action> actions = new SetCover<>();
 
+    /**
+     *
+     * @param kind
+     * @return
+     */
     public boolean containsKind(Kind kind) {
         return kinds.contains(kind);
     }
 
+    /**
+     *
+     * @param kindIdentifier
+     * @return
+     */
     public boolean containsKind(String kindIdentifier) {
         return kinds.contains(kindIdentifier);
     }
 
+    /**
+     *
+     * @param kind
+     * @return
+     */
     public boolean addKind(Kind kind) {
         return kinds.add(kind);
     }
 
+    /**
+     *
+     * @param kindIdentifier
+     * @return
+     */
     public Kind getKind(String kindIdentifier) {
         return kinds.get(kindIdentifier);
     }
 
+    /**
+     *
+     * @param kind
+     * @return
+     */
     public boolean removeKind(Kind kind) {
         return kinds.remove(kind);
     }
 
+    /**
+     *
+     */
     public void clearKinds() {
         kinds.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Kind> getKinds() {
         return kinds.getSet();
     }
 
+    /**
+     *
+     * @param mixin
+     * @return
+     */
     public boolean containsMixin(Mixin mixin) {
         return mixins.contains(mixin);
     }
 
+    /**
+     *
+     * @param mixinIdentifier
+     * @return
+     */
     public boolean containsMixin(String mixinIdentifier) {
         return mixins.contains(mixinIdentifier);
     }
 
+    /**
+     *
+     * @param mixin
+     * @return
+     */
     public boolean addMixin(Mixin mixin) {
         return mixins.add(mixin);
     }
 
+    /**
+     *
+     * @param mixinIdentifier
+     * @return
+     */
     public Mixin getMixin(String mixinIdentifier) {
         return mixins.get(mixinIdentifier);
     }
 
+    /**
+     *
+     * @param mixin
+     * @return
+     */
     public boolean removeMixin(Mixin mixin) {
         return mixins.remove(mixin);
     }
 
+    /**
+     *
+     */
     public void clearMixins() {
         mixins.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Mixin> getMixins() {
         return mixins.getSet();
     }
 
+    /**
+     *
+     * @param action
+     * @return
+     */
     public boolean containsAction(Action action) {
         return actions.contains(action);
     }
 
+    /**
+     *
+     * @param actionIdentifier
+     * @return
+     */
     public boolean containsAction(String actionIdentifier) {
         return actions.contains(actionIdentifier);
     }
 
+    /**
+     *
+     * @param action
+     * @return
+     */
     public boolean addAction(Action action) {
         return actions.add(action);
     }
 
+    /**
+     *
+     * @param actionIdentifier
+     * @return
+     */
     public Action getAction(String actionIdentifier) {
         return actions.get(actionIdentifier);
     }
 
+    /**
+     *
+     * @param action
+     * @return
+     */
     public boolean removeAction(Action action) {
         return actions.remove(action);
     }
 
+    /**
+     *
+     */
     public void clearActions() {
         actions.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Action> getActions() {
         return actions.getSet();
     }
 
+    /**
+     * Finds kind with given identifier (schema+term) in model.
+     *
+     * @param identifier
+     * @return Kind instance with given identifier if found, null otherwise
+     */
     public Kind findKind(URI identifier) {
-        String identigfierString = identifier.toString();
+        String identifierString = identifier.toString();
         for (Kind kind : kinds.getSet()) {
-            if (kind.getIdentifier().equals(identigfierString)) {
+            if (kind.getIdentifier().equals(identifierString)) {
                 return kind;
             }
         }
@@ -113,6 +220,14 @@ public class Model {
         return null;
     }
 
+    /**
+     * Finds kind with given term in model.
+     *
+     * @param term
+     * @return Kind instance with given term if found, null otherwise
+     * @throws AmbiguousIdentifierException if model contains more than one kind
+     * with given term
+     */
     public Kind findKind(String term) throws AmbiguousIdentifierException {
         Kind foundKind = null;
         for (Kind kind : kinds.getSet()) {
@@ -127,6 +242,12 @@ public class Model {
         return foundKind;
     }
 
+    /**
+     * Determines CollectionType for given kind (for parsing purposes).
+     *
+     * @param kind
+     * @return CollectionType instance if determined, null otherwise
+     */
     public CollectionType findKindType(Kind kind) {
         while (kind != null) {
             if (kind.getIdentifier().equals(Resource.getIdentifierDefault())) {
@@ -141,6 +262,13 @@ public class Model {
         return null;
     }
 
+    /**
+     * Determines CollectionType for kind with given location (for parsing
+     * purposes).
+     *
+     * @param location
+     * @return CollectionType instance if determined, null otherwise
+     */
     public CollectionType findKindType(String location) {
         Kind kind = null;
         for (Kind k : kinds.getSet()) {
@@ -154,6 +282,12 @@ public class Model {
     }
 
     //TODO: refactor findMixin methods
+    /**
+     * Finds mixin with given identifier (schema+term) in model.
+     *
+     * @param identifier
+     * @return Mixin instance with given identifier if found, null otherwise
+     */
     public Mixin findMixin(URI identifier) {
         String identigfierString = identifier.toString();
         for (Mixin mixin : mixins.getSet()) {
@@ -165,6 +299,14 @@ public class Model {
         return null;
     }
 
+    /**
+     * Finds mixin with given term in model.
+     *
+     * @param term
+     * @return Mixin instance with given term if found, null otherwise
+     * @throws AmbiguousIdentifierException if model contains more than one
+     * mixin with given term
+     */
     public Mixin findMixin(String term) throws AmbiguousIdentifierException {
         Mixin foundMixin = null;
         for (Mixin mixin : mixins.getSet()) {
@@ -179,6 +321,16 @@ public class Model {
         return foundMixin;
     }
 
+    /**
+     * Finds mixin with given term and relation in model.
+     *
+     * @param term
+     * @param rel term of related mixin
+     * @return Mixin instance with given term and relation if found, null
+     * otherwise
+     * @throws AmbiguousIdentifierException if model contains more than one
+     * mixin with given term
+     */
     public Mixin findMixin(String term, String rel) throws AmbiguousIdentifierException {
         Mixin relMixin = findMixin(rel);
         if (relMixin == null) {
@@ -198,6 +350,16 @@ public class Model {
         return foundMixin;
     }
 
+    /**
+     * Finds mixin with given term and relation in model.
+     *
+     * @param term
+     * @param rel identifier of related mixin (scheme+term)
+     * @return Mixin instance with given term and relation if found, null
+     * otherwise
+     * @throws AmbiguousIdentifierException if model contains more than one
+     * mixin with given term
+     */
     public Mixin findMixin(String term, URI rel) throws AmbiguousIdentifierException {
         Mixin foundMixin = null;
         for (Mixin mixin : mixins.getSet()) {
@@ -212,6 +374,14 @@ public class Model {
         return foundMixin;
     }
 
+    /**
+     * Finds action with given term in model.
+     *
+     * @param term
+     * @return Action instance with given term if found, null otherwise
+     * @throws AmbiguousIdentifierException if model contains more than one
+     * action with given term
+     */
     public Action findAction(String term) throws AmbiguousIdentifierException {
         Action foundAction = null;
         for (Action action : actions.getSet()) {
@@ -226,6 +396,12 @@ public class Model {
         return foundAction;
     }
 
+    /**
+     * Finds action with given identifier (schema+term) in model.
+     *
+     * @param identifier
+     * @return Action instance with given identifier if found, null otherwise
+     */
     public Action findAction(URI identifier) {
         String identigfierString = identifier.toString();
         for (Action action : actions.getSet()) {
@@ -237,6 +413,10 @@ public class Model {
         return null;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 3;
@@ -246,6 +426,11 @@ public class Model {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -267,6 +452,10 @@ public class Model {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Model{" + "kinds=" + kinds + ", mixins=" + mixins + ", actions=" + actions + '}';

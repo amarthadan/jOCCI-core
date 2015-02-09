@@ -14,9 +14,21 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class representing an OCCI Entity
+ *
+ * @author Michal Kimle <kimle.michal@gmail.com>
+ */
 public abstract class Entity implements Identifiable, Comparable<Entity> {
 
+    /**
+     *
+     */
     public static final String ID_ATTRIBUTE_NAME = "occi.core.id";
+
+    /**
+     *
+     */
     public static final String TITLE_ATTRIBUTE_NAME = "occi.core.title";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
@@ -25,6 +37,15 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     private final SetCover<Mixin> mixins = new SetCover<>();
     private final AttributeMapCover attributes = new AttributeMapCover();
 
+    /**
+     * Constructor
+     *
+     * @param id cannot be null
+     * @param kind cannot be null
+     * @param title
+     * @param model
+     * @throws InvalidAttributeValueException
+     */
     public Entity(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
         LOGGER.debug("Creating Entity: class={}, id={}, kind={}, title={}, model={}", getClass().getName(), id, kind, title, model);
 
@@ -43,14 +64,29 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         this.model = model;
     }
 
+    /**
+     *
+     * @param id
+     * @param kind
+     * @throws InvalidAttributeValueException
+     */
     public Entity(String id, Kind kind) throws InvalidAttributeValueException {
         this(id, kind, null, null);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getId() {
         return getValue(ID_ATTRIBUTE_NAME);
     }
 
+    /**
+     *
+     * @param id
+     * @throws InvalidAttributeValueException
+     */
     public void setId(String id) throws InvalidAttributeValueException {
         if (id == null) {
             throw new NullPointerException("Entity id cannot be null.");
@@ -59,10 +95,18 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         addAttribute(ID_ATTRIBUTE_NAME, id);
     }
 
+    /**
+     *
+     * @return
+     */
     public Kind getKind() {
         return kind;
     }
 
+    /**
+     *
+     * @param kind
+     */
     public void setKind(Kind kind) {
         if (kind == null) {
             throw new NullPointerException("Entity kind cannot be null.");
@@ -71,23 +115,44 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         this.kind = kind;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getIdentifier() {
         return kind.getIdentifier() + "|" + getId();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTitle() {
         return getValue(TITLE_ATTRIBUTE_NAME);
     }
 
+    /**
+     *
+     * @param title
+     * @throws InvalidAttributeValueException
+     */
     public void setTitle(String title) throws InvalidAttributeValueException {
         addAttribute(TITLE_ATTRIBUTE_NAME, title);
     }
 
+    /**
+     *
+     * @return
+     */
     public Model getModel() {
         return model;
     }
 
+    /**
+     *
+     * @param model
+     */
     public void setModel(Model model) {
         this.model = model;
     }
@@ -105,10 +170,23 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         attributes.add(attribute, value);
     }
 
+    /**
+     * Adds attribute and its value. If attribute has a content restriction
+     * value is checked.
+     *
+     * @param attributeIdentifier
+     * @param value
+     * @throws InvalidAttributeValueException
+     */
     public void addAttribute(String attributeIdentifier, String value) throws InvalidAttributeValueException {
         privateAddAttribute(attributeIdentifier, value);
     }
 
+    /**
+     *
+     * @param attributes
+     * @throws InvalidAttributeValueException
+     */
     public void addAttributes(Map<String, String> attributes) throws InvalidAttributeValueException {
         for (String name : attributes.keySet()) {
             privateAddAttribute(name, attributes.get(name));
@@ -173,82 +251,170 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         return null;
     }
 
+    /**
+     *
+     * @param attributeIdentifier
+     */
     public void removeAttribute(String attributeIdentifier) {
         attributes.remove(attributeIdentifier);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean containsAttribute(Attribute attribute) {
         return attributes.containsAttribute(attribute);
     }
 
+    /**
+     *
+     * @param attributeName
+     * @return
+     */
     public boolean containsAttribute(String attributeName) {
         return attributes.containsAttribute(attributeName);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public String getValue(Attribute attribute) {
         return attributes.getValue(attribute);
     }
 
+    /**
+     *
+     * @param attributeName
+     * @return
+     */
     public String getValue(String attributeName) {
         return attributes.getValue(attributeName);
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<Attribute, String> getAttributes() {
         return attributes.getAttributes();
     }
 
+    /**
+     *
+     */
     public void clearAttributes() {
         attributes.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     protected String attributesToOneLineText() {
         return attributes.toOneLineText();
     }
 
+    /**
+     *
+     * @return
+     */
     protected String attributesToPrefixText() {
         return attributes.toPrefixText();
     }
 
+    /**
+     *
+     * @param mixin
+     * @return
+     */
     public boolean containsMixin(Mixin mixin) {
         return mixins.contains(mixin);
     }
 
+    /**
+     *
+     * @param mixinIdentifier
+     * @return
+     */
     public boolean containsMixin(String mixinIdentifier) {
         return mixins.contains(mixinIdentifier);
     }
 
+    /**
+     *
+     * @param mixin
+     * @return
+     */
     public boolean addMixin(Mixin mixin) {
         return mixins.add(mixin);
     }
 
+    /**
+     *
+     * @param mixins
+     * @return
+     */
     public boolean addMixins(Collection<Mixin> mixins) {
         return this.mixins.addAll(mixins);
     }
 
+    /**
+     *
+     * @param mixinIdentifier
+     * @return
+     */
     public Mixin getMixin(String mixinIdentifier) {
         return mixins.get(mixinIdentifier);
     }
 
+    /**
+     *
+     * @param mixin
+     * @return
+     */
     public boolean removeMixin(Mixin mixin) {
         return mixins.remove(mixin);
     }
 
+    /**
+     *
+     */
     public void clearMixins() {
         mixins.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Mixin> getMixins() {
         return mixins.getSet();
     }
 
+    /**
+     *
+     * @return
+     */
     public static URI getSchemeDefault() {
         return Category.SCHEME_CORE_DEFAULT;
     }
 
+    /**
+     *
+     * @return
+     */
     public static String getTermDefault() {
         return "entity";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -257,6 +423,11 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -275,15 +446,32 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Entity{" + "class=" + getClass().getName() + ", id=" + getId() + ", kind=" + kind + ", title=" + getTitle() + ", mixins=" + mixins + ", attributes=" + attributes + '}';
     }
 
+    /**
+     *
+     * @return @throws RenderingException
+     */
     public abstract String toText() throws RenderingException;
 
+    /**
+     *
+     * @return
+     */
     public abstract String toJSON();
 
+    /**
+     *
+     * @param e
+     * @return
+     */
     @Override
     public int compareTo(Entity e) {
         return getIdentifier().compareTo(e.getIdentifier());

@@ -14,10 +14,23 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class representing an OCCI Category
+ *
+ * @author Michal Kimle <kimle.michal@gmail.com>
+ */
 public class Category implements Identifiable, Comparable<Category> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
+
+    /**
+     *
+     */
     public static final URI SCHEME_CORE_DEFAULT = makeURI("http://schemas.ogf.org/occi/core#");
+
+    /**
+     *
+     */
     public static final URI SCHEME_INFRASTRUCTURE_DEFAULT = makeURI("http://schemas.ogf.org/occi/infrastructure#");
 
     private String term;
@@ -28,6 +41,15 @@ public class Category implements Identifiable, Comparable<Category> {
     private final SetCover<Action> actions = new SetCover<>();
     private final SetCover<Entity> entities = new SetCover<>();
 
+    /**
+     * Constructor
+     *
+     * @param scheme cannot be null
+     * @param term cannot be null nor empty
+     * @param title
+     * @param location
+     * @param attributes
+     */
     public Category(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
         LOGGER.debug("Creating category: scheme={}, term={}, title={}, location={}, attributes={}", scheme, term, title, location, attributes);
 
@@ -51,6 +73,11 @@ public class Category implements Identifiable, Comparable<Category> {
         }
     }
 
+    /**
+     *
+     * @param scheme
+     * @param term
+     */
     public Category(URI scheme, String term) {
         this(scheme, term, null, null, null);
     }
@@ -64,10 +91,18 @@ public class Category implements Identifiable, Comparable<Category> {
         }
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTerm() {
         return term;
     }
 
+    /**
+     *
+     * @param term
+     */
     public void setTerm(String term) {
         if (term == null) {
             throw new NullPointerException("Category term cannot be null.");
@@ -79,10 +114,18 @@ public class Category implements Identifiable, Comparable<Category> {
         this.term = term;
     }
 
+    /**
+     *
+     * @return
+     */
     public URI getScheme() {
         return scheme;
     }
 
+    /**
+     *
+     * @param scheme
+     */
     public void setScheme(URI scheme) {
         if (scheme == null) {
             throw new NullPointerException("Category scheme cannot be null.");
@@ -91,114 +134,234 @@ public class Category implements Identifiable, Comparable<Category> {
         this.scheme = scheme;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getIdentifier() {
         return getScheme().toString() + getTerm();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTitle() {
         return title;
     }
 
+    /**
+     *
+     * @param title
+     */
     public void setTitle(String title) {
         this.title = title;
     }
 
+    /**
+     *
+     * @return
+     */
     public URI getLocation() {
         return location;
     }
 
+    /**
+     *
+     * @param location
+     */
     public void setLocation(URI location) {
         this.location = location;
     }
 
     //attributes
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean containsAttribute(Attribute attribute) {
         return attributes.contains(attribute);
     }
 
+    /**
+     *
+     * @param attributeIdentifier
+     * @return
+     */
     public boolean containsAttribute(String attributeIdentifier) {
         return attributes.contains(attributeIdentifier);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean addAttribute(Attribute attribute) {
         return attributes.add(attribute);
     }
 
+    /**
+     *
+     * @param attributeIdentifier
+     * @return
+     */
     public Attribute getAttribute(String attributeIdentifier) {
         return attributes.get(attributeIdentifier);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean removeAttribute(Attribute attribute) {
         return attributes.remove(attribute);
     }
 
+    /**
+     *
+     */
     public void clearAttributes() {
         attributes.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Attribute> getAttributes() {
         return attributes.getSet();
     }
 
     //actions
+    /**
+     *
+     * @param action
+     * @return
+     */
     public boolean containsAction(Action action) {
         return actions.contains(action);
     }
 
+    /**
+     *
+     * @param actionIdentifier
+     * @return
+     */
     public boolean containsAction(String actionIdentifier) {
         return actions.contains(actionIdentifier);
     }
 
+    /**
+     *
+     * @param action
+     * @return
+     */
     public boolean addAction(Action action) {
         return actions.add(action);
     }
 
+    /**
+     *
+     * @param actionIdentifier
+     * @return
+     */
     public Action getAction(String actionIdentifier) {
         return actions.get(actionIdentifier);
     }
 
+    /**
+     *
+     * @param action
+     * @return
+     */
     public boolean removeAction(Action action) {
         return actions.remove(action);
     }
 
+    /**
+     *
+     */
     public void clearActions() {
         actions.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Action> getActions() {
         return actions.getSet();
     }
 
     //entities
+    /**
+     *
+     * @param entity
+     * @return
+     */
     public boolean containsEntity(Entity entity) {
         return entities.contains(entity);
     }
 
+    /**
+     *
+     * @param entityIdentifier
+     * @return
+     */
     public boolean containsEntity(String entityIdentifier) {
         return entities.contains(entityIdentifier);
     }
 
+    /**
+     *
+     * @param entity
+     * @return
+     */
     public boolean addEntity(Entity entity) {
         return entities.add(entity);
     }
 
+    /**
+     *
+     * @param entityIdentifier
+     * @return
+     */
     public Entity getEntity(String entityIdentifier) {
         return entities.get(entityIdentifier);
     }
 
+    /**
+     *
+     * @param entity
+     * @return
+     */
     public boolean removeEntity(Entity entity) {
         return entities.remove(entity);
     }
 
+    /**
+     *
+     */
     public void clearEntities() {
         entities.clear();
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Entity> getEntities() {
         return entities.getSet();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -207,6 +370,11 @@ public class Category implements Identifiable, Comparable<Category> {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -225,11 +393,21 @@ public class Category implements Identifiable, Comparable<Category> {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Category{" + "term=" + term + ", scheme=" + scheme + ", title=" + title + ", location=" + location + ", attributes=" + attributes + '}';
     }
 
+    /**
+     * Returns a plain text representation of category and its subtypes (kinds
+     * and mixins) according to OCCI standard.
+     *
+     * @return plain text representation of category
+     */
     public String toText() {
         StringBuilder sb = new StringBuilder("Category: ");
         sb.append(term);
@@ -302,6 +480,11 @@ public class Category implements Identifiable, Comparable<Category> {
         return sb.toString();
     }
 
+    /**
+     *
+     * @param c
+     * @return
+     */
     @Override
     public int compareTo(Category c) {
         return getIdentifier().compareTo(c.getIdentifier());

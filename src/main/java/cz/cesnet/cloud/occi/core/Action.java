@@ -9,81 +9,167 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class representing an OCCI Action structure.
+ *
+ * @author Michal Kimle <kimle.michal@gmail.com>
+ */
 public class Action implements Identifiable, Comparable<Action> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Action.class);
     private Category category;
 
+    /**
+     *
+     * @param scheme
+     * @param term
+     * @param title
+     * @param attributes
+     */
     public Action(URI scheme, String term, String title, Collection<Attribute> attributes) {
         LOGGER.debug("Creating action: scheme={}, term={}, title={}, attributes={}", scheme, term, title, attributes);
         this.category = new Category(scheme, term, title, null, attributes);
     }
 
+    /**
+     *
+     * @param scheme
+     * @param term
+     */
     public Action(URI scheme, String term) {
         this(scheme, term, null, null);
     }
 
+    /**
+     *
+     * @return
+     */
     public URI getScheme() {
         return category.getScheme();
     }
 
+    /**
+     *
+     * @param scheme
+     */
     public void setScheme(URI scheme) {
         category.setScheme(scheme);
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTerm() {
         return category.getTerm();
     }
 
+    /**
+     *
+     * @param term
+     */
     public void setTerm(String term) {
         category.setTerm(term);
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getIdentifier() {
         return category.getIdentifier();
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTitle() {
         return category.getTitle();
     }
 
+    /**
+     *
+     * @param title
+     */
     public void setTitle(String title) {
         category.setTitle(title);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean containsAttribute(Attribute attribute) {
         return category.containsAttribute(attribute);
     }
 
+    /**
+     *
+     * @param attributeName
+     * @return
+     */
     public boolean containsAttribute(String attributeName) {
         return category.containsAttribute(attributeName);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean addAttribute(Attribute attribute) {
         return category.addAttribute(attribute);
     }
 
+    /**
+     *
+     * @param attributeName
+     * @return
+     */
     public Attribute getAttribute(String attributeName) {
         return category.getAttribute(attributeName);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean removeAttribute(Attribute attribute) {
         return category.removeAttribute(attribute);
     }
 
+    /**
+     *
+     * @return
+     */
     public Set<Attribute> getAttributes() {
         return category.getAttributes();
     }
 
+    /**
+     *
+     * @return
+     */
     public URI getSchemeDefault() {
         return Category.SCHEME_CORE_DEFAULT;
     }
 
+    /**
+     *
+     * @return
+     */
     public String getTermDefault() {
         return "action";
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -91,6 +177,11 @@ public class Action implements Identifiable, Comparable<Action> {
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -106,11 +197,22 @@ public class Action implements Identifiable, Comparable<Action> {
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Action{" + "category=" + category + '}';
     }
 
+    /**
+     * Returns a text representation of action link as described in OCCI
+     * standard.
+     *
+     * @param resourceLocation
+     * @return text representation of action link
+     */
     public String toText(String resourceLocation) {
         StringBuilder sb = new StringBuilder("Link: ");
 
@@ -123,6 +225,11 @@ public class Action implements Identifiable, Comparable<Action> {
         return sb.toString();
     }
 
+    /**
+     *
+     * @param a
+     * @return
+     */
     @Override
     public int compareTo(Action a) {
         return getIdentifier().compareTo(a.getIdentifier());

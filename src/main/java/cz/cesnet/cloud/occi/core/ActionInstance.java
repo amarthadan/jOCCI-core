@@ -13,6 +13,11 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Class representing an instance of Action
+ *
+ * @author Michal Kimle <kimle.michal@gmail.com>
+ */
 public class ActionInstance implements Identifiable, Comparable<ActionInstance> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ActionInstance.class);
@@ -20,6 +25,11 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     private Action action;
     private Model model;
 
+    /**
+     * Constructor
+     *
+     * @param action cannot be null
+     */
     public ActionInstance(Action action) {
         LOGGER.debug("Creating ActionInstance: action={}", action);
 
@@ -30,10 +40,18 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
         this.action = action;
     }
 
+    /**
+     *
+     * @return
+     */
     public Action getAction() {
         return action;
     }
 
+    /**
+     *
+     * @param action
+     */
     public void setAction(Action action) {
         if (action == null) {
             throw new NullPointerException("ActionInstance action cannot be null.");
@@ -42,57 +60,115 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
         this.action = action;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String getIdentifier() {
         return action.getIdentifier();
     }
 
+    /**
+     *
+     * @return
+     */
     public Model getModel() {
         return model;
     }
 
+    /**
+     *
+     * @param model
+     */
     public void setModel(Model model) {
         this.model = model;
     }
 
+    /**
+     *
+     * @param attribute
+     * @param value
+     */
     public void addAttribute(Attribute attribute, String value) {
         attributes.add(attribute, value);
     }
 
+    /**
+     *
+     * @param attributes
+     */
     public void addAttributes(Map<String, String> attributes) {
         for (String name : attributes.keySet()) {
             addAttribute(new Attribute(name), attributes.get(name));
         }
     }
 
+    /**
+     *
+     * @param attribute
+     */
     public void removeAttribute(Attribute attribute) {
         attributes.remove(attribute);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public boolean containsAttribute(Attribute attribute) {
         return attributes.containsAttribute(attribute);
     }
 
+    /**
+     *
+     * @param attributeName
+     * @return
+     */
     public boolean containsAttribute(String attributeName) {
         return attributes.containsAttribute(attributeName);
     }
 
+    /**
+     *
+     * @param attribute
+     * @return
+     */
     public String getValue(Attribute attribute) {
         return attributes.getValue(attribute);
     }
 
+    /**
+     *
+     * @param attributeName
+     * @return
+     */
     public String getValue(String attributeName) {
         return attributes.getValue(attributeName);
     }
 
+    /**
+     *
+     * @return
+     */
     public Map<Attribute, String> getAttributes() {
         return attributes.getAttributes();
     }
 
+    /**
+     *
+     */
     public void clearAttributes() {
         attributes.clear();
     }
 
+    /**
+     * Returns a text representation of action instance as described in OCCI
+     * standard.
+     *
+     * @return text representation of action instance
+     */
     public String toText() {
         StringBuilder sb = new StringBuilder("Category: ");
         sb.append(action.getTerm());
@@ -131,6 +207,10 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
         return sb.toString();
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public int hashCode() {
         int hash = 7;
@@ -139,6 +219,11 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
         return hash;
     }
 
+    /**
+     *
+     * @param obj
+     * @return
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -157,11 +242,20 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
         return true;
     }
 
+    /**
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "ActionInstance{" + "attributes=" + attributes + ", action=" + action + '}';
     }
 
+    /**
+     *
+     * @param a
+     * @return
+     */
     @Override
     public int compareTo(ActionInstance a) {
         return getIdentifier().compareTo(a.getIdentifier());
