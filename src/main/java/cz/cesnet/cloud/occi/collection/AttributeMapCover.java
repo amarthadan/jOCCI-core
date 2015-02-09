@@ -38,7 +38,7 @@ public class AttributeMapCover {
 
     /**
      *
-     * @param attribute
+     * @param attribute cannot be null
      */
     public void remove(Attribute attribute) {
         if (attribute == null) {
@@ -50,7 +50,7 @@ public class AttributeMapCover {
 
     /**
      *
-     * @param attributeName
+     * @param attributeName cannot be null
      */
     public void remove(String attributeName) {
         Attribute attTmp = new Attribute(attributeName);
@@ -68,7 +68,7 @@ public class AttributeMapCover {
 
     /**
      *
-     * @param attributeName
+     * @param attributeName cannot be null
      * @return
      */
     public boolean containsAttribute(String attributeName) {
@@ -87,7 +87,7 @@ public class AttributeMapCover {
 
     /**
      *
-     * @param attributeName
+     * @param attributeName cannot be null
      * @return
      */
     public String getValue(String attributeName) {

@@ -22,15 +22,7 @@ import org.slf4j.LoggerFactory;
 public class Category implements Identifiable, Comparable<Category> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
-
-    /**
-     *
-     */
     public static final URI SCHEME_CORE_DEFAULT = makeURI("http://schemas.ogf.org/occi/core#");
-
-    /**
-     *
-     */
     public static final URI SCHEME_INFRASTRUCTURE_DEFAULT = makeURI("http://schemas.ogf.org/occi/infrastructure#");
 
     private String term;
@@ -75,8 +67,8 @@ public class Category implements Identifiable, Comparable<Category> {
 
     /**
      *
-     * @param scheme
-     * @param term
+     * @param scheme cannot be null
+     * @param term cannot be null nor empty
      */
     public Category(URI scheme, String term) {
         this(scheme, term, null, null, null);
@@ -101,7 +93,7 @@ public class Category implements Identifiable, Comparable<Category> {
 
     /**
      *
-     * @param term
+     * @param term cannot be null nor empty
      */
     public void setTerm(String term) {
         if (term == null) {
@@ -124,7 +116,7 @@ public class Category implements Identifiable, Comparable<Category> {
 
     /**
      *
-     * @param scheme
+     * @param scheme cannot be null
      */
     public void setScheme(URI scheme) {
         if (scheme == null) {

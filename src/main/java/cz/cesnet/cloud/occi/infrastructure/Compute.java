@@ -16,40 +16,17 @@ import java.net.URI;
  */
 public class Compute extends Resource {
 
-    /**
-     *
-     */
     public static final String ARCHITECTURE_ATTRIBUTE_NAME = "occi.compute.architecture";
-
-    /**
-     *
-     */
     public static final String CORES_ATTRIBUTE_NAME = "occi.compute.cores";
-
-    /**
-     *
-     */
     public static final String HOSTNAME_ATTRIBUTE_NAME = "occi.compute.hostname";
-
-    /**
-     *
-     */
     public static final String SPEED_ATTRIBUTE_NAME = "occi.compute.speed";
-
-    /**
-     *
-     */
     public static final String MEMORY_ATTRIBUTE_NAME = "occi.compute.memory";
-
-    /**
-     *
-     */
     public static final String STATE_ATTRIBUTE_NAME = "occi.compute.state";
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @param summary
@@ -61,8 +38,8 @@ public class Compute extends Resource {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public Compute(String id, Kind kind) throws InvalidAttributeValueException {
@@ -79,10 +56,13 @@ public class Compute extends Resource {
 
     /**
      *
-     * @param state
+     * @param state cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setState(ComputeState state) throws InvalidAttributeValueException {
+        if (state == null) {
+            throw new NullPointerException("state cannot be null");
+        }
         addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 
@@ -200,10 +180,13 @@ public class Compute extends Resource {
 
     /**
      *
-     * @param architecture
+     * @param architecture cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setArchitecture(Architecture architecture) throws InvalidAttributeValueException {
+        if (architecture == null) {
+            throw new NullPointerException("architecture cannot be null");
+        }
         addAttribute(ARCHITECTURE_ATTRIBUTE_NAME, architecture.toString());
     }
 

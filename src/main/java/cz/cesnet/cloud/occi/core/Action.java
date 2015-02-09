@@ -21,8 +21,8 @@ public class Action implements Identifiable, Comparable<Action> {
 
     /**
      *
-     * @param scheme
-     * @param term
+     * @param scheme cannot be null
+     * @param term cannot be null nor empty
      * @param title
      * @param attributes
      */
@@ -33,8 +33,8 @@ public class Action implements Identifiable, Comparable<Action> {
 
     /**
      *
-     * @param scheme
-     * @param term
+     * @param scheme cannot be null
+     * @param term cannot be null nor empty
      */
     public Action(URI scheme, String term) {
         this(scheme, term, null, null);
@@ -50,7 +50,7 @@ public class Action implements Identifiable, Comparable<Action> {
 
     /**
      *
-     * @param scheme
+     * @param scheme cannot be null
      */
     public void setScheme(URI scheme) {
         category.setScheme(scheme);
@@ -66,7 +66,7 @@ public class Action implements Identifiable, Comparable<Action> {
 
     /**
      *
-     * @param term
+     * @param term cannot be null nor empty
      */
     public void setTerm(String term) {
         category.setTerm(term);

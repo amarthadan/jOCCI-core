@@ -17,26 +17,14 @@ import org.slf4j.LoggerFactory;
 public class IPNetworkInterface extends NetworkInterface {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IPNetworkInterface.class);
-
-    /**
-     *
-     */
     public static final String ADDRESS_ATTRIBUTE_NAME = "occi.networkinterface.address";
-
-    /**
-     *
-     */
     public static final String GATEWAY_ATTRIBUTE_NAME = "occi.networkinterface.gateway";
-
-    /**
-     *
-     */
     public static final String ALLOCATION_ATTRIBUTE_NAME = "occi.networkinterface.allocation";
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @throws InvalidAttributeValueException
@@ -47,8 +35,8 @@ public class IPNetworkInterface extends NetworkInterface {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public IPNetworkInterface(String id, Kind kind) throws InvalidAttributeValueException {
@@ -99,10 +87,13 @@ public class IPNetworkInterface extends NetworkInterface {
 
     /**
      *
-     * @param allocation
+     * @param allocation cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setAllocation(Allocation allocation) throws InvalidAttributeValueException {
+        if (allocation == null) {
+            throw new NullPointerException("allocation cannot be null");
+        }
         addAttribute(ALLOCATION_ATTRIBUTE_NAME, allocation.toString());
     }
 

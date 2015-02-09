@@ -18,19 +18,15 @@ import org.slf4j.LoggerFactory;
  */
 public class Resource extends Entity {
 
-    /**
-     *
-     */
     public static final String SUMMARY_ATTRIBUTE_NAME = "occi.core.summary";
-
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Resource.class);
     private final SetCover<Link> links = new SetCover<>();
     private final SetCover<Action> actions = new SetCover<>();
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @param summary
@@ -44,8 +40,8 @@ public class Resource extends Entity {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public Resource(String id, Kind kind) throws InvalidAttributeValueException {
@@ -309,6 +305,6 @@ public class Resource extends Entity {
      */
     @Override
     public String toJSON() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

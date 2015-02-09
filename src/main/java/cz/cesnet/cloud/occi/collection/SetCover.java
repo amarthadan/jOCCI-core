@@ -41,7 +41,7 @@ public class SetCover<E extends Identifiable> {
 
     /**
      *
-     * @param element
+     * @param element cannot be null
      * @return
      */
     public boolean add(E element) {
@@ -54,7 +54,7 @@ public class SetCover<E extends Identifiable> {
 
     /**
      *
-     * @param elements
+     * @param elements cannot contain null element
      * @return
      */
     public boolean addAll(Collection<E> elements) {
@@ -80,7 +80,7 @@ public class SetCover<E extends Identifiable> {
 
     /**
      *
-     * @param element
+     * @param element cannot be null
      * @return
      */
     public boolean remove(E element) {

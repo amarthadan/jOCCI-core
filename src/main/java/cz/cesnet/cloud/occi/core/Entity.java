@@ -21,14 +21,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class Entity implements Identifiable, Comparable<Entity> {
 
-    /**
-     *
-     */
     public static final String ID_ATTRIBUTE_NAME = "occi.core.id";
-
-    /**
-     *
-     */
     public static final String TITLE_ATTRIBUTE_NAME = "occi.core.title";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
@@ -66,8 +59,8 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public Entity(String id, Kind kind) throws InvalidAttributeValueException {
@@ -84,7 +77,7 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     /**
      *
-     * @param id
+     * @param id cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setId(String id) throws InvalidAttributeValueException {
@@ -105,7 +98,7 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     /**
      *
-     * @param kind
+     * @param kind cannot be null
      */
     public void setKind(Kind kind) {
         if (kind == null) {
@@ -171,7 +164,7 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
-     * Adds attribute and its value. If attribute has a content restriction
+     * Adds attribute and its value. If attribute has a content restriction,
      * value is checked.
      *
      * @param attributeIdentifier
@@ -183,6 +176,8 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Adds attributes and their values. If attributes have a content
+     * restriction, values are checked.
      *
      * @param attributes
      * @throws InvalidAttributeValueException
@@ -456,14 +451,17 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Renders entity to its plain text form as described in OCCI standard.
      *
-     * @return @throws RenderingException
+     * @return plain text form of entity
+     * @throws RenderingException
      */
     public abstract String toText() throws RenderingException;
 
     /**
+     * Renders entity to its JSON form as described in OCCI standard.
      *
-     * @return
+     * @return JSON form of entity
      */
     public abstract String toJSON();
 

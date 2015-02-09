@@ -15,22 +15,14 @@ import java.util.List;
  */
 public class Link extends Entity {
 
-    /**
-     *
-     */
     public static final String SOURCE_ATTRIBUTE_NAME = "occi.core.source";
-
-    /**
-     *
-     */
     public static final String TARGET_ATTRIBUTE_NAME = "occi.core.target";
-
     private String relation;
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @throws InvalidAttributeValueException
@@ -41,8 +33,8 @@ public class Link extends Entity {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public Link(String id, Kind kind) throws InvalidAttributeValueException {
@@ -59,10 +51,13 @@ public class Link extends Entity {
 
     /**
      *
-     * @param source
+     * @param source cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setSource(Resource source) throws InvalidAttributeValueException {
+        if (source == null) {
+            throw new NullPointerException("source cannot be null");
+        }
         addAttribute(SOURCE_ATTRIBUTE_NAME, source.getLocation());
     }
 
@@ -85,10 +80,13 @@ public class Link extends Entity {
 
     /**
      *
-     * @param target
+     * @param target cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setTarget(Resource target) throws InvalidAttributeValueException {
+        if (target == null) {
+            throw new NullPointerException("target cannot be null");
+        }
         addAttribute(TARGET_ATTRIBUTE_NAME, target.getLocation());
     }
 
@@ -200,6 +198,6 @@ public class Link extends Entity {
      */
     @Override
     public String toJSON() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

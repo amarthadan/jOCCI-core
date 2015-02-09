@@ -15,16 +15,16 @@ public class JSONParser implements Parser {
 
     @Override
     public Model parseModel(String mediaType, String body, Headers headers) throws ParsingException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public Collection parseCollection(String mediaType, String body, Headers headers, CollectionType collectionType) throws ParsingException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
     public List<URI> parseLocations(String mediaType, String body, Headers headers) throws ParsingException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

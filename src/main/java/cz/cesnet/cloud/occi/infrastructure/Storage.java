@@ -15,20 +15,13 @@ import java.net.URI;
  */
 public class Storage extends Resource {
 
-    /**
-     *
-     */
     public static final String SIZE_ATTRIBUTE_NAME = "occi.storage.size";
-
-    /**
-     *
-     */
     public static final String STATE_ATTRIBUTE_NAME = "occi.storage.state";
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @param summary
@@ -40,8 +33,8 @@ public class Storage extends Resource {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public Storage(String id, Kind kind) throws InvalidAttributeValueException {
@@ -84,10 +77,13 @@ public class Storage extends Resource {
 
     /**
      *
-     * @param state
+     * @param state cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setState(StorageState state) throws InvalidAttributeValueException {
+        if (state == null) {
+            throw new NullPointerException("state cannot be null");
+        }
         addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 

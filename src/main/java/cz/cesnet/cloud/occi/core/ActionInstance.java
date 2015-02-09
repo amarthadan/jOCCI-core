@@ -50,7 +50,7 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
 
     /**
      *
-     * @param action
+     * @param action cannot be null
      */
     public void setAction(Action action) {
         if (action == null) {

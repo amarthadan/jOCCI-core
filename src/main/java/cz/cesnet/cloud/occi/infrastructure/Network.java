@@ -15,25 +15,14 @@ import java.net.URI;
  */
 public class Network extends Resource {
 
-    /**
-     *
-     */
     public static final String VLAN_ATTRIBUTE_NAME = "occi.network.vlan";
-
-    /**
-     *
-     */
     public static final String LABEL_ATTRIBUTE_NAME = "occi.network.label";
-
-    /**
-     *
-     */
     public static final String STATE_ATTRIBUTE_NAME = "occi.network.state";
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @param summary
@@ -45,8 +34,8 @@ public class Network extends Resource {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public Network(String id, Kind kind) throws InvalidAttributeValueException {
@@ -106,10 +95,13 @@ public class Network extends Resource {
 
     /**
      *
-     * @param state
+     * @param state cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setState(NetworkState state) throws InvalidAttributeValueException {
+        if (state == null) {
+            throw new NullPointerException("state cannot be null");
+        }
         addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 

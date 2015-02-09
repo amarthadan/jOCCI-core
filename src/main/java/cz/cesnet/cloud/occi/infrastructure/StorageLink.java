@@ -15,25 +15,14 @@ import java.net.URI;
  */
 public class StorageLink extends Link {
 
-    /**
-     *
-     */
     public static final String DEVICE_ID_ATTRIBUTE_NAME = "occi.storagelink.deviceid";
-
-    /**
-     *
-     */
     public static final String MOUNTPOINT_ATTRIBUTE_NAME = "occi.storagelink.mountpoint";
-
-    /**
-     *
-     */
     public static final String STATE_ATTRIBUTE_NAME = "occi.storagelink.state";
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @throws InvalidAttributeValueException
@@ -44,8 +33,8 @@ public class StorageLink extends Link {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public StorageLink(String id, Kind kind) throws InvalidAttributeValueException {
@@ -96,10 +85,13 @@ public class StorageLink extends Link {
 
     /**
      *
-     * @param state
+     * @param state cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setState(StorageLinkState state) throws InvalidAttributeValueException {
+        if (state == null) {
+            throw new NullPointerException("state cannot be null");
+        }
         addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 

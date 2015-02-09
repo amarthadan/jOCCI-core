@@ -55,7 +55,7 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
 
     /**
      *
-     * @param name
+     * @param name cannot be null nor empty
      * @param required
      * @param immutable
      */
@@ -65,7 +65,7 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
 
     /**
      *
-     * @param name
+     * @param name cannot be null nor empty
      */
     public Attribute(String name) {
         this(name, false, false, null, null, null, null);
@@ -81,7 +81,7 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
 
     /**
      *
-     * @param name
+     * @param name cannot be null nor empty
      */
     public void setName(String name) {
         if (name == null) {

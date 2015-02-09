@@ -15,25 +15,14 @@ import java.net.URI;
  */
 public class NetworkInterface extends Link {
 
-    /**
-     *
-     */
     public static final String INTERFACE_ATTRIBUTE_NAME = "occi.networkinterface.interface";
-
-    /**
-     *
-     */
     public static final String MAC_ATTRIBUTE_NAME = "occi.networkinterface.mac";
-
-    /**
-     *
-     */
     public static final String STATE_ATTRIBUTE_NAME = "occi.networkinterface.state";
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @param title
      * @param model
      * @throws InvalidAttributeValueException
@@ -44,8 +33,8 @@ public class NetworkInterface extends Link {
 
     /**
      *
-     * @param id
-     * @param kind
+     * @param id cannot be null
+     * @param kind cannot be null
      * @throws InvalidAttributeValueException
      */
     public NetworkInterface(String id, Kind kind) throws InvalidAttributeValueException {
@@ -96,10 +85,13 @@ public class NetworkInterface extends Link {
 
     /**
      *
-     * @param state
+     * @param state cannot be null
      * @throws InvalidAttributeValueException
      */
     public void setState(NetworkState state) throws InvalidAttributeValueException {
+        if (state == null) {
+            throw new NullPointerException("state cannot be null");
+        }
         addAttribute(STATE_ATTRIBUTE_NAME, state.toString());
     }
 

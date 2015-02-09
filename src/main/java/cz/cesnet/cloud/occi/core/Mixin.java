@@ -16,8 +16,8 @@ public class Mixin extends Category {
 
     /**
      *
-     * @param scheme
-     * @param term
+     * @param scheme cannot be null
+     * @param term cannot be null nor empty
      * @param title
      * @param location
      * @param attributes
@@ -28,8 +28,8 @@ public class Mixin extends Category {
 
     /**
      *
-     * @param scheme
-     * @param term
+     * @param scheme cannot be null
+     * @param term cannot be null nor empty
      */
     public Mixin(URI scheme, String term) {
         this(scheme, term, null, null, null);
