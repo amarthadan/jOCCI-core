@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.collection;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.parser.TextParser;
 import cz.cesnet.cloud.occi.renderer.TextRenderer;
@@ -184,7 +185,7 @@ public class AttributeMapCover {
     }
 
     /**
-     * Returns text representation of OCCI attributes with prefix.
+     * Returns a text representation of OCCI attributes with prefix.
      *
      * @return text representation of OCCI attributes with prefix
      */
@@ -203,6 +204,22 @@ public class AttributeMapCover {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Returns an occi text representation of OCCI attributes in form of
+     * headers.
+     *
+     * @return occi text representation of OCCI attributes in form of headers
+     */
+    public Headers toHeaders() {
+        Headers headers = new Headers();
+
+        for (String s : toList()) {
+            headers.add("X-OCCI-Attribute", s);
+        }
+
+        return headers;
     }
 
     /**

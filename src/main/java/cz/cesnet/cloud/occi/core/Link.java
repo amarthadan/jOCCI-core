@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
@@ -160,14 +161,61 @@ public class Link extends Entity {
     }
 
     /**
+     * Returns an occi text representation of link instance as described in OCCI
+     * standard in form of headers.
+     *
+     * @return plain text representation of link instance
+     */
+    public Headers toHeaders() {
+        Headers headers = new Headers();
+
+        headers.putAll(getKind().toHeaders());
+
+        List<Mixin> mixinList = new ArrayList<>(getMixins());
+        Collections.sort(mixinList);
+        for (Mixin m : mixinList) {
+            headers.putAll(m.toHeaders());
+        }
+
+        Headers attributeHeaders = attributesToHeaders();
+        if (!attributeHeaders.isEmpty()) {
+            headers.putAll(attributeHeaders);
+        }
+
+        return headers;
+    }
+
+    /**
      * Returns an inline plain text representation of link instance as described
      * in OCCI standard.
      *
      * @return inline plain text representation of link instance
-     * @throws cz.cesnet.cloud.occi.exception.RenderingException
+     * @throws RenderingException
      */
     public String toInlineText() throws RenderingException {
         StringBuilder sb = new StringBuilder("Link: ");
+        sb.append(inlineTextBody());
+
+        return sb.toString();
+    }
+
+    /**
+     * Returns an inline occi text representation of link instance as described
+     * in OCCI standard in form of headers.
+     *
+     * @return inline occi text representation of link instance in form of
+     * headers
+     * @throws RenderingException
+     */
+    public Headers toInlineHeaders() throws RenderingException {
+        Headers headers = new Headers();
+        headers.add("Link", inlineTextBody());
+
+        return headers;
+    }
+
+    private String inlineTextBody() throws RenderingException {
+        StringBuilder sb = new StringBuilder("");
         if (getTarget() == null || getTarget().isEmpty()) {
             throw new RenderingException("Link " + this + " is missing a target attribute.");
         }

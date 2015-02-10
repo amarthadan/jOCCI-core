@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.renderer.TextRenderer;
@@ -164,14 +165,33 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
-     * Returns a text representation of action instance as described in OCCI
-     * standard.
+     * Returns a plain text representation of action instance as described in
+     * OCCI standard.
      *
      * @return text representation of action instance
      */
     public String toText() {
         StringBuilder sb = new StringBuilder("Category: ");
-        sb.append(action.getTerm());
+        sb.append(textBody());
+
+        return sb.toString();
+    }
+
+    /**
+     * Returns an occi text representation of action instance as described in
+     * OCCI standard in form of headers.
+     *
+     * @return occi text representation of action instance in form of headers
+     */
+    public Headers toHeaders() {
+        Headers headers = new Headers();
+        headers.add("Category", textBody());
+
+        return headers;
+    }
+
+    private String textBody() {
+        StringBuilder sb = new StringBuilder(action.getTerm());
         sb.append(";");
         sb.append("scheme");
         sb.append(TextRenderer.surroundString(action.getScheme().toString()));

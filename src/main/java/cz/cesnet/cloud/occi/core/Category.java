@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
@@ -402,7 +403,26 @@ public class Category implements Identifiable, Comparable<Category> {
      */
     public String toText() {
         StringBuilder sb = new StringBuilder("Category: ");
-        sb.append(term);
+        sb.append(textBody());
+
+        return sb.toString();
+    }
+
+    /**
+     * Returns an occi text representation of category and its subtypes (kinds
+     * and mixins) according to OCCI standard in form of headers.
+     *
+     * @return plain text representation of category
+     */
+    public Headers toHeaders() {
+        Headers headers = new Headers();
+        headers.add("Category", textBody());
+
+        return headers;
+    }
+
+    private String textBody() {
+        StringBuilder sb = new StringBuilder(term);
         sb.append(";");
         sb.append("scheme");
         sb.append(TextRenderer.surroundString(scheme.toString()));

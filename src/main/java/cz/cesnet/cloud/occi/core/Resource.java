@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
@@ -297,6 +298,44 @@ public class Resource extends Entity {
         }
 
         return sb.toString();
+    }
+
+    /**
+     * Returns a occi text representation of resource instance as described in
+     * OCCI standard in form of headers.
+     *
+     * @return plain text representation of resource instance
+     * @throws RenderingException
+     */
+    public Headers toHeaders() throws RenderingException {
+        Headers headers = new Headers();
+
+        headers.putAll(getKind().toHeaders());
+
+        List<Mixin> mixinList = new ArrayList<>(getMixins());
+        Collections.sort(mixinList);
+        for (Mixin m : mixinList) {
+            headers.putAll(m.toHeaders());
+        }
+
+        Headers attributeHeaders = attributesToHeaders();
+        if (!attributeHeaders.isEmpty()) {
+            headers.putAll(attributeHeaders);
+        }
+
+        List<Link> linkList = new ArrayList<>(getLinks());
+        Collections.sort(linkList);
+        for (Link l : linkList) {
+            headers.putAll(l.toInlineHeaders());
+        }
+
+        List<Action> actionList = new ArrayList<>(getActions());
+        Collections.sort(actionList);
+        for (Action a : actionList) {
+            headers.putAll(a.toHeaders(getKind().getLocation().toString() + getId()));
+        }
+
+        return headers;
     }
 
     /**

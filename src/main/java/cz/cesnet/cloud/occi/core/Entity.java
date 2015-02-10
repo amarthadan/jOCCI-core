@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.AttributeMapCover;
 import cz.cesnet.cloud.occi.type.Identifiable;
@@ -321,6 +322,10 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         return attributes.toPrefixText();
     }
 
+    protected Headers attributesToHeaders() {
+        return attributes.toHeaders();
+    }
+
     /**
      *
      * @param mixin
@@ -457,6 +462,15 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
      * @throws RenderingException
      */
     public abstract String toText() throws RenderingException;
+
+    /**
+     * Renders entity to its occi text form as described in OCCI standard in
+     * form of headers.
+     *
+     * @return occi text form of entity
+     * @throws RenderingException
+     */
+    public abstract Headers toHeaders() throws RenderingException;
 
     /**
      * Renders entity to its JSON form as described in OCCI standard.

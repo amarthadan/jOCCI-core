@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import java.net.URI;
@@ -215,6 +216,27 @@ public class Action implements Identifiable, Comparable<Action> {
      */
     public String toText(String resourceLocation) {
         StringBuilder sb = new StringBuilder("Link: ");
+        sb.append(textBody(resourceLocation));
+
+        return sb.toString();
+    }
+
+    /**
+     * Returns an occi text representation of action link as described in OCCI
+     * standard in form of headers.
+     *
+     * @param resourceLocation
+     * @return text representation of action link
+     */
+    public Headers toHeaders(String resourceLocation) {
+        Headers headers = new Headers();
+        headers.add("Link", textBody(resourceLocation));
+
+        return headers;
+    }
+
+    private String textBody(String resourceLocation) {
+        StringBuilder sb = new StringBuilder("");
 
         String descriptor = resourceLocation + "?action=" + getTerm();
         sb.append(TextRenderer.surroundString(descriptor, "<", ">;"));
