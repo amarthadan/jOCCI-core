@@ -8,7 +8,7 @@ Requirements
 * JDK 7+
 * Maven
 
-Instalation
+Installation
 -----------
 **For now, the only way to use jOCCI-core is to clone the repository and add it to your Java project manually. Distribution via Maven will be added soon.**
 
