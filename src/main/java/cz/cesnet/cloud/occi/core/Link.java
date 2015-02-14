@@ -166,6 +166,7 @@ public class Link extends Entity {
      *
      * @return plain text representation of link instance
      */
+    @Override
     public Headers toHeaders() {
         Headers headers = new Headers();
 
@@ -174,7 +175,12 @@ public class Link extends Entity {
         List<Mixin> mixinList = new ArrayList<>(getMixins());
         Collections.sort(mixinList);
         for (Mixin m : mixinList) {
-            headers.putAll(m.toHeaders());
+            Headers mixinHeaders = m.toHeaders();
+            for (String name : mixinHeaders.keySet()) {
+                for (String value : mixinHeaders.get(name)) {
+                    headers.add(name, value);
+                }
+            }
         }
 
         Headers attributeHeaders = attributesToHeaders();

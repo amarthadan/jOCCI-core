@@ -307,6 +307,7 @@ public class Resource extends Entity {
      * @return plain text representation of resource instance
      * @throws RenderingException
      */
+    @Override
     public Headers toHeaders() throws RenderingException {
         Headers headers = new Headers();
 
@@ -315,7 +316,12 @@ public class Resource extends Entity {
         List<Mixin> mixinList = new ArrayList<>(getMixins());
         Collections.sort(mixinList);
         for (Mixin m : mixinList) {
-            headers.putAll(m.toHeaders());
+            Headers mixinHeaders = m.toHeaders();
+            for (String name : mixinHeaders.keySet()) {
+                for (String value : mixinHeaders.get(name)) {
+                    headers.add(name, value);
+                }
+            }
         }
 
         Headers attributeHeaders = attributesToHeaders();
@@ -326,13 +332,23 @@ public class Resource extends Entity {
         List<Link> linkList = new ArrayList<>(getLinks());
         Collections.sort(linkList);
         for (Link l : linkList) {
-            headers.putAll(l.toInlineHeaders());
+            Headers linkHeaders = l.toInlineHeaders();
+            for (String name : linkHeaders.keySet()) {
+                for (String value : linkHeaders.get(name)) {
+                    headers.add(name, value);
+                }
+            }
         }
 
         List<Action> actionList = new ArrayList<>(getActions());
         Collections.sort(actionList);
         for (Action a : actionList) {
-            headers.putAll(a.toHeaders(getKind().getLocation().toString() + getId()));
+            Headers actionHeaders = a.toHeaders(getKind().getLocation().toString() + getId());
+            for (String name : actionHeaders.keySet()) {
+                for (String value : actionHeaders.get(name)) {
+                    headers.add(name, value);
+                }
+            }
         }
 
         return headers;

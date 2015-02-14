@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.infrastructure.Compute;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -62,5 +63,15 @@ public class ActionTest {
         Action action = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start");
 
         assertEquals(expected, action.toText("/compute/123"));
+    }
+
+    @Test
+    public void testToHeaders() throws Exception {
+        Headers headers = new Headers();
+        headers.add("Link", "</compute/123?action=start>;rel=\"http://schemas.ogf.org/occi/infrastructure/compute/action#start\";");
+
+        Action action = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start");
+
+        assertEquals(headers, action.toHeaders("/compute/123"));
     }
 }

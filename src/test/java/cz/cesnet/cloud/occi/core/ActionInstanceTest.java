@@ -1,7 +1,10 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.DataGenerator;
 import cz.cesnet.cloud.occi.TestHelper;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.net.URI;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -41,10 +44,27 @@ public class ActionInstanceTest {
 
     @Test
     public void testToText() throws Exception {
-        String expected = TestHelper.readFile(RESOURCE_PATH + "action.txt");
+        String expected = TestHelper.readFile(RESOURCE_PATH + "action_plain.txt");
         ActionInstance ai = DataGenerator.getAction();
 
-        System.out.println(ai.toText());
         assertEquals(expected, ai.toText());
+    }
+
+    @Test
+    public void testToHeaders() throws Exception {
+        Headers headers = new Headers();
+        ActionInstance ai = DataGenerator.getAction();
+
+        headers.add("Category", TestHelper.readFile(RESOURCE_PATH + "action_headers_category.txt"));
+
+        try (BufferedReader br = new BufferedReader(new FileReader(RESOURCE_PATH + "action_headers_attributes.txt"))) {
+            String line = br.readLine();
+            while (line != null) {
+                headers.add("X-OCCI-Attribute", line);
+                line = br.readLine();
+            }
+        }
+
+        assertEquals(headers, ai.toHeaders());
     }
 }

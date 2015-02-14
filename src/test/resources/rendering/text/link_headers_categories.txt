@@ -1,0 +1,4 @@
+console;scheme="http://schemas.ogf.org/occi/infrastructure/compute#";class="kind";title="Link to the VM's console";rel="http://schemas.ogf.org/occi/core#link";location="/console/"
+os_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Operating System Template";location="/mixins/os_tpl/"
+resource_tpl;scheme="http://schemas.ogf.org/occi/infrastructure#";class="mixin";title="Resource Template";location="/mixins/resource_tpl/"
+ipnetwork;scheme="http://schemas.ogf.org/occi/infrastructure/network#";class="mixin";title="IP Network Mixin";location="/mixins/ipnetwork/";attributes="occi.network.address occi.network.allocation occi.network.gateway occi.network.state"

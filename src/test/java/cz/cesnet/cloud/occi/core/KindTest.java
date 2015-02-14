@@ -1,5 +1,6 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.TestHelper;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -61,7 +62,7 @@ public class KindTest {
 
     @Test
     public void testToText() throws Exception {
-        String[] lines = TestHelper.readFile(RESOURCE_PATH + "kind.txt").split("\n");
+        String[] lines = TestHelper.readFile(RESOURCE_PATH + "kind_plain.txt").split("\n");
         Attribute at1 = new Attribute(Entity.ID_ATTRIBUTE_NAME);
         Attribute at2 = new Attribute(Entity.TITLE_ATTRIBUTE_NAME);
 
@@ -69,38 +70,102 @@ public class KindTest {
         Action a2 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "stop");
 
         Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
-        assertEquals(kind.toText(), lines[0]);
+        assertEquals(lines[0], kind.toText());
 
         kind.setTitle("Entity");
-        assertEquals(kind.toText(), lines[1]);
+        assertEquals(lines[1], kind.toText());
 
         kind.setTitle(null);
         kind.setLocation(new URI("/entity/"));
-        assertEquals(kind.toText(), lines[2]);
+        assertEquals(lines[2], kind.toText());
 
         kind.setLocation(null);
         kind.addAttribute(at1);
         kind.addAttribute(at2);
-        assertEquals(kind.toText(), lines[3]);
+        assertEquals(lines[3], kind.toText());
 
         kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
         kind.addAction(a1);
         kind.addAction(a2);
-        assertEquals(kind.toText(), lines[4]);
+        assertEquals(lines[4], kind.toText());
 
         kind.addAttribute(at1);
         kind.addAttribute(at2);
         kind.setTitle("Entity");
         kind.setLocation(new URI("/entity/"));
-        assertEquals(kind.toText(), lines[5]);
+        assertEquals(lines[5], kind.toText());
 
         kind.getAttribute(Entity.ID_ATTRIBUTE_NAME).setRequired(true);
-        assertEquals(kind.toText(), lines[6]);
+        assertEquals(lines[6], kind.toText());
 
         kind.getAttribute(Entity.ID_ATTRIBUTE_NAME).setImmutable(true);
-        assertEquals(kind.toText(), lines[7]);
+        assertEquals(lines[7], kind.toText());
 
         kind.getAttribute(Entity.TITLE_ATTRIBUTE_NAME).setImmutable(true);
-        assertEquals(kind.toText(), lines[8]);
+        assertEquals(lines[8], kind.toText());
+    }
+
+    @Test
+    public void testToHeaders() throws Exception {
+        String[] lines = TestHelper.readFile(RESOURCE_PATH + "kind_headers.txt").split("\n");
+        Attribute at1 = new Attribute(Entity.ID_ATTRIBUTE_NAME);
+        Attribute at2 = new Attribute(Entity.TITLE_ATTRIBUTE_NAME);
+
+        Action a1 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start");
+        Action a2 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "stop");
+
+        Headers headers = new Headers();
+
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        headers.add("Category", lines[0]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind.setTitle("Entity");
+        headers.clear();
+        headers.add("Category", lines[1]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind.setTitle(null);
+        kind.setLocation(new URI("/entity/"));
+        headers.clear();
+        headers.add("Category", lines[2]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind.setLocation(null);
+        kind.addAttribute(at1);
+        kind.addAttribute(at2);
+        headers.clear();
+        headers.add("Category", lines[3]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        kind.addAction(a1);
+        kind.addAction(a2);
+        headers.clear();
+        headers.add("Category", lines[4]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind.addAttribute(at1);
+        kind.addAttribute(at2);
+        kind.setTitle("Entity");
+        kind.setLocation(new URI("/entity/"));
+        headers.clear();
+        headers.add("Category", lines[5]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind.getAttribute(Entity.ID_ATTRIBUTE_NAME).setRequired(true);
+        headers.clear();
+        headers.add("Category", lines[6]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind.getAttribute(Entity.ID_ATTRIBUTE_NAME).setImmutable(true);
+        headers.clear();
+        headers.add("Category", lines[7]);
+        assertEquals(headers, kind.toHeaders());
+
+        kind.getAttribute(Entity.TITLE_ATTRIBUTE_NAME).setImmutable(true);
+        headers.clear();
+        headers.add("Category", lines[8]);
+        assertEquals(headers, kind.toHeaders());
     }
 }

@@ -1,9 +1,8 @@
 package cz.cesnet.cloud.occi.collection;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.core.Attribute;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -125,7 +124,19 @@ public class AttributeMapCoverTest {
     public void testToPrefixText() {
         String line = "X-OCCI-Attribute: occi.compute.architecture=\"x86\"\nX-OCCI-Attribute: occi.compute.hostname=\"compute1.example.org\"\nX-OCCI-Attribute: occi.compute.memory=1.7\nX-OCCI-Attribute: occi.compute.speed=1.0\nX-OCCI-Attribute: occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\"\nX-OCCI-Attribute: occi.core.title=\"compute1\"";
 
-        System.out.println(attrMap.toPrefixText());
         assertEquals(line, attrMap.toPrefixText());
+    }
+
+    @Test
+    public void testToHeaders() {
+        Headers headers = new Headers();
+        headers.add("X-OCCI-Attribute", "occi.compute.architecture=\"x86\"");
+        headers.add("X-OCCI-Attribute", "occi.compute.hostname=\"compute1.example.org\"");
+        headers.add("X-OCCI-Attribute", "occi.compute.memory=1.7");
+        headers.add("X-OCCI-Attribute", "occi.compute.speed=1.0");
+        headers.add("X-OCCI-Attribute", "occi.core.id=\"87f3bfc3-42d4-4474-b45c-757e55e093e9\"");
+        headers.add("X-OCCI-Attribute", "occi.core.title=\"compute1\"");
+
+        assertEquals(headers, attrMap.toHeaders());
     }
 }

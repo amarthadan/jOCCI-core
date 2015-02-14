@@ -1,10 +1,13 @@
 package cz.cesnet.cloud.occi.core;
 
+import com.sun.net.httpserver.Headers;
 import cz.cesnet.cloud.occi.TestHelper;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import cz.cesnet.cloud.occi.infrastructure.Compute;
 import cz.cesnet.cloud.occi.infrastructure.NetworkInterface;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +21,36 @@ public class LinkTest {
 
     @Test
     public void testToText() throws Exception {
-        String expected = TestHelper.readFile(RESOURCE_PATH + "link.txt");
+        String expected = TestHelper.readFile(RESOURCE_PATH + "link_plain.txt");
+        Link link = prepareLink();
 
+        assertEquals(expected, link.toText());
+    }
+
+    @Test
+    public void testToHeaders() throws Exception {
+        Headers headers = new Headers();
+        Link link = prepareLink();
+
+        try (BufferedReader br = new BufferedReader(new FileReader(RESOURCE_PATH + "link_headers_categories.txt"))) {
+            String line = br.readLine();
+            while (line != null) {
+                headers.add("Category", line);
+                line = br.readLine();
+            }
+        }
+        try (BufferedReader br = new BufferedReader(new FileReader(RESOURCE_PATH + "link_headers_attributes.txt"))) {
+            String line = br.readLine();
+            while (line != null) {
+                headers.add("X-OCCI-Attribute", line);
+                line = br.readLine();
+            }
+        }
+
+        assertEquals(headers, link.toHeaders());
+    }
+
+    private Link prepareLink() throws Exception {
         Kind rel = new Kind(Category.SCHEME_CORE_DEFAULT, Link.getTermDefault());
         Kind kind = new Kind(new URI("http://schemas.ogf.org/occi/infrastructure/compute#"), "console", "Link to the VM's console", new URI("/console/"), null);
         kind.addRelation(rel);
@@ -43,14 +74,12 @@ public class LinkTest {
         link.addAttribute(Compute.SPEED_ATTRIBUTE_NAME, "1.0");
         link.addAttribute(Compute.STATE_ATTRIBUTE_NAME, "active");
 
-        System.out.println(link.toText());
-
-        assertEquals(expected, link.toText());
+        return link;
     }
 
     @Test
     public void testToInlineText() throws Exception {
-        String[] lines = TestHelper.readFile(RESOURCE_PATH + "inline_link.txt").split("\n");
+        String[] lines = TestHelper.readFile(RESOURCE_PATH + "inline_link_plain.txt").split("\n");
 
         Kind kind = new Kind(NetworkInterface.getSchemeDefault(), NetworkInterface.getTermDefault());
         Link link = new Link("456", kind);
@@ -69,6 +98,37 @@ public class LinkTest {
 
         link.getKind().setLocation(new URI("/link/networkinterface/"));
         assertEquals(lines[3], link.toInlineText());
+    }
+
+    @Test
+    public void testToInlineHeaders() throws Exception {
+        String[] lines = TestHelper.readFile(RESOURCE_PATH + "inline_link_headers.txt").split("\n");
+        Headers headers = new Headers();
+
+        Kind kind = new Kind(NetworkInterface.getSchemeDefault(), NetworkInterface.getTermDefault());
+        Link link = new Link("456", kind);
+        link.setRelation("http://schemas.ogf.org/occi/infrastructure#network");
+        link.setTarget("/network/123");
+        headers.add("Link", lines[0]);
+        assertEquals(headers, link.toInlineHeaders());
+
+        link.getKind().setLocation(new URI("/link/networkinterface/"));
+        headers.clear();
+        headers.add("Link", lines[1]);
+        assertEquals(headers, link.toInlineHeaders());
+
+        link.getKind().setLocation(null);
+        link.addAttribute("occi.networkinterface.interface", "eth0");
+        link.addAttribute("occi.networkinterface.mac", "00:11:22:33:44:55");
+        link.addAttribute("occi.networkinterface.state", "active");
+        headers.clear();
+        headers.add("Link", lines[2]);
+        assertEquals(headers, link.toInlineHeaders());
+
+        link.getKind().setLocation(new URI("/link/networkinterface/"));
+        headers.clear();
+        headers.add("Link", lines[3]);
+        assertEquals(headers, link.toInlineHeaders());
     }
 
     @Test

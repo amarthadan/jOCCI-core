@@ -174,6 +174,12 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
         StringBuilder sb = new StringBuilder("Category: ");
         sb.append(textBody());
 
+        String attributesString = attributes.toPrefixText();
+        if (!attributesString.isEmpty()) {
+            sb.append("\n");
+            sb.append(attributesString);
+        }
+
         return sb.toString();
     }
 
@@ -186,6 +192,11 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     public Headers toHeaders() {
         Headers headers = new Headers();
         headers.add("Category", textBody());
+
+        Headers attributesHeaders = attributes.toHeaders();
+        if (!attributesHeaders.isEmpty()) {
+            headers.putAll(attributesHeaders);
+        }
 
         return headers;
     }
@@ -216,12 +227,6 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
             }
             attrSB.deleteCharAt(attrSB.length() - 1);
             sb.append(TextRenderer.surroundString(attrSB.toString()));
-        }
-
-        String attributesString = attributes.toPrefixText();
-        if (!attributesString.isEmpty()) {
-            sb.append("\n");
-            sb.append(attributesString);
         }
 
         return sb.toString();
