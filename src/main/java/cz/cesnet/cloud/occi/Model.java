@@ -210,6 +210,10 @@ public class Model {
      * @return Kind instance with given identifier if found, null otherwise
      */
     public Kind findKind(URI identifier) {
+        if (identifier == null) {
+            return null;
+        }
+
         String identifierString = identifier.toString();
         for (Kind kind : kinds.getSet()) {
             if (kind.getIdentifier().equals(identifierString)) {
@@ -289,6 +293,10 @@ public class Model {
      * @return Mixin instance with given identifier if found, null otherwise
      */
     public Mixin findMixin(URI identifier) {
+        if (identifier == null) {
+            return null;
+        }
+
         String identigfierString = identifier.toString();
         for (Mixin mixin : mixins.getSet()) {
             if (mixin.getIdentifier().equals(identigfierString)) {
@@ -361,6 +369,10 @@ public class Model {
      * mixin with given term
      */
     public Mixin findMixin(String term, URI rel) throws AmbiguousIdentifierException {
+        if (rel == null) {
+            return null;
+        }
+
         Mixin foundMixin = null;
         for (Mixin mixin : mixins.getSet()) {
             if (mixin.getTerm().equals(term) && mixin.relatesTo(rel.toString())) {
@@ -403,6 +415,10 @@ public class Model {
      * @return Action instance with given identifier if found, null otherwise
      */
     public Action findAction(URI identifier) {
+        if (identifier == null) {
+            return null;
+        }
+
         String identigfierString = identifier.toString();
         for (Action action : actions.getSet()) {
             if (action.getIdentifier().equals(identigfierString)) {

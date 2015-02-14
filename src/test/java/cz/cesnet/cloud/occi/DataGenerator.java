@@ -46,6 +46,7 @@ public class DataGenerator {
         attributes.add(a);
         Kind resource = new Kind(new URI("http://schemas.ogf.org/occi/core#"), "resource", "Resource", new URI("/resource/"), attributes);
         resource.addRelation(entity);
+        resource.setParentKind(entity);
         kinds.add(resource);
 
         attributes.clear();
@@ -55,6 +56,7 @@ public class DataGenerator {
         attributes.add(a);
         Kind link = new Kind(new URI("http://schemas.ogf.org/occi/core#"), "link", "Link", new URI("/link/"), attributes);
         link.addRelation(entity);
+        link.setParentKind(entity);
         kinds.add(link);
 
         attributes.clear();
@@ -80,6 +82,7 @@ public class DataGenerator {
         ac = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "suspend");
         k.addAction(ac);
         k.addRelation(resource);
+        k.setParentKind(resource);
         kinds.add(k);
 
         attributes.clear();
@@ -91,6 +94,7 @@ public class DataGenerator {
         attributes.add(a);
         k = new Kind(new URI("http://schemas.ogf.org/occi/infrastructure#"), "storagelink", "Storage Link", new URI("/storagelink/"), attributes);
         k.addRelation(link);
+        k.setParentKind(link);
         kinds.add(k);
 
         return kinds;
