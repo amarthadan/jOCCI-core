@@ -433,7 +433,7 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         if (obj == null) {
             return false;
         }
-        if (getClass() != obj.getClass()) {
+        if (!(obj instanceof Entity)) {
             return false;
         }
         final Entity other = (Entity) obj;
