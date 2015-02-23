@@ -6,6 +6,9 @@ import cz.cesnet.cloud.occi.core.Mixin;
 import cz.cesnet.cloud.occi.exception.AmbiguousIdentifierException;
 import cz.cesnet.cloud.occi.parser.CollectionType;
 import java.net.URI;
+import static java.util.Collections.list;
+import java.util.HashSet;
+import java.util.Set;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.fail;
@@ -55,6 +58,37 @@ public class ModelTest {
 
         try {
             model.findKind("link");
+            fail();
+        } catch (AmbiguousIdentifierException ex) {
+            //cool
+        }
+    }
+
+    @Test
+    public void testFindRelatedKindsWithURI() throws Exception {
+        Set<Kind> set = new HashSet<>();
+        set.add(DataGenerator.getFiveKinds().get(1));
+        set.add(DataGenerator.getFiveKinds().get(2));
+
+        assertEquals(set, new HashSet(model.findRelatedKinds(URI.create("http://schemas.ogf.org/occi/core#entity"))));
+    }
+
+    @Test
+    public void testFindRelatedKindsWithString() throws Exception {
+        Set<Kind> set = new HashSet<>();
+        set.add(DataGenerator.getFiveKinds().get(1));
+        set.add(DataGenerator.getFiveKinds().get(2));
+
+        assertEquals(set, new HashSet(model.findRelatedKinds("entity")));
+    }
+
+    @Test
+    public void testInvalidFindRelatedKindsWithString() throws Exception {
+        Kind kind = new Kind(new URI("http://different.uri.same/term/core#"), "entity", "Entity", new URI("/entity/"), null);
+        model.addKind(kind);
+
+        try {
+            model.findRelatedKinds("entity");
             fail();
         } catch (AmbiguousIdentifierException ex) {
             //cool
@@ -148,6 +182,43 @@ public class ModelTest {
             m.addRelation(model.findMixin("resource_tpl"));
             model.addMixin(m);
             model.findMixin("larger", "resource_tpl");
+            fail();
+        } catch (AmbiguousIdentifierException ex) {
+            //cool
+        }
+    }
+
+    @Test
+    public void testFindRelatedMixinsWithURI() throws Exception {
+        Set<Mixin> set = new HashSet<>();
+        set.add(DataGenerator.getFiveMixins().get(4));
+        Mixin m = new Mixin(new URI("https://occi.localhost/occi/infrastructure/os_tpl#"), "archlinux", "archlinux", new URI("/mixins/archlinux/"), null);
+        m.addRelation(model.findMixin("os_tpl"));
+        model.addMixin(m);
+        set.add(m);
+
+        assertEquals(set, new HashSet(model.findRelatedMixins(URI.create("http://schemas.ogf.org/occi/infrastructure#os_tpl"))));
+    }
+
+    @Test
+    public void testFindRelatedMixinsWithString() throws Exception {
+        Set<Mixin> set = new HashSet<>();
+        set.add(DataGenerator.getFiveMixins().get(4));
+        Mixin m = new Mixin(new URI("https://occi.localhost/occi/infrastructure/os_tpl#"), "archlinux", "archlinux", new URI("/mixins/archlinux/"), null);
+        m.addRelation(model.findMixin("os_tpl"));
+        model.addMixin(m);
+        set.add(m);
+
+        assertEquals(set, new HashSet(model.findRelatedMixins("os_tpl")));
+    }
+
+    @Test
+    public void testInvalidFindRelatedMixinsWithString() throws Exception {
+        Mixin mixin = new Mixin(new URI("http://different.uri.same/term/core#"), "os_tpl", "Operating System Template", new URI("/mixins/os_tpl/"), null);
+        model.addMixin(mixin);
+
+        try {
+            model.findRelatedMixins("os_tpl");
             fail();
         } catch (AmbiguousIdentifierException ex) {
             //cool

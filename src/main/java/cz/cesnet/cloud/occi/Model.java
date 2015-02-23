@@ -9,6 +9,8 @@ import cz.cesnet.cloud.occi.core.Resource;
 import cz.cesnet.cloud.occi.exception.AmbiguousIdentifierException;
 import cz.cesnet.cloud.occi.parser.CollectionType;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -247,6 +249,45 @@ public class Model {
     }
 
     /**
+     * Finds kinds related to kind specified by given identifier.
+     *
+     * @param identifier
+     * @return list of Kinds related to the one specified Kind
+     */
+    public List<Kind> findRelatedKinds(URI identifier) {
+        Kind main = findKind(identifier);
+        return getRelatedKinds(main);
+    }
+
+    /**
+     * Finds kinds related to kind specified by given term.
+     *
+     * @param term
+     * @return list of Kinds related to the one specified Kind
+     * @throws AmbiguousIdentifierException if model contains more than one kind
+     * with given term
+     */
+    public List<Kind> findRelatedKinds(String term) throws AmbiguousIdentifierException {
+        Kind main = findKind(term);
+        return getRelatedKinds(main);
+    }
+
+    private List<Kind> getRelatedKinds(Kind main) {
+        List<Kind> related = new ArrayList<>();
+        if (main == null) {
+            return related;
+        }
+
+        for (Kind kind : kinds.getSet()) {
+            if (kind.relatesTo(main)) {
+                related.add(kind);
+            }
+        }
+
+        return related;
+    }
+
+    /**
      * Determines CollectionType for given kind (for parsing purposes).
      *
      * @param kind
@@ -384,6 +425,45 @@ public class Model {
         }
 
         return foundMixin;
+    }
+
+    /**
+     * Finds mixins related to mixin specified by given identifier.
+     *
+     * @param identifier
+     * @return list of Mixins related to the one specified Mixin
+     */
+    public List<Mixin> findRelatedMixins(URI identifier) {
+        Mixin main = findMixin(identifier);
+        return getRelatedMixins(main);
+    }
+
+    /**
+     * Finds mixins related to mixin specified by given term.
+     *
+     * @param term
+     * @return list of Mixins related to the one specified Mixin
+     * @throws AmbiguousIdentifierException if model contains more than one
+     * mixin with given term
+     */
+    public List<Mixin> findRelatedMixins(String term) throws AmbiguousIdentifierException {
+        Mixin main = findMixin(term);
+        return getRelatedMixins(main);
+    }
+
+    private List<Mixin> getRelatedMixins(Mixin main) {
+        List<Mixin> related = new ArrayList<>();
+        if (main == null) {
+            return related;
+        }
+
+        for (Mixin mixin : mixins.getSet()) {
+            if (mixin.relatesTo(main)) {
+                related.add(mixin);
+            }
+        }
+
+        return related;
     }
 
     /**
