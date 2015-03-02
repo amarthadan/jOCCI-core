@@ -9,9 +9,15 @@ Requirements
 * Maven
 
 Installation
------------
-**For now, the only way to use jOCCI-core is to clone the repository and add it to your Java project manually. Distribution via Maven will be added soon.**
-
+------------
+Using Maven:
+```xml
+<dependency>
+    <groupId>cz.cesnet.cloud</groupId>
+    <artifactId>jocci-core</artifactId>
+    <version>0.1.1</version>
+</dependency>
+```
 ### Continuous integration
 
 [Continuous integration for jOCCI by Travis-CI](http://travis-ci.org/Misenko/jOCCI-core/)
