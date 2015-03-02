@@ -3,3 +3,4 @@ build.xml
 nb-configuration.xml
 /target/
 release.properties
+pom.xml.releaseBackup
