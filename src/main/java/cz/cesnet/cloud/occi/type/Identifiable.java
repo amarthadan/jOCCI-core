@@ -6,8 +6,9 @@ package cz.cesnet.cloud.occi.type;
 public interface Identifiable {
 
     /**
+     * Returns identifier by which the object is recognized.
      *
-     * @return
+     * @return object's identifier
      */
     public String getIdentifier();
 }

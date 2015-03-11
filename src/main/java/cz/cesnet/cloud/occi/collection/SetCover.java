@@ -8,6 +8,8 @@ import java.util.HashSet;
 import java.util.Objects;
 
 /**
+ * Collection class serving as a set for all classes identifiable.
+ *
  * @author Michal Kimle <kimle.michal@gmail.com>
  * @param <E>
  */
@@ -16,18 +18,20 @@ public class SetCover<E extends Identifiable> {
     private final Set<E> set = new HashSet<>();
 
     /**
+     * Checks whether set contains the element.
      *
-     * @param element
-     * @return
+     * @param element looked up in the set
+     * @return true if set contains the element, false otherwise
      */
     public boolean contains(E element) {
         return set.contains(element);
     }
 
     /**
+     * Checks whether set contains an element specified by the identifier.
      *
-     * @param elementIdentifier
-     * @return
+     * @param elementIdentifier identifier of the element looked up in the set
+     * @return true if set contains the element, false otherwise
      */
     public boolean contains(String elementIdentifier) {
         for (E element : set) {
@@ -40,9 +44,10 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
+     * Adds element to the set.
      *
-     * @param element cannot be null
-     * @return
+     * @param element element to be added. Cannot be null.
+     * @return true if the addition was successful, false otherwise
      */
     public boolean add(E element) {
         if (element == null) {
@@ -53,9 +58,11 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
+     * Adds all elements from the collection to the set.
      *
-     * @param elements cannot contain null element
-     * @return
+     * @param elements collection of elements to be added. Cannot contain any
+     * null elements.
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addAll(Collection<E> elements) {
         if (elements.contains(null)) {
@@ -66,9 +73,10 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
+     * Retrieves element rom the set.
      *
-     * @param elementIdentifier
-     * @return
+     * @param elementIdentifier identifier of the element to be retrieved
+     * @return element specified by its identifier if in set, null otherwise
      */
     public E get(String elementIdentifier) {
         if (!contains(elementIdentifier)) {
@@ -79,9 +87,10 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
+     * Removes element from the set
      *
-     * @param element cannot be null
-     * @return
+     * @param element element to be remoed from the set. Cannot be null.
+     * @return true if the deletion was successful, false otherwise
      */
     public boolean remove(E element) {
         if (element == null) {
@@ -102,24 +111,26 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
-     *
+     * Removes all the elements from the set.
      */
     public void clear() {
         set.clear();
     }
 
     /**
+     * Returns unmodifiable set of elements.
      *
-     * @return
+     * @return unmodifiable set of elements
      */
     public Set<E> getSet() {
         return getSet(false);
     }
 
     /**
+     * Returns set of elements.
      *
-     * @param modifiable
-     * @return
+     * @param modifiable specifies if the set will be modifiable or not
+     * @return set of elements
      */
     public Set<E> getSet(boolean modifiable) {
         if (modifiable) {
@@ -130,16 +141,17 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
+     * Returns number of elements in the set.
      *
-     * @return
+     * @return number of elements in the set
      */
     public int size() {
         return set.size();
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return set's hash code
      */
     @Override
     public int hashCode() {
@@ -149,9 +161,9 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare set with
+     * @return true if two sets are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -169,8 +181,10 @@ public class SetCover<E extends Identifiable> {
     }
 
     /**
+     * Resturns string representation of the set
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the set
      */
     @Override
     public String toString() {

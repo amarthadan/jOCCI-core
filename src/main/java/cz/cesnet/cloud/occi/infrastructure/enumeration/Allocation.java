@@ -8,10 +8,6 @@ public enum Allocation {
 
     DYNAMIC, STATIC;
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return this.name().toLowerCase();

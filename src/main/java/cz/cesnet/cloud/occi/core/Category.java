@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class representing an OCCI Category
+ * Class representing an OCCI Category.
  *
  * @author Michal Kimle <kimle.michal@gmail.com>
  */
@@ -35,13 +35,14 @@ public class Category implements Identifiable, Comparable<Category> {
     private final SetCover<Entity> entities = new SetCover<>();
 
     /**
-     * Constructor
+     * Constructor. Creates a category with scheme, term, title, location and
+     * attributes.
      *
-     * @param scheme cannot be null
-     * @param term cannot be null nor empty
-     * @param title
-     * @param location
-     * @param attributes
+     * @param scheme category's scheme. Cannot be null.
+     * @param term category's term. Cannot be null nor empty.
+     * @param title category's title
+     * @param location category's location
+     * @param attributes category's attributes
      */
     public Category(URI scheme, String term, String title, URI location, Collection<Attribute> attributes) {
         LOGGER.debug("Creating category: scheme={}, term={}, title={}, location={}, attributes={}", scheme, term, title, location, attributes);
@@ -67,9 +68,10 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
+     * Constructor. Creates a category with scheme and term.
      *
-     * @param scheme cannot be null
-     * @param term cannot be null nor empty
+     * @param scheme category's scheme. Cannot be null.
+     * @param term category's term. Cannot be null nor empty.
      */
     public Category(URI scheme, String term) {
         this(scheme, term, null, null, null);
@@ -85,16 +87,18 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
+     * Returns category's term.
      *
-     * @return
+     * @return category's term
      */
     public String getTerm() {
         return term;
     }
 
     /**
+     * Sets category's term.
      *
-     * @param term cannot be null nor empty
+     * @param term category's term. Cannot be null nor empty.
      */
     public void setTerm(String term) {
         if (term == null) {
@@ -108,16 +112,18 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
+     * Returns category's scheme.
      *
-     * @return
+     * @return category's scheme
      */
     public URI getScheme() {
         return scheme;
     }
 
     /**
+     * Sets category's scheme.
      *
-     * @param scheme cannot be null
+     * @param scheme category's scheme. Cannot be null.
      */
     public void setScheme(URI scheme) {
         if (scheme == null) {
@@ -128,8 +134,9 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
+     * Returns category's identifier.
      *
-     * @return
+     * @return category's identifier
      */
     @Override
     public String getIdentifier() {
@@ -137,32 +144,36 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
+     * Returns category's title.
      *
-     * @return
+     * @return category's title
      */
     public String getTitle() {
         return title;
     }
 
     /**
+     * Sets category's title
      *
-     * @param title
+     * @param title category's title
      */
     public void setTitle(String title) {
         this.title = title;
     }
 
     /**
+     * Returns category's location.
      *
-     * @return
+     * @return category's location
      */
     public URI getLocation() {
         return location;
     }
 
     /**
+     * Sets category's location
      *
-     * @param location
+     * @param location category's location
      */
     public void setLocation(URI location) {
         this.location = location;
@@ -170,60 +181,66 @@ public class Category implements Identifiable, Comparable<Category> {
 
     //attributes
     /**
+     * Checks whether category has given attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be looked up
+     * @return true if category has given attribute, false otherwise
      */
     public boolean containsAttribute(Attribute attribute) {
         return attributes.contains(attribute);
     }
 
     /**
+     * Checks whether category has given attribute.
      *
-     * @param attributeIdentifier
-     * @return
+     * @param attributeIdentifier identifier of attribute to be looked up
+     * @return true if category has given attribute, false otherwise
      */
     public boolean containsAttribute(String attributeIdentifier) {
         return attributes.contains(attributeIdentifier);
     }
 
     /**
+     * Adds given attribute to category.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be added
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addAttribute(Attribute attribute) {
         return attributes.add(attribute);
     }
 
     /**
+     * Returns attribute from category.
      *
-     * @param attributeIdentifier
-     * @return
+     * @param attributeIdentifier identifier of the requested attribute
+     * @return attribute from category
      */
     public Attribute getAttribute(String attributeIdentifier) {
         return attributes.get(attributeIdentifier);
     }
 
     /**
+     * Removes attribute from category
      *
-     * @param attribute
-     * @return
+     * @param attribute to be removed
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeAttribute(Attribute attribute) {
         return attributes.remove(attribute);
     }
 
     /**
-     *
+     * Removes all attributes from category.
      */
     public void clearAttributes() {
         attributes.clear();
     }
 
     /**
+     * Returns all category's attributes in form of set.
      *
-     * @return
+     * @return all category's attributes in form of set
      */
     public Set<Attribute> getAttributes() {
         return attributes.getSet();
@@ -231,60 +248,66 @@ public class Category implements Identifiable, Comparable<Category> {
 
     //actions
     /**
+     * Checks whether category has given action.
      *
-     * @param action
-     * @return
+     * @param action action to be looked up
+     * @return true if category has given action, false otherwise
      */
     public boolean containsAction(Action action) {
         return actions.contains(action);
     }
 
     /**
+     * Checks whether category has given action.
      *
-     * @param actionIdentifier
-     * @return
+     * @param actionIdentifier identifier of action to be looked up
+     * @return true if category has given action, false otherwise
      */
     public boolean containsAction(String actionIdentifier) {
         return actions.contains(actionIdentifier);
     }
 
     /**
+     * Adds given action to category.
      *
-     * @param action
-     * @return
+     * @param action action to be added
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addAction(Action action) {
         return actions.add(action);
     }
 
     /**
+     * Returns action from category.
      *
-     * @param actionIdentifier
-     * @return
+     * @param actionIdentifier identifier of the requested action
+     * @return action from category
      */
     public Action getAction(String actionIdentifier) {
         return actions.get(actionIdentifier);
     }
 
     /**
+     * Removes action from category
      *
-     * @param action
-     * @return
+     * @param action to be removed
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeAction(Action action) {
         return actions.remove(action);
     }
 
     /**
-     *
+     * Removes all actions from category.
      */
     public void clearActions() {
         actions.clear();
     }
 
     /**
+     * Returns all category's actions in form of set.
      *
-     * @return
+     * @return all category's actions in form of set
      */
     public Set<Action> getActions() {
         return actions.getSet();
@@ -292,68 +315,74 @@ public class Category implements Identifiable, Comparable<Category> {
 
     //entities
     /**
+     * Checks whether category has given entity.
      *
-     * @param entity
-     * @return
+     * @param entity entity to be looked up
+     * @return true if category has given entity, false otherwise
      */
     public boolean containsEntity(Entity entity) {
         return entities.contains(entity);
     }
 
     /**
+     * Checks whether category has given entity.
      *
-     * @param entityIdentifier
-     * @return
+     * @param entityIdentifier identifier of entity to be looked up
+     * @return true if category has given entity, false otherwise
      */
     public boolean containsEntity(String entityIdentifier) {
         return entities.contains(entityIdentifier);
     }
 
     /**
+     * Adds given entity to category.
      *
-     * @param entity
-     * @return
+     * @param entity entity to be added
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addEntity(Entity entity) {
         return entities.add(entity);
     }
 
     /**
+     * Returns entity from category.
      *
-     * @param entityIdentifier
-     * @return
+     * @param entityIdentifier identifier of the requested entity
+     * @return entity from category
      */
     public Entity getEntity(String entityIdentifier) {
         return entities.get(entityIdentifier);
     }
 
     /**
+     * Removes entity from category
      *
-     * @param entity
-     * @return
+     * @param entity to be removed
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeEntity(Entity entity) {
         return entities.remove(entity);
     }
 
     /**
-     *
+     * Removes all entities from category.
      */
     public void clearEntities() {
         entities.clear();
     }
 
     /**
+     * Returns all category's entities in form of set.
      *
-     * @return
+     * @return all category's entities in form of set
      */
     public Set<Entity> getEntities() {
         return entities.getSet();
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return category's hash code
      */
     @Override
     public int hashCode() {
@@ -364,9 +393,9 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare category with
+     * @return true if two categories are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -387,8 +416,10 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
+     * Resturns string representation of the category
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the category
      */
     @Override
     public String toString() {
@@ -493,9 +524,9 @@ public class Category implements Identifiable, Comparable<Category> {
     }
 
     /**
+     * Comapres two cetegories lexicographically based on their identifier.
      *
-     * @param c
-     * @return
+     * @see Comparable#compareTo(java.lang.Object)
      */
     @Override
     public int compareTo(Category c) {

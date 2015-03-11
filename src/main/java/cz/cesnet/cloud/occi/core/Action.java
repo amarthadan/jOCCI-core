@@ -21,11 +21,13 @@ public class Action implements Identifiable, Comparable<Action> {
     private Category category;
 
     /**
+     * Constructor. Creates an Action instance with given scheme, term, title
+     * and set of attributes.
      *
-     * @param scheme cannot be null
-     * @param term cannot be null nor empty
-     * @param title
-     * @param attributes
+     * @param scheme action's scheme. Cannot be null.
+     * @param term action's term. Cannot be null nor empty.
+     * @param title action's title
+     * @param attributes set of action's attributes
      */
     public Action(URI scheme, String term, String title, Collection<Attribute> attributes) {
         LOGGER.debug("Creating action: scheme={}, term={}, title={}, attributes={}", scheme, term, title, attributes);
@@ -33,49 +35,55 @@ public class Action implements Identifiable, Comparable<Action> {
     }
 
     /**
+     * Constructor. Creates an Action instance with given scheme and term.
      *
-     * @param scheme cannot be null
-     * @param term cannot be null nor empty
+     * @param scheme action's scheme. Cannot be null.
+     * @param term action's term. Cannot be null nor empty.
      */
     public Action(URI scheme, String term) {
         this(scheme, term, null, null);
     }
 
     /**
+     * Returns action's scheme.
      *
-     * @return
+     * @return action's scheme.
      */
     public URI getScheme() {
         return category.getScheme();
     }
 
     /**
+     * Sets action's scheme.
      *
-     * @param scheme cannot be null
+     * @param scheme action's scheme. Cannot be null.
      */
     public void setScheme(URI scheme) {
         category.setScheme(scheme);
     }
 
     /**
+     * Returns action's term.
      *
-     * @return
+     * @return action's term.
      */
     public String getTerm() {
         return category.getTerm();
     }
 
     /**
+     * Sets action's term.
      *
-     * @param term cannot be null nor empty
+     * @param term action's term. Cannot be null nor empty.
      */
     public void setTerm(String term) {
         category.setTerm(term);
     }
 
     /**
+     * Returns action's identifier.
      *
-     * @return
+     * @return action's identifier
      */
     @Override
     public String getIdentifier() {
@@ -83,93 +91,103 @@ public class Action implements Identifiable, Comparable<Action> {
     }
 
     /**
+     * Returns action's title.
      *
-     * @return
+     * @return action's title
      */
     public String getTitle() {
         return category.getTitle();
     }
 
     /**
+     * Sets action's title.
      *
-     * @param title
+     * @param title action's title
      */
     public void setTitle(String title) {
         category.setTitle(title);
     }
 
     /**
+     * Checks whether action has the attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be looked up
+     * @return true if action has the attribute, false otherwise
      */
     public boolean containsAttribute(Attribute attribute) {
         return category.containsAttribute(attribute);
     }
 
     /**
+     * Checks whether action has the attribute.
      *
-     * @param attributeName
-     * @return
+     * @param attributeName name of the attribute to be looked up
+     * @return true if action has the attribute, false otherwise
      */
     public boolean containsAttribute(String attributeName) {
         return category.containsAttribute(attributeName);
     }
 
     /**
+     * Adds attribute to the action.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be added
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addAttribute(Attribute attribute) {
         return category.addAttribute(attribute);
     }
 
     /**
+     * Retrieves an attribute from the action.
      *
-     * @param attributeName
-     * @return
+     * @param attributeName name of the attribute to be retrieved
+     * @return attribute
      */
     public Attribute getAttribute(String attributeName) {
         return category.getAttribute(attributeName);
     }
 
     /**
+     * Removes attribute from the action.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be removed
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeAttribute(Attribute attribute) {
         return category.removeAttribute(attribute);
     }
 
     /**
+     * Returns all action's attribute in form of set.
      *
-     * @return
+     * @return all action's attribute in form of set
      */
     public Set<Attribute> getAttributes() {
         return category.getAttributes();
     }
 
     /**
+     * Returns action's default scheme 'http://schemas.ogf.org/occi/core#'
      *
-     * @return
+     * @return action's default scheme
      */
     public URI getSchemeDefault() {
         return Category.SCHEME_CORE_DEFAULT;
     }
 
     /**
+     * Returns action's default term 'term'
      *
-     * @return
+     * @return action's default term
      */
     public String getTermDefault() {
         return "action";
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return action's hash code
      */
     @Override
     public int hashCode() {
@@ -179,9 +197,9 @@ public class Action implements Identifiable, Comparable<Action> {
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare action with
+     * @return true if two actions are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -199,8 +217,10 @@ public class Action implements Identifiable, Comparable<Action> {
     }
 
     /**
+     * Resturns string representation of the action
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the action
      */
     @Override
     public String toString() {
@@ -248,9 +268,9 @@ public class Action implements Identifiable, Comparable<Action> {
     }
 
     /**
+     * Comapres two actions lexicographically based on their identifier.
      *
-     * @param a
-     * @return
+     * @see Comparable#compareTo(java.lang.Object)
      */
     @Override
     public int compareTo(Action a) {

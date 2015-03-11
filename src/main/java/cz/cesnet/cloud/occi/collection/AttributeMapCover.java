@@ -23,8 +23,8 @@ public class AttributeMapCover {
     /**
      * Stores attribute and its value.
      *
-     * @param attribute cannot be null
-     * @param value cannot be null
+     * @param attribute attribute to be stored. Cannot be null.
+     * @param value value to be stored for the attribute. Cannot be null.
      */
     public void add(Attribute attribute, String value) {
         if (attribute == null) {
@@ -38,8 +38,9 @@ public class AttributeMapCover {
     }
 
     /**
+     * Removes attribute from the collection.
      *
-     * @param attribute cannot be null
+     * @param attribute attribute to be removed. Cannot be null.
      */
     public void remove(Attribute attribute) {
         if (attribute == null) {
@@ -50,8 +51,9 @@ public class AttributeMapCover {
     }
 
     /**
+     * Removes attribute from the collection.
      *
-     * @param attributeName cannot be null
+     * @param attributeName name of the attribute to be removed. Cannot be null.
      */
     public void remove(String attributeName) {
         Attribute attTmp = new Attribute(attributeName);
@@ -59,18 +61,21 @@ public class AttributeMapCover {
     }
 
     /**
+     * Checks whether collection contains the attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be looked up in the collection
+     * @return true if collection contains the attribute, false otherwise
      */
     public boolean containsAttribute(Attribute attribute) {
         return attributes.containsKey(attribute);
     }
 
     /**
+     * Checks whether collection contains the attribute.
      *
-     * @param attributeName cannot be null
-     * @return
+     * @param attributeName name of the attribute to be looked up in the
+     * collection. Cannot be null.
+     * @return true if collection contains the attribute, false otherwise
      */
     public boolean containsAttribute(String attributeName) {
         Attribute attTmp = new Attribute(attributeName);
@@ -78,18 +83,21 @@ public class AttributeMapCover {
     }
 
     /**
+     * Returns the value for the given attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute of which value is returned.
+     * @return value for the given attribute
      */
     public String getValue(Attribute attribute) {
         return attributes.get(attribute);
     }
 
     /**
+     * Returns the value for the given attribute.
      *
-     * @param attributeName cannot be null
-     * @return
+     * @param attributeName name of the attribute of which value is returned.
+     * Cannot be null.
+     * @return value for the given attribute
      */
     public String getValue(String attributeName) {
         Attribute attTmp = new Attribute(attributeName);
@@ -97,31 +105,33 @@ public class AttributeMapCover {
     }
 
     /**
+     * Returns all the attributes and their values in form of map.
      *
-     * @return
+     * @return all the attributes and their values in form of map
      */
     public Map<Attribute, String> getAttributes() {
         return Collections.unmodifiableMap(attributes);
     }
 
     /**
-     *
+     * Removes all attributes and their values from the collection.
      */
     public void clear() {
         attributes.clear();
     }
 
     /**
+     * Returns the number of attributes in the collection.
      *
-     * @return
+     * @return the number of attributes in the collection
      */
     public int size() {
         return attributes.size();
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return collection's hash code
      */
     @Override
     public int hashCode() {
@@ -131,9 +141,9 @@ public class AttributeMapCover {
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare collection with
+     * @return true if two collections are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -151,8 +161,10 @@ public class AttributeMapCover {
     }
 
     /**
+     * Resturns string representation of the collection
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the collection
      */
     @Override
     public String toString() {

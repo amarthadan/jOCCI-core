@@ -17,11 +17,11 @@ public interface Parser {
     /**
      * Parses an OCCI model either from body or headers depending on mediaType.
      *
-     * @param mediaType
-     * @param body
-     * @param headers
+     * @param mediaType media type of the parsed server response
+     * @param body body of the server response
+     * @param headers headers of the server response
      * @return OCCI model
-     * @throws ParsingException
+     * @throws ParsingException when error occures during the parsing
      */
     Model parseModel(String mediaType, String body, Headers headers) throws ParsingException;
 
@@ -29,12 +29,13 @@ public interface Parser {
      * Parses an OCCI entity either from body or headers depending on mediaType
      * and collectionType.
      *
-     * @param mediaType
-     * @param body
-     * @param headers
-     * @param collectionType
-     * @return
-     * @throws ParsingException
+     * @param mediaType media type of the parsed server response
+     * @param body body of the server response
+     * @param headers headers of the server response
+     * @param collectionType collection type representing entities that will be
+     * parsed from the response
+     * @return collection of parsed entities
+     * @throws ParsingException when error occures during the parsing
      */
     Collection parseCollection(String mediaType, String body, Headers headers, CollectionType collectionType) throws ParsingException;
 
@@ -42,11 +43,11 @@ public interface Parser {
      * Parses a list of locations either from body or headers depending on
      * mediaType.
      *
-     * @param mediaType
-     * @param body
-     * @param headers
-     * @return
-     * @throws ParsingException
+     * @param mediaType media type of the parsed server response
+     * @param body body of the server response
+     * @param headers headers of the server response
+     * @return list of locations
+     * @throws ParsingException when error occures during the parsing
      */
     List<URI> parseLocations(String mediaType, String body, Headers headers) throws ParsingException;
 }

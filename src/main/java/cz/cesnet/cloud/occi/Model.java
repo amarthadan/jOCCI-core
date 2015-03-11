@@ -15,7 +15,8 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Class representing an OCCI model.
+ * Class representing an OCCI model. Can contain instances of classes Kind,
+ * Mixin and Action.
  *
  * @author Michal Kimle <kimle.michal@gmail.com>
  */
@@ -26,180 +27,204 @@ public class Model {
     private final SetCover<Action> actions = new SetCover<>();
 
     /**
+     * Creates an empty model.
+     */
+    public Model() {
+    }
+
+    /**
+     * Checks whether model contains a kind
      *
-     * @param kind
-     * @return
+     * @param kind kind looked up in the model
+     * @return true if model contains the kind, false otherwise
      */
     public boolean containsKind(Kind kind) {
         return kinds.contains(kind);
     }
 
     /**
+     * Checks whether model contains a kind specified by the identifier
      *
-     * @param kindIdentifier
-     * @return
+     * @param kindIdentifier identifier for the kind looked up in the model
+     * @return true if model contains the kind, false otherwise
      */
     public boolean containsKind(String kindIdentifier) {
         return kinds.contains(kindIdentifier);
     }
 
     /**
+     * Adds kind to the model.
      *
-     * @param kind
-     * @return
+     * @param kind kind to be added to the model
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addKind(Kind kind) {
         return kinds.add(kind);
     }
 
     /**
+     * Retrieves a kind from the model.
      *
-     * @param kindIdentifier
-     * @return
+     * @param kindIdentifier identifier of the kind to be retrieved
+     * @return kind instance from the mdoel
      */
     public Kind getKind(String kindIdentifier) {
         return kinds.get(kindIdentifier);
     }
 
     /**
+     * Removes kind from model.
      *
-     * @param kind
-     * @return
+     * @param kind kind to be removed from the model
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeKind(Kind kind) {
         return kinds.remove(kind);
     }
 
     /**
-     *
+     * Remove all kinds from the model.
      */
     public void clearKinds() {
         kinds.clear();
     }
 
     /**
+     * Returns all kinds from the model in a form of set.
      *
-     * @return
+     * @return set of all kinds from the model
      */
     public Set<Kind> getKinds() {
         return kinds.getSet();
     }
 
     /**
+     * Checks whether model contains a mixin
      *
-     * @param mixin
-     * @return
+     * @param mixin mixin looked up in the model
+     * @return true if model contains the mixin, false otherwise
      */
     public boolean containsMixin(Mixin mixin) {
         return mixins.contains(mixin);
     }
 
     /**
+     * Checks whether model contains a mixin specified by the identifier
      *
-     * @param mixinIdentifier
-     * @return
+     * @param mixinIdentifier identifier for the mixin looked up in the model
+     * @return true if model contains the mixin, false otherwise
      */
     public boolean containsMixin(String mixinIdentifier) {
         return mixins.contains(mixinIdentifier);
     }
 
     /**
+     * Adds mixin to the model.
      *
-     * @param mixin
-     * @return
+     * @param mixin mixin to be added to the model
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addMixin(Mixin mixin) {
         return mixins.add(mixin);
     }
 
     /**
+     * Retrieves a mixin from the model.
      *
-     * @param mixinIdentifier
-     * @return
+     * @param mixinIdentifier identifier of the mixin to be retrieved
+     * @return mixin instance from the mdoel
      */
     public Mixin getMixin(String mixinIdentifier) {
         return mixins.get(mixinIdentifier);
     }
 
     /**
+     * Removes mixin from model.
      *
-     * @param mixin
-     * @return
+     * @param mixin mixin to be removed from the model
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeMixin(Mixin mixin) {
         return mixins.remove(mixin);
     }
 
     /**
-     *
+     * Remove all mixins from the model.
      */
     public void clearMixins() {
         mixins.clear();
     }
 
     /**
+     * Returns all mixins from the model in a form of set.
      *
-     * @return
+     * @return set of all mixins from the model
      */
     public Set<Mixin> getMixins() {
         return mixins.getSet();
     }
 
     /**
+     * Checks whether model contains a action
      *
-     * @param action
-     * @return
+     * @param action action looked up in the model
+     * @return true if model contains the action, false otherwise
      */
     public boolean containsAction(Action action) {
         return actions.contains(action);
     }
 
     /**
+     * Checks whether model contains a action specified by the identifier
      *
-     * @param actionIdentifier
-     * @return
+     * @param actionIdentifier identifier for the action looked up in the model
+     * @return true if model contains the action, false otherwise
      */
     public boolean containsAction(String actionIdentifier) {
         return actions.contains(actionIdentifier);
     }
 
     /**
+     * Adds action to the model.
      *
-     * @param action
-     * @return
+     * @param action action to be added to the model
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addAction(Action action) {
         return actions.add(action);
     }
 
     /**
+     * Retrieves a action from the model.
      *
-     * @param actionIdentifier
-     * @return
+     * @param actionIdentifier identifier of the action to be retrieved
+     * @return action instance from the mdoel
      */
     public Action getAction(String actionIdentifier) {
         return actions.get(actionIdentifier);
     }
 
     /**
+     * Removes action from model.
      *
-     * @param action
-     * @return
+     * @param action action to be removed from the model
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeAction(Action action) {
         return actions.remove(action);
     }
 
     /**
-     *
+     * Remove all actions from the model.
      */
     public void clearActions() {
         actions.clear();
     }
 
     /**
+     * Returns all actions from the model in a form of set.
      *
-     * @return
+     * @return set of all actions from the model
      */
     public Set<Action> getActions() {
         return actions.getSet();
@@ -510,8 +535,8 @@ public class Model {
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return model's hash code
      */
     @Override
     public int hashCode() {
@@ -523,9 +548,9 @@ public class Model {
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare model with
+     * @return true if two models are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -549,8 +574,10 @@ public class Model {
     }
 
     /**
+     * Resturns string representation of the model
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the model
      */
     @Override
     public String toString() {

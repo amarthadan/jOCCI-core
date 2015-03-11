@@ -8,10 +8,6 @@ public enum Architecture {
 
     X_86, X_64;
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return this.name().toLowerCase();
