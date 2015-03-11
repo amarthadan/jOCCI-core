@@ -10,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Class representing an OCCI Link
+ * Class representing an OCCI Link.
  *
  * @author Michal Kimle <kimle.michal@gmail.com>
  */
@@ -21,39 +21,44 @@ public class Link extends Entity {
     private String relation;
 
     /**
+     * Constructor.
      *
-     * @param id cannot be null
-     * @param kind cannot be null
-     * @param title
-     * @param model
-     * @throws InvalidAttributeValueException
+     * @param id occi.core.id attribute. Cannot be null.
+     * @param kind link's kind. Cannot be null.
+     * @param title occi.core.title attribute
+     * @param model link's model
+     * @throws InvalidAttributeValueException in case of invalid id or title
+     * value
      */
     public Link(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
         super(id, kind, title, model);
     }
 
     /**
+     * Constructor.
      *
-     * @param id cannot be null
-     * @param kind cannot be null
-     * @throws InvalidAttributeValueException
+     * @param id occi.core.id attribute. Cannot be null.
+     * @param kind link's kind. Cannot be null.
+     * @throws InvalidAttributeValueException in case of invalid id value
      */
     public Link(String id, Kind kind) throws InvalidAttributeValueException {
         super(id, kind);
     }
 
     /**
+     * Returns link's source (value of occi.core.source attribute).
      *
-     * @return
+     * @return link's source
      */
     public String getSource() {
         return getValue(SOURCE_ATTRIBUTE_NAME);
     }
 
     /**
+     * Sets link's source.
      *
-     * @param source cannot be null
-     * @throws InvalidAttributeValueException
+     * @param source link's source. Cannot be null.
+     * @throws InvalidAttributeValueException in case source value is invalid
      */
     public void setSource(Resource source) throws InvalidAttributeValueException {
         if (source == null) {
@@ -63,26 +68,29 @@ public class Link extends Entity {
     }
 
     /**
+     * Sets link's source.
      *
-     * @param sourceLocation
-     * @throws InvalidAttributeValueException
+     * @param sourceLocation location of link's source
+     * @throws InvalidAttributeValueException in case source value is invalid
      */
     public void setSource(String sourceLocation) throws InvalidAttributeValueException {
         addAttribute(SOURCE_ATTRIBUTE_NAME, sourceLocation);
     }
 
     /**
+     * Returns link's target (value of occi.core.terget attribute).
      *
-     * @return
+     * @return link's target
      */
     public String getTarget() {
         return getValue(TARGET_ATTRIBUTE_NAME);
     }
 
     /**
+     * Sets link's target.
      *
-     * @param target cannot be null
-     * @throws InvalidAttributeValueException
+     * @param target link's target. Cannot be null.
+     * @throws InvalidAttributeValueException in case target value is invalid
      */
     public void setTarget(Resource target) throws InvalidAttributeValueException {
         if (target == null) {
@@ -92,23 +100,26 @@ public class Link extends Entity {
     }
 
     /**
+     * Sets link's target.
      *
-     * @param targetLocation
-     * @throws InvalidAttributeValueException
+     * @param targetLocation location of link's target
+     * @throws InvalidAttributeValueException in case target value is invalid
      */
     public void setTarget(String targetLocation) throws InvalidAttributeValueException {
         addAttribute(TARGET_ATTRIBUTE_NAME, targetLocation);
     }
 
     /**
+     * Returns link's relation.
      *
-     * @return
+     * @return link's relation
      */
     public String getRelation() {
         return relation;
     }
 
     /**
+     * Sets link's relation.
      *
      * @param relation
      */
@@ -117,16 +128,18 @@ public class Link extends Entity {
     }
 
     /**
+     * Returns link's default term 'link'.
      *
-     * @return
+     * @return link's default term
      */
     public static String getTermDefault() {
         return "link";
     }
 
     /**
+     * Returns link's default identifier 'http://schemas.ogf.org/occi/core#link'
      *
-     * @return
+     * @return link's default identifier
      */
     public static String getIdentifierDefault() {
         return getSchemeDefault().toString() + getTermDefault();
@@ -247,8 +260,10 @@ public class Link extends Entity {
     }
 
     /**
+     * Returns a JSON representation of link instance as described in OCCI
+     * standard. NOT IMPLEMENTED YET!
      *
-     * @return
+     * @return JSON representation of link instance
      */
     @Override
     public String toJSON() {

@@ -7,7 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class representing an OCCI attribute.
+ * Class representing an OCCI attribute. Attributes are used to store properties
+ * of OCCI classes.
  *
  * @author Michal Kimle <kimle.michal@gmail.com>
  */
@@ -23,15 +24,15 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
     private String description;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param name cannot be null nor empty
-     * @param required
-     * @param immutable
-     * @param type
-     * @param pattern
-     * @param defaultValue
-     * @param description
+     * @param name name of the attribute. Cannot be null nor empty.
+     * @param required whether attribute is required or not
+     * @param immutable whether attribute is immutable or not
+     * @param type attribute's type
+     * @param pattern attribute's pattern
+     * @param defaultValue attribute's default value
+     * @param description attribute's description
      */
     public Attribute(String name, boolean required, boolean immutable, String type, String pattern, String defaultValue, String description) {
         LOGGER.debug("Creating attribute: name={}, required={}, immutable={}, type={}, pattern={}, defaultValue={}, description={}",
@@ -54,34 +55,38 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
     }
 
     /**
+     * Constructor.
      *
-     * @param name cannot be null nor empty
-     * @param required
-     * @param immutable
+     * @param name name of the attribute. Cannot be null nor empty.
+     * @param required whether attribute is required or not
+     * @param immutable whether attribute is immutable or not
      */
     public Attribute(String name, boolean required, boolean immutable) {
         this(name, required, immutable, null, null, null, null);
     }
 
     /**
+     * Constructor.
      *
-     * @param name cannot be null nor empty
+     * @param name name of the attribute. Cannot be null nor empty.
      */
     public Attribute(String name) {
         this(name, false, false, null, null, null, null);
     }
 
     /**
+     * Returns attribute's name.
      *
-     * @return
+     * @return attribute's name
      */
     public String getName() {
         return name;
     }
 
     /**
+     * Sets attribute's name.
      *
-     * @param name cannot be null nor empty
+     * @param name attribute's name. Cannot be null nor empty
      */
     public void setName(String name) {
         if (name == null) {
@@ -95,8 +100,9 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
     }
 
     /**
+     * Returns attribute's identifier.
      *
-     * @return
+     * @return attribute's identifier
      */
     @Override
     public String getIdentifier() {
@@ -104,104 +110,116 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
     }
 
     /**
+     * Returns whether atttribute is required.
      *
-     * @return
+     * @return true if attribute is required, false otherwise
      */
     public boolean isRequired() {
         return required;
     }
 
     /**
+     * Sets attribute's requiredness.
      *
-     * @param required
+     * @param required whether the attribute should be required or not
      */
     public void setRequired(boolean required) {
         this.required = required;
     }
 
     /**
+     * Returns whether atttribute is immutable.
      *
-     * @return
+     * @return true if attribute is immutable, false otherwise
      */
     public boolean isImmutable() {
         return immutable;
     }
 
     /**
+     * Sets attribute's immutability.
      *
-     * @param immutable
+     * @param immutable whether the attribute should be immutable or not
      */
     public void setImmutable(boolean immutable) {
         this.immutable = immutable;
     }
 
     /**
+     * Returns attribute's type.
      *
-     * @return
+     * @return attribute's type
      */
     public String getType() {
         return type;
     }
 
     /**
+     * Sets attribute's type.
      *
-     * @param type
+     * @param type attribute's type
      */
     public void setType(String type) {
         this.type = type;
     }
 
     /**
+     * Returns attribute's pattern.
      *
-     * @return
+     * @return attribute's pattern
      */
     public String getPattern() {
         return pattern;
     }
 
     /**
+     * Sets attribute's pattern.
      *
-     * @param pattern
+     * @param pattern attribute's pattern
      */
     public void setPattern(String pattern) {
         this.pattern = pattern;
     }
 
     /**
+     * Returns attribute's default value.
      *
-     * @return
+     * @return attribute's default value
      */
     public String getDefaultValue() {
         return defaultValue;
     }
 
     /**
+     * Sets attribute's default value.
      *
-     * @param defaultValue
+     * @param defaultValue attribute's default value
      */
     public void setDefaultValue(String defaultValue) {
         this.defaultValue = defaultValue;
     }
 
     /**
+     * Returns attribute's description.
      *
-     * @return
+     * @return attribute's description
      */
     public String getDescription() {
         return description;
     }
 
     /**
+     * Sets attribute's description.
      *
-     * @param description
+     * @param description attribute's description
      */
     public void setDescription(String description) {
         this.description = description;
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return attribute's hash code
      */
     @Override
     public int hashCode() {
@@ -211,9 +229,9 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare attribute with
+     * @return true if two attributes are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -231,8 +249,10 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
     }
 
     /**
+     * Resturns string representation of the attribute
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the attribute
      */
     @Override
     public String toString() {
@@ -269,9 +289,9 @@ public class Attribute implements Identifiable, Comparable<Attribute> {
     }
 
     /**
+     * Comapres two attributes lexicographically based on their identifier.
      *
-     * @param a
-     * @return
+     * @see Comparable#compareTo(java.lang.Object)
      */
     @Override
     public int compareTo(Attribute a) {

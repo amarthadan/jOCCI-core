@@ -1,7 +1,7 @@
 jOCCI-core - A Java OCCI Framework
 ==================================
 
-[![Build Status](https://secure.travis-ci.org/Misenko/jOCCI-core.png)](http://travis-ci.org/Misenko/jOCCI-core)
+[![Build Status](https://secure.travis-ci.org/EGI-FCTF/jOCCI-core.png)](http://travis-ci.org/EGI-FCTF/jOCCI-core)
 
 Requirements
 ------------
@@ -15,12 +15,12 @@ Using Maven:
 <dependency>
     <groupId>cz.cesnet.cloud</groupId>
     <artifactId>jocci-core</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
 </dependency>
 ```
 ### Continuous integration
 
-[Continuous integration for jOCCI by Travis-CI](http://travis-ci.org/Misenko/jOCCI-core/)
+[Continuous integration for jOCCI by Travis-CI](http://travis-ci.org/EGI-FCTF/jOCCI-core/)
 
 ### Contribute
 

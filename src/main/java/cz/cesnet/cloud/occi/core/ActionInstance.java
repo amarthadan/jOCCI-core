@@ -27,9 +27,9 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     private Model model;
 
     /**
-     * Constructor
+     * Constructor. Creates an instance of ActionInstance with given Action.
      *
-     * @param action cannot be null
+     * @param action action to create instance of. Cannot be null.
      */
     public ActionInstance(Action action) {
         LOGGER.debug("Creating ActionInstance: action={}", action);
@@ -42,16 +42,18 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
+     * Returns action of this instance.
      *
-     * @return
+     * @return action of this instance
      */
     public Action getAction() {
         return action;
     }
 
     /**
+     * Sets action for this instance.
      *
-     * @param action cannot be null
+     * @param action action for this instance. Cannot be null.
      */
     public void setAction(Action action) {
         if (action == null) {
@@ -62,8 +64,9 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
+     * Returns action's identifier.
      *
-     * @return
+     * @return action's identifier
      */
     @Override
     public String getIdentifier() {
@@ -71,33 +74,37 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
+     * Returns instance's model.
      *
-     * @return
+     * @return instance's model
      */
     public Model getModel() {
         return model;
     }
 
     /**
+     * Sets model for the instance.
      *
-     * @param model
+     * @param model model for the instance
      */
     public void setModel(Model model) {
         this.model = model;
     }
 
     /**
+     * Adds attribute and its value for the instance.
      *
-     * @param attribute
-     * @param value
+     * @param attribute attribute to be added
+     * @param value value of the attribute to be added
      */
     public void addAttribute(Attribute attribute, String value) {
         attributes.add(attribute, value);
     }
 
     /**
+     * Adds all attributes and their values from the given map.
      *
-     * @param attributes
+     * @param attributes map of attributes and their values
      */
     public void addAttributes(Map<String, String> attributes) {
         for (String name : attributes.keySet()) {
@@ -106,59 +113,65 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
+     * Removes attribute and its value from the instance.
      *
-     * @param attribute
+     * @param attribute attribute to be removed
      */
     public void removeAttribute(Attribute attribute) {
         attributes.remove(attribute);
     }
 
     /**
+     * Checks whether the instance has an attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be looked up
+     * @return true if instance has the attribute, false otherwise
      */
     public boolean containsAttribute(Attribute attribute) {
         return attributes.containsAttribute(attribute);
     }
 
     /**
+     * Checks whether the instance has an attribute.
      *
-     * @param attributeName
-     * @return
+     * @param attributeName name of the attribute to be looked up
+     * @return true if instance has the attribute, false otherwise
      */
     public boolean containsAttribute(String attributeName) {
         return attributes.containsAttribute(attributeName);
     }
 
     /**
+     * Returns value of the given attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute which value is returned
+     * @return value of the given attribute
      */
     public String getValue(Attribute attribute) {
         return attributes.getValue(attribute);
     }
 
     /**
+     * Returns value of the given attribute.
      *
-     * @param attributeName
-     * @return
+     * @param attributeName name of the attribute which value is returned
+     * @return value of the given attribute
      */
     public String getValue(String attributeName) {
         return attributes.getValue(attributeName);
     }
 
     /**
+     * Returns all instance's attributes and their values in form of map.
      *
-     * @return
+     * @return all instance's attributes and their values in form of map
      */
     public Map<Attribute, String> getAttributes() {
         return attributes.getAttributes();
     }
 
     /**
-     *
+     * Removes all attributes with their values from the instance.
      */
     public void clearAttributes() {
         attributes.clear();
@@ -233,8 +246,8 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return instance's hash code
      */
     @Override
     public int hashCode() {
@@ -245,9 +258,9 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare instance with
+     * @return true if two instances are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -268,8 +281,10 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
+     * Resturns string representation of the instance
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the instance
      */
     @Override
     public String toString() {
@@ -277,9 +292,9 @@ public class ActionInstance implements Identifiable, Comparable<ActionInstance> 
     }
 
     /**
+     * Comapres two instances lexicographically based on their actions.
      *
-     * @param a
-     * @return
+     * @see Comparable#compareTo(java.lang.Object)
      */
     @Override
     public int compareTo(ActionInstance a) {

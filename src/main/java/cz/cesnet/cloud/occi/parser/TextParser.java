@@ -102,6 +102,10 @@ public class TextParser implements Parser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TextParser.class);
 
+    /**
+     * @see Parser#parseModel(java.lang.String, java.lang.String,
+     * com.sun.net.httpserver.Headers)
+     */
     @Override
     public Model parseModel(String mediaType, String body, Headers headers) throws ParsingException {
         LOGGER.debug("Parsing model...");
@@ -413,6 +417,10 @@ public class TextParser implements Parser {
         return defaultKinds;
     }
 
+    /**
+     * @see Parser#parseLocations(java.lang.String, java.lang.String,
+     * com.sun.net.httpserver.Headers)
+     */
     @Override
     public List<URI> parseLocations(String mediaType, String body, Headers headers) throws ParsingException {
         LOGGER.debug("Parsing location...");
@@ -462,6 +470,11 @@ public class TextParser implements Parser {
         return locationsURI;
     }
 
+    /**
+     * @see Parser#parseCollection(java.lang.String, java.lang.String,
+     * com.sun.net.httpserver.Headers,
+     * cz.cesnet.cloud.occi.parser.CollectionType)
+     */
     @Override
     public Collection parseCollection(String mediaType, String body, Headers headers, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Parsing collection...");
@@ -863,11 +876,6 @@ public class TextParser implements Parser {
         return action;
     }
 
-    /**
-     *
-     * @param uri
-     * @return
-     */
     public static String[] divideUriByLastSegment(String uri) {
         String[] parts = new String[2];
         parts[0] = uri.substring(uri.lastIndexOf('/') + 1);

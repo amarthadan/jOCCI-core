@@ -16,7 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Class representing an OCCI Entity
+ * Abstract class representing an OCCI Entity.
  *
  * @author Michal Kimle <kimle.michal@gmail.com>
  */
@@ -32,13 +32,14 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     private final AttributeMapCover attributes = new AttributeMapCover();
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param id cannot be null
-     * @param kind cannot be null
-     * @param title
-     * @param model
-     * @throws InvalidAttributeValueException
+     * @param id occi.core.id attribute. Cannot be null.
+     * @param kind entity's kind. Cannot be null.
+     * @param title occi.core.title attribute
+     * @param model entity's model
+     * @throws InvalidAttributeValueException in case of invalid id or title
+     * value
      */
     public Entity(String id, Kind kind, String title, Model model) throws InvalidAttributeValueException {
         LOGGER.debug("Creating Entity: class={}, id={}, kind={}, title={}, model={}", getClass().getName(), id, kind, title, model);
@@ -59,27 +60,31 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Constructor.
      *
-     * @param id cannot be null
-     * @param kind cannot be null
-     * @throws InvalidAttributeValueException
+     * @param id occi.core.id attribute. Cannot be null.
+     * @param kind entity's kind. Cannot be null.
+     * @throws InvalidAttributeValueException in case of invalid id or title
+     * value
      */
     public Entity(String id, Kind kind) throws InvalidAttributeValueException {
         this(id, kind, null, null);
     }
 
     /**
+     * Returns entity's id.
      *
-     * @return
+     * @return entity's id
      */
     public String getId() {
         return getValue(ID_ATTRIBUTE_NAME);
     }
 
     /**
+     * Sets entity's id.
      *
-     * @param id cannot be null
-     * @throws InvalidAttributeValueException
+     * @param id entity's id. Cannot be null.
+     * @throws InvalidAttributeValueException in case of invalid id value
      */
     public void setId(String id) throws InvalidAttributeValueException {
         if (id == null) {
@@ -90,16 +95,18 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Returns entity's kind.
      *
-     * @return
+     * @return entity's kind
      */
     public Kind getKind() {
         return kind;
     }
 
     /**
+     * Sets entity's kind.
      *
-     * @param kind cannot be null
+     * @param kind entity's kind. Cannot be null.
      */
     public void setKind(Kind kind) {
         if (kind == null) {
@@ -110,8 +117,9 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Returns entity's identifier.
      *
-     * @return
+     * @return entity's identifier
      */
     @Override
     public String getIdentifier() {
@@ -119,33 +127,37 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Returns entity's title.
      *
-     * @return
+     * @return entity's title
      */
     public String getTitle() {
         return getValue(TITLE_ATTRIBUTE_NAME);
     }
 
     /**
+     * Sets entity's title.
      *
-     * @param title
-     * @throws InvalidAttributeValueException
+     * @param title entity's title
+     * @throws InvalidAttributeValueException in case of invalit tile value
      */
     public void setTitle(String title) throws InvalidAttributeValueException {
         addAttribute(TITLE_ATTRIBUTE_NAME, title);
     }
 
     /**
+     * Returns entity's model.
      *
-     * @return
+     * @return entity's model
      */
     public Model getModel() {
         return model;
     }
 
     /**
+     * Sets entity's model.
      *
-     * @param model
+     * @param model entity's model
      */
     public void setModel(Model model) {
         this.model = model;
@@ -248,172 +260,196 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Removes attribute from entity.
      *
-     * @param attributeIdentifier
+     * @param attributeIdentifier identifier of the attribute to be removed
      */
     public void removeAttribute(String attributeIdentifier) {
         attributes.remove(attributeIdentifier);
     }
 
     /**
+     * Checks whether entity has given attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute to be looked up
+     * @return true if entity has given attribute, false otherwise
      */
     public boolean containsAttribute(Attribute attribute) {
         return attributes.containsAttribute(attribute);
     }
 
     /**
+     * Checks whether entity has given attribute.
      *
-     * @param attributeName
-     * @return
+     * @param attributeName name of the attribute to be looked up
+     * @return true if entity has given attribute, false otherwise
      */
     public boolean containsAttribute(String attributeName) {
         return attributes.containsAttribute(attributeName);
     }
 
     /**
+     * Returns value of given attribute.
      *
-     * @param attribute
-     * @return
+     * @param attribute attribute which value will be returned
+     * @return value of given attribute
      */
     public String getValue(Attribute attribute) {
         return attributes.getValue(attribute);
     }
 
     /**
+     * Returns value of given attribute.
      *
-     * @param attributeName
-     * @return
+     * @param attributeName name of the attribute which value will be returned
+     * @return value of given attribute
      */
     public String getValue(String attributeName) {
         return attributes.getValue(attributeName);
     }
 
     /**
+     * Returns all entity's attributes and their values in form of map.
      *
-     * @return
+     * @return all entity's attributes and their values in form of map
      */
     public Map<Attribute, String> getAttributes() {
         return attributes.getAttributes();
     }
 
     /**
-     *
+     * Removes all entity's attributes.
      */
     public void clearAttributes() {
         attributes.clear();
     }
 
     /**
+     * Returns text representation of entity's attributes in one line.
      *
-     * @return
+     * @return text representation of entity's attributes in one line
      */
     protected String attributesToOneLineText() {
         return attributes.toOneLineText();
     }
 
     /**
+     * Returns a text representation of entity's attributes with prefix.
      *
-     * @return
+     * @return text representation of entity's attributes with prefix
      */
     protected String attributesToPrefixText() {
         return attributes.toPrefixText();
     }
 
+    /**
+     * Returns an occi text representation of entity's attributes in form of
+     * headers.
+     *
+     * @return occi text representation of entity's attributes in form of
+     * headers
+     */
     protected Headers attributesToHeaders() {
         return attributes.toHeaders();
     }
 
     /**
+     * Checks whether the entity has given mixin.
      *
-     * @param mixin
-     * @return
+     * @param mixin mixin to be looked up
+     * @return true if entity has given mixin, false otherwise
      */
     public boolean containsMixin(Mixin mixin) {
         return mixins.contains(mixin);
     }
 
     /**
+     * Checks whether the entity has given mixin.
      *
-     * @param mixinIdentifier
-     * @return
+     * @param mixinIdentifier identifier of mixin to be looked up
+     * @return true if entity has given mixin, false otherwise
      */
     public boolean containsMixin(String mixinIdentifier) {
         return mixins.contains(mixinIdentifier);
     }
 
     /**
+     * Adds mixin to the entity.
      *
-     * @param mixin
-     * @return
+     * @param mixin mixin to be added
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addMixin(Mixin mixin) {
         return mixins.add(mixin);
     }
 
     /**
+     * Adds all the mixins from given collection to the entity.
      *
-     * @param mixins
-     * @return
+     * @param mixins collection of mixins
+     * @return true if the addition was successful, false otherwise
      */
     public boolean addMixins(Collection<Mixin> mixins) {
         return this.mixins.addAll(mixins);
     }
 
     /**
+     * Returns mixin form entity.
      *
-     * @param mixinIdentifier
-     * @return
+     * @param mixinIdentifier identifier of requested mixin
+     * @return mixin form entity
      */
     public Mixin getMixin(String mixinIdentifier) {
         return mixins.get(mixinIdentifier);
     }
 
     /**
+     * Removes mixin from entity.
      *
-     * @param mixin
-     * @return
+     * @param mixin mixin to be removed
+     * @return true if the removal was successful, false otherwise
      */
     public boolean removeMixin(Mixin mixin) {
         return mixins.remove(mixin);
     }
 
     /**
-     *
+     * Removes all mixins from entity.
      */
     public void clearMixins() {
         mixins.clear();
     }
 
     /**
+     * Returns all mixins from entity in form of a set.
      *
-     * @return
+     * @return all mixins from entity in form of a set
      */
     public Set<Mixin> getMixins() {
         return mixins.getSet();
     }
 
     /**
+     * Returns default entity's scheme 'http://schemas.ogf.org/occi/core#'
      *
-     * @return
+     * @return default entity's scheme
      */
     public static URI getSchemeDefault() {
         return Category.SCHEME_CORE_DEFAULT;
     }
 
     /**
+     * Returns default entity's term 'entity'.
      *
-     * @return
+     * @return default entity's term
      */
     public static String getTermDefault() {
         return "entity";
     }
 
     /**
-     *
-     * @return
+     * @see Object#hashCode()
+     * @return entity's hash code
      */
     @Override
     public int hashCode() {
@@ -424,9 +460,9 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
-     *
-     * @param obj
-     * @return
+     * @see Object#equals(java.lang.Object)
+     * @param obj object to compare entity with
+     * @return true if two entity are equal, false otherwise
      */
     @Override
     public boolean equals(Object obj) {
@@ -447,8 +483,10 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
+     * Resturns string representation of the entity
      *
-     * @return
+     * @see Object#toString()
+     * @return string representation of the entity
      */
     @Override
     public String toString() {
@@ -480,9 +518,9 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     public abstract String toJSON();
 
     /**
+     * Comapres two entities lexicographically based on their identifier.
      *
-     * @param e
-     * @return
+     * @see Comparable#compareTo(java.lang.Object)
      */
     @Override
     public int compareTo(Entity e) {

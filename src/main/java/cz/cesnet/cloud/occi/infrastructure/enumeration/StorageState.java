@@ -8,10 +8,6 @@ public enum StorageState {
 
     ONLINE, OFFLINE, BACKUP, SNAPSHOT, RESIZE, DEGRADED;
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return this.name().toLowerCase();

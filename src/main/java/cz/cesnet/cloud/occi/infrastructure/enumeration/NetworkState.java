@@ -8,10 +8,6 @@ public enum NetworkState {
 
     ACTIVE, INACTIVE;
 
-    /**
-     *
-     * @return
-     */
     @Override
     public String toString() {
         return this.name().toLowerCase();

@@ -5,9 +5,6 @@ import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Allocation;
 import java.net.URI;
-import java.net.URISyntaxException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Class representing an OCCI IPNetwork
@@ -16,80 +13,91 @@ import org.slf4j.LoggerFactory;
  */
 public class IPNetwork extends Network {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(IPNetwork.class);
     public static final String ADDRESS_ATTRIBUTE_NAME = "occi.network.address";
     public static final String GATEWAY_ATTRIBUTE_NAME = "occi.network.gateway";
     public static final String ALLOCATION_ATTRIBUTE_NAME = "occi.network.allocation";
 
     /**
+     * Constructor.
      *
-     * @param id cannot be null
-     * @param kind cannot be null
-     * @param title
-     * @param model
-     * @param summary
-     * @throws InvalidAttributeValueException
+     * @param id occi.core.id attribute. Cannot be null.
+     * @param kind ipnetwork's kind. Cannot be null.
+     * @param title occi.core.title attribute
+     * @param model ipnetwork's model
+     * @param summary ipnetwork's summary
+     * @throws InvalidAttributeValueException in case of invalid id, title or
+     * summary value
      */
     public IPNetwork(String id, Kind kind, String title, Model model, String summary) throws InvalidAttributeValueException {
         super(id, kind, title, model, summary);
     }
 
     /**
+     * Constructor.
      *
-     * @param id cannot be null
-     * @param kind cannot be null
-     * @throws InvalidAttributeValueException
+     * @param id occi.core.id attribute. Cannot be null.
+     * @param kind ipnetwork's kind. Cannot be null.
+     * @throws InvalidAttributeValueException in case of invalid id value
      */
     public IPNetwork(String id, Kind kind) throws InvalidAttributeValueException {
         super(id, kind);
     }
 
     /**
+     * Returns ipnetwork's address (attribute occi.network.address).
      *
-     * @return
+     * @return ipnetwork's address
      */
     public String getAddress() {
         return getValue(ADDRESS_ATTRIBUTE_NAME);
     }
 
     /**
+     * Sets ipnetwork's address.
      *
-     * @param address
-     * @throws InvalidAttributeValueException
+     * @param address ipnetwork's address
+     * @throws InvalidAttributeValueException in case value for address is
+     * invalid
      */
     public void setAddress(String address) throws InvalidAttributeValueException {
         addAttribute(ADDRESS_ATTRIBUTE_NAME, address);
     }
 
     /**
+     * Returns ipnetwork's gateway (attribute occi.network.gateway).
      *
-     * @return
+     * @return ipnetwork's gateway
      */
     public String getGateway() {
         return getValue(GATEWAY_ATTRIBUTE_NAME);
     }
 
     /**
+     * Sets ipnetwork's gateway
      *
-     * @param gateway
-     * @throws InvalidAttributeValueException
+     * @param gateway ipnetwork's gateway
+     * @throws InvalidAttributeValueException in case value for gateway is
+     * invalid
      */
     public void setGateway(String gateway) throws InvalidAttributeValueException {
         addAttribute(GATEWAY_ATTRIBUTE_NAME, gateway);
     }
 
     /**
+     * Returns ipnetwork's allocation (attribute occi.network.allocation).
      *
-     * @return
+     * @return ipnetwork's allocation
      */
     public String getAllocation() {
         return getValue(ALLOCATION_ATTRIBUTE_NAME);
     }
 
     /**
+     * Sets ipnetwork's allocation.
      *
-     * @param allocation cannot be null
-     * @throws InvalidAttributeValueException
+     * @param allocation ipnetwork's allocation. Cannot be null.
+     * @throws InvalidAttributeValueException in case value for allocation is
+     * invalid
      */
     public void setAllocation(Allocation allocation) throws InvalidAttributeValueException {
         if (allocation == null) {
@@ -99,30 +107,30 @@ public class IPNetwork extends Network {
     }
 
     /**
+     * Sets ipnetwork's allocation.
      *
-     * @param allocationName
-     * @throws InvalidAttributeValueException
+     * @param allocationName ipnetwork's allocation. Cannot be null.
+     * @throws InvalidAttributeValueException in case value for allocation is
+     * invalid
      */
     public void setAllocation(String allocationName) throws InvalidAttributeValueException {
         addAttribute(ALLOCATION_ATTRIBUTE_NAME, allocationName);
     }
 
     /**
+     * Returns ipnetwork's default scheme
+     * 'http://schemas.ogf.org/occi/infrastructure/network#'
      *
-     * @return
+     * @return ipnetwork's default scheme
      */
     public static URI getSchemeDefault() {
-        try {
-            return new URI("http://schemas.ogf.org/occi/infrastructure/network#");
-        } catch (URISyntaxException ex) {
-            LOGGER.error("Wrong scheme URI", ex);
-            return null;
-        }
+        return URI.create("http://schemas.ogf.org/occi/infrastructure/network#");
     }
 
     /**
+     * Returns ipnetwork's default term 'ipnetwork'.
      *
-     * @return
+     * @return ipnetwork's default term
      */
     public static String getTermDefault() {
         return "ipnetwork";
