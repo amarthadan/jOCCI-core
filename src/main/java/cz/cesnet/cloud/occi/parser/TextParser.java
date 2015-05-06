@@ -741,7 +741,7 @@ public class TextParser implements Parser {
 
         for (String attribute : attributes) {
             LOGGER.debug("Attribute represented by string: {}", attribute);
-            String[] parts = attribute.split("=");
+            String[] parts = attribute.split("=", 2);
             if (parts.length != 2) {
                 throw new ParsingException("Wrong attribute format.");
             }
@@ -809,12 +809,25 @@ public class TextParser implements Parser {
 
         try {
             Kind kind;
+            List<Mixin> mixins = new ArrayList<>();
             if (category != null && !category.isEmpty()) {
-                String[] splitedCategory = category.split("#");
-                if (splitedCategory.length != 2) {
-                    throw new ParsingException("Invalid link category");
+                String[] categories = category.split(" ");
+                String[] kindCategory = categories[0].split("#");
+                if (kindCategory.length != 2) {
+                    throw new ParsingException("Invalid link category: " + category);
                 }
-                kind = new Kind(new URI(splitedCategory[0] + "#"), splitedCategory[1]);
+                kind = new Kind(new URI(kindCategory[0] + "#"), kindCategory[1]);
+
+                if (categories.length > 1) {
+                    for (int i = 1; i < categories.length; i++) {
+                        String[] splitedCategory = categories[i].split("#");
+                        if (splitedCategory.length != 2) {
+                            throw new ParsingException("Invalid link category: " + category);
+                        }
+                        Mixin mixin = new Mixin(new URI(splitedCategory[0] + "#"), splitedCategory[1]);
+                        mixins.add(mixin);
+                    }
+                }
             } else {
                 kind = new Kind(Link.getSchemeDefault(), Link.getTermDefault());
             }
@@ -827,6 +840,8 @@ public class TextParser implements Parser {
             } else {
                 link = new Link(UUID.randomUUID().toString(), kind);
             }
+
+            link.addMixins(mixins);
 
             link.setTarget(uri);
             link.setRelation(rel);
