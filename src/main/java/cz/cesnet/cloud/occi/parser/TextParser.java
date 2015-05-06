@@ -741,7 +741,7 @@ public class TextParser implements Parser {
 
         for (String attribute : attributes) {
             LOGGER.debug("Attribute represented by string: {}", attribute);
-            String[] parts = attribute.split("=");
+            String[] parts = attribute.split("=", 2);
             if (parts.length != 2) {
                 throw new ParsingException("Wrong attribute format.");
             }
