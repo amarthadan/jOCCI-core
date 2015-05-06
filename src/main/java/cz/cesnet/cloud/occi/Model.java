@@ -342,7 +342,7 @@ public class Model {
     public CollectionType findKindType(String location) {
         Kind kind = null;
         for (Kind k : kinds.getSet()) {
-            if (k.getLocation().toString().equals(location)) {
+            if (k.getLocation().getPath().equals(location)) {
                 kind = k;
                 break;
             }
