@@ -740,8 +740,9 @@ public class TextParser implements Parser {
         Map<String, String> result = new HashMap<>();
 
         for (String attribute : attributes) {
-            LOGGER.debug("Attribute represented by string: {}", attribute);
-            String[] parts = attribute.split("=", 2);
+            String trimmedAttribute = attribute.trim();
+            LOGGER.debug("Attribute represented by string: {}", trimmedAttribute);
+            String[] parts = trimmedAttribute.split("=", 2);
             if (parts.length != 2) {
                 throw new ParsingException("Wrong attribute format.");
             }
