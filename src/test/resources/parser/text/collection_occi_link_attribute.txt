@@ -1,1 +1,1 @@
-occi.core.id="87f3bfc3-42d4-4474-b45c-757e55e093e9",occi.networkinterface.interface="eth0";,occi.networkinterface.mac="00:11:22:33:44:55";,occi.networkinterface.state="active";,occi.core.source="/vms/foo/vm1",occi.core.target="/network/123"
+occi.core.id="87f3bfc3-42d4-4474-b45c-757e55e093e9",occi.networkinterface.interface="eth0",occi.networkinterface.mac="00:11:22:33:44:55",occi.networkinterface.state="active",occi.core.source="/vms/foo/vm1",occi.core.target="/network/123"
