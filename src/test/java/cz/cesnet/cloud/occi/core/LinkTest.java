@@ -51,7 +51,7 @@ public class LinkTest {
     }
 
     private Link prepareLink() throws Exception {
-        Kind rel = new Kind(Category.SCHEME_CORE_DEFAULT, Link.getTermDefault());
+        Kind rel = new Kind(Category.SCHEME_CORE_DEFAULT, Link.TERM_DEFAULT);
         Kind kind = new Kind(new URI("http://schemas.ogf.org/occi/infrastructure/compute#"), "console", "Link to the VM's console", new URI("/console/"), null);
         kind.addRelation(rel);
 
@@ -81,7 +81,7 @@ public class LinkTest {
     public void testToInlineText() throws Exception {
         String[] lines = TestHelper.readFile(RESOURCE_PATH + "inline_link_plain.txt").split("\n");
 
-        Kind kind = new Kind(NetworkInterface.getSchemeDefault(), NetworkInterface.getTermDefault());
+        Kind kind = new Kind(NetworkInterface.SCHEME_DEFAULT, NetworkInterface.TERM_DEFAULT);
         Link link = new Link("456", kind);
         link.setRelation("http://schemas.ogf.org/occi/infrastructure#network");
         link.setTarget("/network/123");
@@ -105,7 +105,7 @@ public class LinkTest {
         String[] lines = TestHelper.readFile(RESOURCE_PATH + "inline_link_headers.txt").split("\n");
         Headers headers = new Headers();
 
-        Kind kind = new Kind(NetworkInterface.getSchemeDefault(), NetworkInterface.getTermDefault());
+        Kind kind = new Kind(NetworkInterface.SCHEME_DEFAULT, NetworkInterface.TERM_DEFAULT);
         Link link = new Link("456", kind);
         link.setRelation("http://schemas.ogf.org/occi/infrastructure#network");
         link.setTarget("/network/123");
@@ -134,7 +134,7 @@ public class LinkTest {
     @Test
     public void testInvalidToInlineText() throws InvalidAttributeValueException {
         try {
-            Kind kind = new Kind(NetworkInterface.getSchemeDefault(), NetworkInterface.getTermDefault());
+            Kind kind = new Kind(NetworkInterface.SCHEME_DEFAULT, NetworkInterface.TERM_DEFAULT);
             Link link = new Link("456", kind);
             link.setRelation("http://schemas.ogf.org/occi/infrastructure#network");
             link.toInlineText();
@@ -144,7 +144,7 @@ public class LinkTest {
         }
 
         try {
-            Kind kind = new Kind(NetworkInterface.getSchemeDefault(), NetworkInterface.getTermDefault());
+            Kind kind = new Kind(NetworkInterface.SCHEME_DEFAULT, NetworkInterface.TERM_DEFAULT);
             Link link = new Link("456", kind);
             link.setTarget("/network/123");
             link.toInlineText();

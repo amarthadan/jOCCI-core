@@ -17,26 +17,26 @@ public class ActionTest {
         attributes.add(new Attribute("aaa"));
         attributes.add(new Attribute("bbb"));
         attributes.add(new Attribute("ccc"));
-        Action action = new Action(Compute.getSchemeDefault(), "start", "Start", attributes);
+        Action action = new Action(Compute.SCHEME_DEFAULT, "start", "Start", attributes);
 
         assertEquals(action.getAttributes(), attributes);
-        assertEquals(action.getScheme(), Compute.getSchemeDefault());
+        assertEquals(action.getScheme(), Compute.SCHEME_DEFAULT);
         assertEquals(action.getTerm(), "start");
         assertEquals(action.getTitle(), "Start");
     }
 
     @Test
     public void testMinimalConstructor() throws URISyntaxException {
-        Action action = new Action(Compute.getSchemeDefault(), "start");
+        Action action = new Action(Compute.SCHEME_DEFAULT, "start");
 
-        assertEquals(action.getScheme(), Compute.getSchemeDefault());
+        assertEquals(action.getScheme(), Compute.SCHEME_DEFAULT);
         assertEquals(action.getTerm(), "start");
     }
 
     @Test
     public void testInvalidConstructor() throws URISyntaxException {
         try {
-            Action action = new Action(null, Entity.getTermDefault());
+            Action action = new Action(null, Entity.TERM_DEFAULT);
             fail();
         } catch (NullPointerException ex) {
             //cool

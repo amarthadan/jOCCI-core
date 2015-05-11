@@ -5,7 +5,6 @@ import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.renderer.TextRenderer;
 import cz.cesnet.cloud.occi.type.Identifiable;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,8 +22,8 @@ import org.slf4j.LoggerFactory;
 public class Category implements Identifiable, Comparable<Category> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Category.class);
-    public static final URI SCHEME_CORE_DEFAULT = makeURI("http://schemas.ogf.org/occi/core#");
-    public static final URI SCHEME_INFRASTRUCTURE_DEFAULT = makeURI("http://schemas.ogf.org/occi/infrastructure#");
+    public static final URI SCHEME_CORE_DEFAULT = URI.create("http://schemas.ogf.org/occi/core#");
+    public static final URI SCHEME_INFRASTRUCTURE_DEFAULT = URI.create("http://schemas.ogf.org/occi/infrastructure#");
 
     private String term;
     private URI scheme;
@@ -75,15 +74,6 @@ public class Category implements Identifiable, Comparable<Category> {
      */
     public Category(URI scheme, String term) {
         this(scheme, term, null, null, null);
-    }
-
-    private static URI makeURI(String uri) {
-        try {
-            return new URI(uri);
-        } catch (URISyntaxException ex) {
-            LOGGER.error("Wrong scheme URI", ex);
-            return null;
-        }
     }
 
     /**

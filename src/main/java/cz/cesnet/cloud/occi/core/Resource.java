@@ -5,6 +5,7 @@ import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +21,9 @@ import org.slf4j.LoggerFactory;
 public class Resource extends Entity {
 
     public static final String SUMMARY_ATTRIBUTE_NAME = "occi.core.summary";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_CORE_DEFAULT;
+    public static final String TERM_DEFAULT = "resource";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
     private static final org.slf4j.Logger LOGGER = LoggerFactory.getLogger(Resource.class);
     private final SetCover<Link> links = new SetCover<>();
     private final SetCover<Action> actions = new SetCover<>();
@@ -251,22 +255,27 @@ public class Resource extends Entity {
     }
 
     /**
-     * Returns resource's default term 'resource'.
-     *
-     * @return resource's default term
-     */
-    public static String getTermDefault() {
-        return "resource";
-    }
-
-    /**
      * Returns resource's default identifier
      * 'http://schemas.ogf.org/occi/core#resource'
      *
      * @return resource's default identifier
      */
-    public static String getIdentifierDefault() {
-        return getSchemeDefault().toString() + getTermDefault();
+    @Override
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
+    }
+
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.addAll(Entity.getDefaultAttributes());
+        list.add(new Attribute(SUMMARY_ATTRIBUTE_NAME, false, false));
+
+        return list;
+    }
+
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Resource", URI.create("/resource/"), Resource.getDefaultAttributes());
+        return kind;
     }
 
     /**

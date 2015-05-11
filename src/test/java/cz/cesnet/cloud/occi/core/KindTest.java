@@ -19,27 +19,27 @@ public class KindTest {
         attributes.add(new Attribute("aaa"));
         attributes.add(new Attribute("bbb"));
         attributes.add(new Attribute("ccc"));
-        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault(), "title", new URI("/location/"), attributes);
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.TERM_DEFAULT, "title", new URI("/location/"), attributes);
 
         assertEquals(kind.getAttributes(), attributes);
         assertEquals(kind.getLocation(), new URI("/location/"));
         assertEquals(kind.getScheme(), Category.SCHEME_CORE_DEFAULT);
-        assertEquals(kind.getTerm(), Entity.getTermDefault());
+        assertEquals(kind.getTerm(), Entity.TERM_DEFAULT);
         assertEquals(kind.getTitle(), "title");
     }
 
     @Test
     public void testMinimalConstructor() throws URISyntaxException {
-        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.TERM_DEFAULT);
 
         assertEquals(kind.getScheme(), Category.SCHEME_CORE_DEFAULT);
-        assertEquals(kind.getTerm(), Entity.getTermDefault());
+        assertEquals(kind.getTerm(), Entity.TERM_DEFAULT);
     }
 
     @Test
     public void testInvalidConstructor() throws URISyntaxException {
         try {
-            Kind kind = new Kind(null, Entity.getTermDefault());
+            Kind kind = new Kind(null, Entity.TERM_DEFAULT);
             fail();
         } catch (NullPointerException ex) {
             //cool
@@ -69,7 +69,7 @@ public class KindTest {
         Action a1 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "start");
         Action a2 = new Action(new URI("http://schemas.ogf.org/occi/infrastructure/compute/action#"), "stop");
 
-        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.TERM_DEFAULT);
         assertEquals(lines[0], kind.toText());
 
         kind.setTitle("Entity");
@@ -84,7 +84,7 @@ public class KindTest {
         kind.addAttribute(at2);
         assertEquals(lines[3], kind.toText());
 
-        kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.TERM_DEFAULT);
         kind.addAction(a1);
         kind.addAction(a2);
         assertEquals(lines[4], kind.toText());
@@ -116,7 +116,7 @@ public class KindTest {
 
         Headers headers = new Headers();
 
-        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        Kind kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.TERM_DEFAULT);
         headers.add("Category", lines[0]);
         assertEquals(headers, kind.toHeaders());
 
@@ -138,7 +138,7 @@ public class KindTest {
         headers.add("Category", lines[3]);
         assertEquals(headers, kind.toHeaders());
 
-        kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        kind = new Kind(Category.SCHEME_CORE_DEFAULT, Entity.TERM_DEFAULT);
         kind.addAction(a1);
         kind.addAction(a2);
         headers.clear();
