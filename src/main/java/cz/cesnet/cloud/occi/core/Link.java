@@ -262,7 +262,13 @@ public class Link extends Entity {
         }
 
         sb.append("category");
-        sb.append(TextRenderer.surroundString(getKind().getIdentifier()));
+        sb.append("=\"");
+        sb.append(getKind().getIdentifier());
+        for (Mixin mixin : getMixins()) {
+            sb.append(" ");
+            sb.append(mixin.getIdentifier());
+        }
+        sb.append("\";");
 
         sb.append(attributesToOneLineText());
 

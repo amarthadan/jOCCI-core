@@ -9,6 +9,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import org.slf4j.LoggerFactory;
@@ -86,13 +87,36 @@ public class Resource extends Entity {
     }
 
     /**
-     * Checks whether resource contains given link.
+     * Checks whether resource contains link which kind has given term.
      *
-     * @param linkIdentifier identifier of link to be looked up
+     * @param term term of link's kind
      * @return true is resource contains given link, false otherwise
      */
-    public boolean containsLink(String linkIdentifier) {
-        return links.contains(linkIdentifier);
+    public boolean containsLink(String term) {
+        for (Link link : links.getSet()) {
+            if (link.getKind().getTerm().equals(term)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Checks whether resource contains link which kind has given identifier.
+     *
+     * @param identifier identifier of link's kind
+     * @return true is resource contains given link, false otherwise
+     */
+    public boolean containsLink(URI identifier) {
+        String identifierString = identifier.toString();
+        for (Link link : links.getSet()) {
+            if (link.getKind().getIdentifier().equals(identifierString)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -134,13 +158,38 @@ public class Resource extends Entity {
     }
 
     /**
-     * Returns resource's link.
+     * Returns resources' links which kind has given term.
      *
-     * @param linkIdentifier identifier of requested link
+     * @param term term of link's kind
      * @return resource's link
      */
-    public Link getLink(String linkIdentifier) {
-        return links.get(linkIdentifier);
+    public Set<Link> getLinks(String term) {
+        Set<Link> set = new HashSet<>();
+        for (Link link : links.getSet()) {
+            if (link.getKind().getTerm().equals(term)) {
+                set.add(link);
+            }
+        }
+
+        return set;
+    }
+
+    /**
+     * Returns resources' links which kind has given identifier.
+     *
+     * @param identifier identifier of link's kind
+     * @return resource's link
+     */
+    public Set<Link> getLinks(URI identifier) {
+        String identifierString = identifier.toString();
+        Set<Link> set = new HashSet<>();
+        for (Link link : links.getSet()) {
+            if (link.getKind().getIdentifier().equals(identifierString)) {
+                set.add(link);
+            }
+        }
+
+        return set;
     }
 
     /**
