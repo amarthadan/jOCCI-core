@@ -254,6 +254,10 @@ public class DataGenerator {
         l.addAttribute(StorageLink.STATE_ATTRIBUTE_NAME, "active");
         l.setTarget("/storage/852");
         l.setRelation("http://schemas.ogf.org/occi/infrastructure#storage");
+
+        Mixin m = new Mixin(new URI("http://opennebula.org/occi/infrastructure#"), "storagelink");
+        l.addMixin(m);
+
         links.add(l);
 
         return links;
