@@ -145,8 +145,8 @@ public class StorageLink extends Link {
         return list;
     }
 
-    public static Mixin getDefaultMixin() {
-        Mixin mixin = new Mixin(SCHEME_DEFAULT, TERM_DEFAULT, "Storage Link", URI.create("/storagelink/"), StorageLink.getDefaultAttributes());
-        return mixin;
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Storage Link", URI.create("/storagelink/"), StorageLink.getDefaultAttributes());
+        return kind;
     }
 }
