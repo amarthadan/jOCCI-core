@@ -5,7 +5,6 @@ import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Category;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Link;
-import cz.cesnet.cloud.occi.core.Mixin;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.StorageLinkState;
 import java.net.URI;
