@@ -16,8 +16,8 @@ public class EntityTest {
 
     @Before
     public void setUp() throws Exception {
-        kind = new Kind(Entity.getSchemeDefault(), Entity.getTermDefault());
-        mixin = new Mixin(NetworkInterface.getSchemeDefault(), NetworkInterface.getTermDefault());
+        kind = new Kind(Entity.SCHEME_DEFAULT, Entity.TERM_DEFAULT);
+        mixin = new Mixin(NetworkInterface.SCHEME_DEFAULT, NetworkInterface.TERM_DEFAULT);
         model = new Model();
         model.addKind(kind);
         entity = new Link("link_id", kind);

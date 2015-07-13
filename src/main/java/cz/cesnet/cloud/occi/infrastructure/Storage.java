@@ -1,12 +1,15 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Category;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Resource;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.StorageState;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing an OCCI Storage.
@@ -17,6 +20,9 @@ public class Storage extends Resource {
 
     public static final String SIZE_ATTRIBUTE_NAME = "occi.storage.size";
     public static final String STATE_ATTRIBUTE_NAME = "occi.storage.state";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    public static final String TERM_DEFAULT = "storage";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     /**
      * Constructor.
@@ -122,5 +128,41 @@ public class Storage extends Resource {
      */
     public static String getTermDefault() {
         return "storage";
+    }
+
+    /**
+     * Returns storage's default identifier
+     * 'http://schemas.ogf.org/occi/infrastructure#storage'
+     *
+     * @return storage's default identifier
+     */
+    @Override
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
+    }
+
+    /**
+     * Returns storage's default attributes. For Storage class those are
+     * attributes occi.storage.size and occi.storage.state.
+     *
+     * @return list of storage's default attributes
+     */
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.addAll(Resource.getDefaultAttributes());
+        list.add(new Attribute(SIZE_ATTRIBUTE_NAME, true, false));
+        list.add(new Attribute(STATE_ATTRIBUTE_NAME, true, true));
+
+        return list;
+    }
+
+    /**
+     * Returns storage's default kind instance.
+     *
+     * @return storage's default kind
+     */
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Storage Resource", URI.create("/storage/"), Storage.getDefaultAttributes());
+        return kind;
     }
 }

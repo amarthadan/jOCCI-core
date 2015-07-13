@@ -1,10 +1,14 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Kind;
+import cz.cesnet.cloud.occi.core.Mixin;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Allocation;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing an OCCI IPNetwork
@@ -16,6 +20,9 @@ public class IPNetwork extends Network {
     public static final String ADDRESS_ATTRIBUTE_NAME = "occi.network.address";
     public static final String GATEWAY_ATTRIBUTE_NAME = "occi.network.gateway";
     public static final String ALLOCATION_ATTRIBUTE_NAME = "occi.network.allocation";
+    public static final URI SCHEME_DEFAULT = URI.create("http://schemas.ogf.org/occi/infrastructure/network#");
+    public static final String TERM_DEFAULT = "ipnetwork";
+    public static final String MIXIN_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     /**
      * Constructor.
@@ -118,21 +125,39 @@ public class IPNetwork extends Network {
     }
 
     /**
-     * Returns ipnetwork's default scheme
-     * 'http://schemas.ogf.org/occi/infrastructure/network#'
+     * Returns ipnetwork's default identifier
+     * 'http://schemas.ogf.org/occi/infrastructure/network#ipnetworking'
      *
-     * @return ipnetwork's default scheme
+     * @return ipnetwork's default identifier
      */
-    public static URI getSchemeDefault() {
-        return URI.create("http://schemas.ogf.org/occi/infrastructure/network#");
+    @Override
+    public String getDefaultKindIdentifier() {
+        return MIXIN_IDENTIFIER_DEFAULT;
     }
 
     /**
-     * Returns ipnetwork's default term 'ipnetwork'.
+     * Returns ipnetwork's default attributes. For IPNetwork class those are
+     * attributes occi.network.address, occi.network.gateway and
+     * occi.network.allocation.
      *
-     * @return ipnetwork's default term
+     * @return list of ipnetwork's default attributes
      */
-    public static String getTermDefault() {
-        return "ipnetwork";
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.add(new Attribute(ADDRESS_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(GATEWAY_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(ALLOCATION_ATTRIBUTE_NAME, false, false));
+
+        return list;
+    }
+
+    /**
+     * Returns ipnetwork's default mixin instance.
+     *
+     * @return ipnetwork's default mixin
+     */
+    public static Mixin getDefaultMixin() {
+        Mixin mixin = new Mixin(SCHEME_DEFAULT, TERM_DEFAULT, "IP Network Mixin", URI.create("/mixins/ipnetwork/"), IPNetwork.getDefaultAttributes());
+        return mixin;
     }
 }

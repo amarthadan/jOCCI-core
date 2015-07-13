@@ -1,12 +1,15 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Category;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.StorageLinkState;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing an OCCI StorageLink
@@ -18,6 +21,9 @@ public class StorageLink extends Link {
     public static final String DEVICE_ID_ATTRIBUTE_NAME = "occi.storagelink.deviceid";
     public static final String MOUNTPOINT_ATTRIBUTE_NAME = "occi.storagelink.mountpoint";
     public static final String STATE_ATTRIBUTE_NAME = "occi.storagelink.state";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    public static final String TERM_DEFAULT = "storagelink";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     /**
      * Constructor.
@@ -118,21 +124,40 @@ public class StorageLink extends Link {
     }
 
     /**
-     * Returns storage link's default scheme
-     * 'http://schemas.ogf.org/occi/infrastructure#'.
+     * Returns storagelink's default identifier
+     * 'http://schemas.ogf.org/occi/infrastructure#storagelink'
      *
-     * @return storage link's default scheme
+     * @return storagelink's default identifier
      */
-    public static URI getSchemeDefault() {
-        return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    @Override
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
     }
 
     /**
-     * Returns storage link's default term 'storagelink'.
+     * Returns storagelink's default attributes. For StorageLink class those are
+     * attributes occi.storagelink.deviceid, occi.storagelink.mountpoint and
+     * occi.storagelink.state.
      *
-     * @return storage link's default term
+     * @return list of storagelink's default attributes
      */
-    public static String getTermDefault() {
-        return "storagelink";
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.addAll(Storage.getDefaultAttributes());
+        list.add(new Attribute(DEVICE_ID_ATTRIBUTE_NAME, true, false));
+        list.add(new Attribute(MOUNTPOINT_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(STATE_ATTRIBUTE_NAME, true, true));
+
+        return list;
+    }
+
+    /**
+     * Returns storagelink's default kind instance.
+     *
+     * @return storagelink's default kind
+     */
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Storage Link", URI.create("/storagelink/"), StorageLink.getDefaultAttributes());
+        return kind;
     }
 }

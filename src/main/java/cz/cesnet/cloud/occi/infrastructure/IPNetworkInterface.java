@@ -1,10 +1,14 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Kind;
+import cz.cesnet.cloud.occi.core.Mixin;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Allocation;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing an OCCI IPNetworkInterface
@@ -16,6 +20,9 @@ public class IPNetworkInterface extends NetworkInterface {
     public static final String ADDRESS_ATTRIBUTE_NAME = "occi.networkinterface.address";
     public static final String GATEWAY_ATTRIBUTE_NAME = "occi.networkinterface.gateway";
     public static final String ALLOCATION_ATTRIBUTE_NAME = "occi.networkinterface.allocation";
+    public static final URI SCHEME_DEFAULT = URI.create("http://schemas.ogf.org/occi/infrastructure/networkinterface#");
+    public static final String TERM_DEFAULT = "ipnetworkinterface";
+    public static final String MIXIN_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     /**
      * Constructor.
@@ -120,21 +127,39 @@ public class IPNetworkInterface extends NetworkInterface {
     }
 
     /**
-     * Returns ipnetwork interface's default scheme
-     * 'http://schemas.ogf.org/occi/infrastructure/networkinterface#'
+     * Returns ipnetworkinterface's default identifier
+     * 'http://schemas.ogf.org/occi/infrastructure/networkinterface#ipnetworkinterface'
      *
-     * @return ipnetwork interface's default scheme
+     * @return ipnetworkinterface's default identifier
      */
-    public static URI getSchemeDefault() {
-        return URI.create("http://schemas.ogf.org/occi/infrastructure/networkinterface#");
+    @Override
+    public String getDefaultKindIdentifier() {
+        return MIXIN_IDENTIFIER_DEFAULT;
     }
 
     /**
-     * Returns ipnetwork interface's default term 'ipnetworkinterface.'.
+     * Returns ipnetworkinterface's default attributes. For IPNetworkInterface
+     * class those are attributes occi.networkinterface.address,
+     * occi.networkinterface.gateway and occi.networkinterface.allocation.
      *
-     * @return ipnetwork interface's default term
+     * @return list of ipnetworkinterface's default attributes
      */
-    public static String getTermDefault() {
-        return "ipnetworkinterface.";
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.add(new Attribute(ADDRESS_ATTRIBUTE_NAME, true, false));
+        list.add(new Attribute(GATEWAY_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(ALLOCATION_ATTRIBUTE_NAME, true, false));
+
+        return list;
+    }
+
+    /**
+     * Returns ipnetworkinterface's default mixin instance.
+     *
+     * @return ipnetworkinterface's default mixin
+     */
+    public static Mixin getDefaultMixin() {
+        Mixin mixin = new Mixin(SCHEME_DEFAULT, TERM_DEFAULT, "IP Networkinterface Mixin", URI.create("/mixins/ipnetworkinterface/"), IPNetworkInterface.getDefaultAttributes());
+        return mixin;
     }
 }

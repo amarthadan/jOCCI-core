@@ -1,6 +1,7 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Category;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Resource;
@@ -8,6 +9,8 @@ import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.ComputeState;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.Architecture;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing an OCCI Compute
@@ -22,6 +25,9 @@ public class Compute extends Resource {
     public static final String SPEED_ATTRIBUTE_NAME = "occi.compute.speed";
     public static final String MEMORY_ATTRIBUTE_NAME = "occi.compute.memory";
     public static final String STATE_ATTRIBUTE_NAME = "occi.compute.state";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    public static final String TERM_DEFAULT = "compute";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     /**
      * Constructor.
@@ -223,21 +229,44 @@ public class Compute extends Resource {
     }
 
     /**
-     * Returns compute's default scheme
-     * 'http://schemas.ogf.org/occi/infrastructure'
+     * Returns compute's default identifier
+     * 'http://schemas.ogf.org/occi/infrastructure#compute'
      *
-     * @return compute's default scheme
+     * @return compute's default identifier
      */
-    public static URI getSchemeDefault() {
-        return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    @Override
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
     }
 
     /**
-     * Returns compute's default term 'compute'
+     * Returns compute's default attributes. For Compute class those are
+     * attributes occi.compute.architecture, occi.compute.cores,
+     * occi.compute.hostname, occi.compute.speed, occi.compute.memory and
+     * occi.compute.state.
      *
-     * @return compute's default term
+     * @return list of compute's default attributes
      */
-    public static String getTermDefault() {
-        return "compute";
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.addAll(Resource.getDefaultAttributes());
+        list.add(new Attribute(ARCHITECTURE_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(CORES_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(HOSTNAME_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(SPEED_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(MEMORY_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(STATE_ATTRIBUTE_NAME, true, true));
+
+        return list;
+    }
+
+    /**
+     * Returns compute's default kind instance.
+     *
+     * @return compute's default kind
+     */
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Compute Resource", URI.create("/compute/"), Compute.getDefaultAttributes());
+        return kind;
     }
 }

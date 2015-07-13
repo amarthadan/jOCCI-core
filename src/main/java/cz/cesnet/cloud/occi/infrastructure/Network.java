@@ -1,12 +1,15 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Category;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Resource;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.NetworkState;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing an OCCI Network
@@ -18,6 +21,9 @@ public class Network extends Resource {
     public static final String VLAN_ATTRIBUTE_NAME = "occi.network.vlan";
     public static final String LABEL_ATTRIBUTE_NAME = "occi.network.label";
     public static final String STATE_ATTRIBUTE_NAME = "occi.network.state";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    public static final String TERM_DEFAULT = "network";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     /**
      * Constructor.
@@ -126,21 +132,39 @@ public class Network extends Resource {
     }
 
     /**
-     * Returns network's default scheme
-     * 'http://schemas.ogf.org/occi/infrastructure#'
+     * Returns network's default identifier
+     * 'http://schemas.ogf.org/occi/infrastructure#network'
      *
-     * @return network's default scheme
+     * @return network's default identifier
      */
-    public static URI getSchemeDefault() {
-        return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    @Override
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
     }
 
     /**
-     * Returns network's default term 'network'
+     * Returns network's default attributes. For Network class those are
+     * attributes occi.network.vlan, occi.network.label, occi.network.state.
      *
-     * @return network's default term
+     * @return list of network's default attributes
      */
-    public static String getTermDefault() {
-        return "network";
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.addAll(Resource.getDefaultAttributes());
+        list.add(new Attribute(VLAN_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(LABEL_ATTRIBUTE_NAME, false, false));
+        list.add(new Attribute(STATE_ATTRIBUTE_NAME, true, true));
+
+        return list;
+    }
+
+    /**
+     * Returns network's default kind instance.
+     *
+     * @return network's default kind
+     */
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Network Resource", URI.create("/network/"), Network.getDefaultAttributes());
+        return kind;
     }
 }

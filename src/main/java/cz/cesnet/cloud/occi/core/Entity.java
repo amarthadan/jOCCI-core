@@ -8,7 +8,9 @@ import cz.cesnet.cloud.occi.collection.SetCover;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -24,6 +26,9 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
 
     public static final String ID_ATTRIBUTE_NAME = "occi.core.id";
     public static final String TITLE_ATTRIBUTE_NAME = "occi.core.title";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_CORE_DEFAULT;
+    public static final String TERM_DEFAULT = "entity";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Entity.class);
     private Kind kind;
@@ -430,24 +435,6 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     }
 
     /**
-     * Returns default entity's scheme 'http://schemas.ogf.org/occi/core#'
-     *
-     * @return default entity's scheme
-     */
-    public static URI getSchemeDefault() {
-        return Category.SCHEME_CORE_DEFAULT;
-    }
-
-    /**
-     * Returns default entity's term 'entity'.
-     *
-     * @return default entity's term
-     */
-    public static String getTermDefault() {
-        return "entity";
-    }
-
-    /**
      * @see Object#hashCode()
      * @return entity's hash code
      */
@@ -525,5 +512,29 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
     @Override
     public int compareTo(Entity e) {
         return getIdentifier().compareTo(e.getIdentifier());
+    }
+
+    /**
+     * Returns entity's default kind identifier (scheme+term). For Entity class
+     * this equals to 'http://schemas.ogf.org/occi/core#entity'.
+     *
+     * @return entity's default kind identifier
+     */
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
+    }
+
+    /**
+     * Returns entity's default attributes. For Entity class those are
+     * attributes occi.core.id and occi.core.title.
+     *
+     * @return list of entity's default attributes
+     */
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.add(new Attribute(ID_ATTRIBUTE_NAME, true, true));
+        list.add(new Attribute(TITLE_ATTRIBUTE_NAME, false, false));
+
+        return list;
     }
 }

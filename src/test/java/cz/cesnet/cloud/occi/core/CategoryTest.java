@@ -10,7 +10,7 @@ public class CategoryTest {
 
     @Before
     public void setUp() {
-        category = new Category(Category.SCHEME_CORE_DEFAULT, Entity.getTermDefault());
+        category = new Category(Category.SCHEME_CORE_DEFAULT, Entity.TERM_DEFAULT);
     }
 
     @Test

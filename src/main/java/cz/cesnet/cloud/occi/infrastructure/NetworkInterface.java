@@ -1,12 +1,15 @@
 package cz.cesnet.cloud.occi.infrastructure;
 
 import cz.cesnet.cloud.occi.Model;
+import cz.cesnet.cloud.occi.core.Attribute;
 import cz.cesnet.cloud.occi.core.Category;
 import cz.cesnet.cloud.occi.core.Kind;
 import cz.cesnet.cloud.occi.core.Link;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.infrastructure.enumeration.NetworkState;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Class representing an OCCI NetworkInterface
@@ -18,6 +21,9 @@ public class NetworkInterface extends Link {
     public static final String INTERFACE_ATTRIBUTE_NAME = "occi.networkinterface.interface";
     public static final String MAC_ATTRIBUTE_NAME = "occi.networkinterface.mac";
     public static final String STATE_ATTRIBUTE_NAME = "occi.networkinterface.state";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    public static final String TERM_DEFAULT = "networkinterface";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
 
     /**
      * Constructor.
@@ -118,21 +124,40 @@ public class NetworkInterface extends Link {
     }
 
     /**
-     * Returns network interface's default scheme
-     * 'http://schemas.ogf.org/occi/infrastructure#'.
+     * Returns networkinterface's default identifier
+     * 'http://schemas.ogf.org/occi/infrastructure#networkinterface'
      *
-     * @return network interface's default scheme
+     * @return networkinterface's default identifier
      */
-    public static URI getSchemeDefault() {
-        return Category.SCHEME_INFRASTRUCTURE_DEFAULT;
+    @Override
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
     }
 
     /**
-     * Returns network interface's default term 'networkinterface'.
+     * Returns networkinterface's default attributes. For NetworkInterface class
+     * those are attributes occi.networkinterface.interface,
+     * occi.networkinterface.mac and occi.networkinterface.state.
      *
-     * @return network interface's default term
+     * @return list of networkinterface's default attributes
      */
-    public static String getTermDefault() {
-        return "networkinterface";
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.addAll(Link.getDefaultAttributes());
+        list.add(new Attribute(INTERFACE_ATTRIBUTE_NAME, true, true));
+        list.add(new Attribute(MAC_ATTRIBUTE_NAME, true, false));
+        list.add(new Attribute(STATE_ATTRIBUTE_NAME, true, true));
+
+        return list;
+    }
+
+    /**
+     * Returns networkinterface's default kind instance.
+     *
+     * @return networkinterface's default kind
+     */
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Networkinterface", URI.create("/networkinterface/"), NetworkInterface.getDefaultAttributes());
+        return kind;
     }
 }

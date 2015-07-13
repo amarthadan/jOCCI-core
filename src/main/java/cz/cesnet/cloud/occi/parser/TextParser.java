@@ -396,12 +396,12 @@ public class TextParser implements Parser {
         Set<Attribute> attributes = new HashSet<>();
         attributes.add(new Attribute(Entity.ID_ATTRIBUTE_NAME, true, true));
         attributes.add(new Attribute(Entity.TITLE_ATTRIBUTE_NAME, false, false));
-        Kind entity = new Kind(Entity.getSchemeDefault(), Entity.getTermDefault(), "Entity", URI.create("/entity/"), attributes);
+        Kind entity = new Kind(Entity.SCHEME_DEFAULT, Entity.TERM_DEFAULT, "Entity", URI.create("/entity/"), attributes);
         defaultKinds.add(entity);
 
         attributes = new HashSet<>();
         attributes.add(new Attribute(Resource.SUMMARY_ATTRIBUTE_NAME, false, false));
-        Kind resource = new Kind(Resource.getSchemeDefault(), Resource.getTermDefault(), "Resource", URI.create("/resource/"), attributes);
+        Kind resource = new Kind(Resource.SCHEME_DEFAULT, Resource.TERM_DEFAULT, "Resource", URI.create("/resource/"), attributes);
         resource.setParentKind(entity);
         resource.addRelation(entity);
         defaultKinds.add(resource);
@@ -409,7 +409,7 @@ public class TextParser implements Parser {
         attributes = new HashSet<>();
         attributes.add(new Attribute(Link.SOURCE_ATTRIBUTE_NAME, true, false));
         attributes.add(new Attribute(Link.TARGET_ATTRIBUTE_NAME, true, false));
-        Kind link = new Kind(Link.getSchemeDefault(), Link.getTermDefault(), "Link", URI.create("/link/"), attributes);
+        Kind link = new Kind(Link.SCHEME_DEFAULT, Link.TERM_DEFAULT, "Link", URI.create("/link/"), attributes);
         link.setParentKind(entity);
         link.addRelation(entity);
         defaultKinds.add(link);
@@ -830,7 +830,7 @@ public class TextParser implements Parser {
                     }
                 }
             } else {
-                kind = new Kind(Link.getSchemeDefault(), Link.getTermDefault());
+                kind = new Kind(Link.SCHEME_DEFAULT, Link.TERM_DEFAULT);
             }
 
             Link link;

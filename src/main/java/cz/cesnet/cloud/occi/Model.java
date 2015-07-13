@@ -320,10 +320,10 @@ public class Model {
      */
     public CollectionType findKindType(Kind kind) {
         while (kind != null) {
-            if (kind.getIdentifier().equals(Resource.getIdentifierDefault())) {
+            if (kind.getIdentifier().equals(Resource.KIND_IDENTIFIER_DEFAULT)) {
                 return CollectionType.RESOURCE;
             }
-            if (kind.getIdentifier().equals(Link.getIdentifierDefault())) {
+            if (kind.getIdentifier().equals(Link.KIND_IDENTIFIER_DEFAULT)) {
                 return CollectionType.LINK;
             }
             kind = kind.getParentKind();

@@ -5,6 +5,7 @@ import cz.cesnet.cloud.occi.Model;
 import cz.cesnet.cloud.occi.exception.InvalidAttributeValueException;
 import cz.cesnet.cloud.occi.exception.RenderingException;
 import cz.cesnet.cloud.occi.renderer.TextRenderer;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +19,9 @@ public class Link extends Entity {
 
     public static final String SOURCE_ATTRIBUTE_NAME = "occi.core.source";
     public static final String TARGET_ATTRIBUTE_NAME = "occi.core.target";
+    public static final URI SCHEME_DEFAULT = Category.SCHEME_CORE_DEFAULT;
+    public static final String TERM_DEFAULT = "link";
+    public static final String KIND_IDENTIFIER_DEFAULT = SCHEME_DEFAULT + TERM_DEFAULT;
     private String relation;
 
     /**
@@ -128,21 +132,27 @@ public class Link extends Entity {
     }
 
     /**
-     * Returns link's default term 'link'.
-     *
-     * @return link's default term
-     */
-    public static String getTermDefault() {
-        return "link";
-    }
-
-    /**
      * Returns link's default identifier 'http://schemas.ogf.org/occi/core#link'
      *
      * @return link's default identifier
      */
-    public static String getIdentifierDefault() {
-        return getSchemeDefault().toString() + getTermDefault();
+    @Override
+    public String getDefaultKindIdentifier() {
+        return KIND_IDENTIFIER_DEFAULT;
+    }
+
+    public static List<Attribute> getDefaultAttributes() {
+        List<Attribute> list = new ArrayList<>();
+        list.addAll(Entity.getDefaultAttributes());
+        list.add(new Attribute(SOURCE_ATTRIBUTE_NAME, true, false));
+        list.add(new Attribute(TARGET_ATTRIBUTE_NAME, true, false));
+
+        return list;
+    }
+
+    public static Kind getDefaultKind() {
+        Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Link", URI.create("/link/"), Link.getDefaultAttributes());
+        return kind;
     }
 
     /**
