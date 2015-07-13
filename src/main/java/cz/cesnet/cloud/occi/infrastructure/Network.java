@@ -142,6 +142,12 @@ public class Network extends Resource {
         return KIND_IDENTIFIER_DEFAULT;
     }
 
+    /**
+     * Returns network's default attributes. For Network class those are
+     * attributes occi.network.vlan, occi.network.label, occi.network.state.
+     *
+     * @return list of network's default attributes
+     */
     public static List<Attribute> getDefaultAttributes() {
         List<Attribute> list = new ArrayList<>();
         list.addAll(Resource.getDefaultAttributes());
@@ -152,6 +158,11 @@ public class Network extends Resource {
         return list;
     }
 
+    /**
+     * Returns network's default kind instance.
+     *
+     * @return network's default kind
+     */
     public static Kind getDefaultKind() {
         Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Network Resource", URI.create("/network/"), Network.getDefaultAttributes());
         return kind;

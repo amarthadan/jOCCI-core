@@ -239,6 +239,14 @@ public class Compute extends Resource {
         return KIND_IDENTIFIER_DEFAULT;
     }
 
+    /**
+     * Returns compute's default attributes. For Compute class those are
+     * attributes occi.compute.architecture, occi.compute.cores,
+     * occi.compute.hostname, occi.compute.speed, occi.compute.memory and
+     * occi.compute.state.
+     *
+     * @return list of compute's default attributes
+     */
     public static List<Attribute> getDefaultAttributes() {
         List<Attribute> list = new ArrayList<>();
         list.addAll(Resource.getDefaultAttributes());
@@ -252,6 +260,11 @@ public class Compute extends Resource {
         return list;
     }
 
+    /**
+     * Returns compute's default kind instance.
+     *
+     * @return compute's default kind
+     */
     public static Kind getDefaultKind() {
         Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Compute Resource", URI.create("/compute/"), Compute.getDefaultAttributes());
         return kind;

@@ -137,6 +137,13 @@ public class IPNetworkInterface extends NetworkInterface {
         return MIXIN_IDENTIFIER_DEFAULT;
     }
 
+    /**
+     * Returns ipnetworkinterface's default attributes. For IPNetworkInterface
+     * class those are attributes occi.networkinterface.address,
+     * occi.networkinterface.gateway and occi.networkinterface.allocation.
+     *
+     * @return list of ipnetworkinterface's default attributes
+     */
     public static List<Attribute> getDefaultAttributes() {
         List<Attribute> list = new ArrayList<>();
         list.add(new Attribute(ADDRESS_ATTRIBUTE_NAME, true, false));
@@ -146,6 +153,11 @@ public class IPNetworkInterface extends NetworkInterface {
         return list;
     }
 
+    /**
+     * Returns ipnetworkinterface's default mixin instance.
+     *
+     * @return ipnetworkinterface's default mixin
+     */
     public static Mixin getDefaultMixin() {
         Mixin mixin = new Mixin(SCHEME_DEFAULT, TERM_DEFAULT, "IP Networkinterface Mixin", URI.create("/mixins/ipnetworkinterface/"), IPNetworkInterface.getDefaultAttributes());
         return mixin;

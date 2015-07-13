@@ -134,6 +134,13 @@ public class NetworkInterface extends Link {
         return KIND_IDENTIFIER_DEFAULT;
     }
 
+    /**
+     * Returns networkinterface's default attributes. For NetworkInterface class
+     * those are attributes occi.networkinterface.interface,
+     * occi.networkinterface.mac and occi.networkinterface.state.
+     *
+     * @return list of networkinterface's default attributes
+     */
     public static List<Attribute> getDefaultAttributes() {
         List<Attribute> list = new ArrayList<>();
         list.addAll(Link.getDefaultAttributes());
@@ -144,6 +151,11 @@ public class NetworkInterface extends Link {
         return list;
     }
 
+    /**
+     * Returns networkinterface's default kind instance.
+     *
+     * @return networkinterface's default kind
+     */
     public static Kind getDefaultKind() {
         Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Networkinterface", URI.create("/networkinterface/"), NetworkInterface.getDefaultAttributes());
         return kind;

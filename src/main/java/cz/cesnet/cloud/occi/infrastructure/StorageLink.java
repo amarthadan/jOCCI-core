@@ -134,6 +134,13 @@ public class StorageLink extends Link {
         return KIND_IDENTIFIER_DEFAULT;
     }
 
+    /**
+     * Returns storagelink's default attributes. For StorageLink class those are
+     * attributes occi.storagelink.deviceid, occi.storagelink.mountpoint and
+     * occi.storagelink.state.
+     *
+     * @return list of storagelink's default attributes
+     */
     public static List<Attribute> getDefaultAttributes() {
         List<Attribute> list = new ArrayList<>();
         list.addAll(Storage.getDefaultAttributes());
@@ -144,6 +151,11 @@ public class StorageLink extends Link {
         return list;
     }
 
+    /**
+     * Returns storagelink's default kind instance.
+     *
+     * @return storagelink's default kind
+     */
     public static Kind getDefaultKind() {
         Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Storage Link", URI.create("/storagelink/"), StorageLink.getDefaultAttributes());
         return kind;

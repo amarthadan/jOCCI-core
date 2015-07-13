@@ -141,6 +141,12 @@ public class Storage extends Resource {
         return KIND_IDENTIFIER_DEFAULT;
     }
 
+    /**
+     * Returns storage's default attributes. For Storage class those are
+     * attributes occi.storage.size and occi.storage.state.
+     *
+     * @return list of storage's default attributes
+     */
     public static List<Attribute> getDefaultAttributes() {
         List<Attribute> list = new ArrayList<>();
         list.addAll(Resource.getDefaultAttributes());
@@ -150,6 +156,11 @@ public class Storage extends Resource {
         return list;
     }
 
+    /**
+     * Returns storage's default kind instance.
+     *
+     * @return storage's default kind
+     */
     public static Kind getDefaultKind() {
         Kind kind = new Kind(SCHEME_DEFAULT, TERM_DEFAULT, "Storage Resource", URI.create("/storage/"), Storage.getDefaultAttributes());
         return kind;

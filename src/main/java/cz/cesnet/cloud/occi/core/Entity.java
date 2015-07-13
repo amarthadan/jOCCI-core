@@ -514,10 +514,22 @@ public abstract class Entity implements Identifiable, Comparable<Entity> {
         return getIdentifier().compareTo(e.getIdentifier());
     }
 
+    /**
+     * Returns entity's default kind identifier (scheme+term). For Entity class
+     * this equals to 'http://schemas.ogf.org/occi/core#entity'.
+     *
+     * @return entity's default kind identifier
+     */
     public String getDefaultKindIdentifier() {
         return KIND_IDENTIFIER_DEFAULT;
     }
 
+    /**
+     * Returns entity's default attributes. For Entity class those are
+     * attributes occi.core.id and occi.core.title.
+     *
+     * @return list of entity's default attributes
+     */
     public static List<Attribute> getDefaultAttributes() {
         List<Attribute> list = new ArrayList<>();
         list.add(new Attribute(ID_ATTRIBUTE_NAME, true, true));
