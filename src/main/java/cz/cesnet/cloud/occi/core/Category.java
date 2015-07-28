@@ -423,8 +423,19 @@ public class Category implements Identifiable, Comparable<Category> {
      * @return plain text representation of category
      */
     public String toText() {
+        return toText(true);
+    }
+
+    /**
+     * Returns a plain text representation of category and its subtypes (kinds
+     * and mixins) according to OCCI standard.
+     *
+     * @param fullRendering whether to render all the information
+     * @return plain text representation of category
+     */
+    public String toText(boolean fullRendering) {
         StringBuilder sb = new StringBuilder("Category: ");
-        sb.append(textBody());
+        sb.append(textBody(fullRendering));
 
         return sb.toString();
     }
@@ -436,13 +447,24 @@ public class Category implements Identifiable, Comparable<Category> {
      * @return plain text representation of category
      */
     public Headers toHeaders() {
+        return toHeaders(true);
+    }
+
+    /**
+     * Returns an occi text representation of category and its subtypes (kinds
+     * and mixins) according to OCCI standard in form of headers.
+     *
+     * @param fullRendering whether to render all the information
+     * @return plain text representation of category
+     */
+    public Headers toHeaders(boolean fullRendering) {
         Headers headers = new Headers();
-        headers.add("Category", textBody());
+        headers.add("Category", textBody(fullRendering));
 
         return headers;
     }
 
-    private String textBody() {
+    private String textBody(boolean fullRendering) {
         StringBuilder sb = new StringBuilder(term);
         sb.append(";");
         sb.append("scheme");
@@ -450,60 +472,62 @@ public class Category implements Identifiable, Comparable<Category> {
         sb.append("class");
         sb.append(TextRenderer.surroundString(this.getClass().getSimpleName().toLowerCase()));
 
-        if (title != null && !title.isEmpty()) {
-            sb.append("title");
-            sb.append(TextRenderer.surroundString(title));
-        }
+        if (fullRendering) {
+            if (title != null && !title.isEmpty()) {
+                sb.append("title");
+                sb.append(TextRenderer.surroundString(title));
+            }
 
-        if (this instanceof Kind) {
-            Kind kind = (Kind) this;
-            if (kind.getRelations().size() == 1) {
-                sb.append("rel");
-                for (Kind k : kind.getRelations()) {
-                    sb.append(TextRenderer.surroundString(k.getIdentifier()));
+            if (this instanceof Kind) {
+                Kind kind = (Kind) this;
+                if (kind.getRelations().size() == 1) {
+                    sb.append("rel");
+                    for (Kind k : kind.getRelations()) {
+                        sb.append(TextRenderer.surroundString(k.getIdentifier()));
+                    }
                 }
             }
-        }
 
-        if (this instanceof Mixin) {
-            Mixin mixin = (Mixin) this;
-            if (mixin.getRelations().size() == 1) {
-                sb.append("rel");
-                for (Mixin m : mixin.getRelations()) {
-                    sb.append(TextRenderer.surroundString(m.getIdentifier()));
+            if (this instanceof Mixin) {
+                Mixin mixin = (Mixin) this;
+                if (mixin.getRelations().size() == 1) {
+                    sb.append("rel");
+                    for (Mixin m : mixin.getRelations()) {
+                        sb.append(TextRenderer.surroundString(m.getIdentifier()));
+                    }
                 }
             }
-        }
 
-        if (location != null) {
-            sb.append("location");
-            sb.append(TextRenderer.surroundString(location.toString()));
-        }
-
-        if (attributes != null && !attributes.getSet().isEmpty()) {
-            sb.append("attributes");
-            StringBuilder attrSB = new StringBuilder();
-            List<Attribute> attributeList = new ArrayList<>(attributes.getSet());
-            Collections.sort(attributeList);
-            for (Attribute attribute : attributeList) {
-                attrSB.append(attribute.toText());
-                attrSB.append(" ");
+            if (location != null) {
+                sb.append("location");
+                sb.append(TextRenderer.surroundString(location.toString()));
             }
-            attrSB.deleteCharAt(attrSB.length() - 1);
-            sb.append(TextRenderer.surroundString(attrSB.toString()));
-        }
 
-        if (actions != null && !actions.getSet().isEmpty()) {
-            sb.append("actions");
-            StringBuilder actionsSB = new StringBuilder();
-            List<Action> actionList = new ArrayList<>(actions.getSet());
-            Collections.sort(actionList);
-            for (Action action : actionList) {
-                actionsSB.append(action.getIdentifier());
-                actionsSB.append(" ");
+            if (attributes != null && !attributes.getSet().isEmpty()) {
+                sb.append("attributes");
+                StringBuilder attrSB = new StringBuilder();
+                List<Attribute> attributeList = new ArrayList<>(attributes.getSet());
+                Collections.sort(attributeList);
+                for (Attribute attribute : attributeList) {
+                    attrSB.append(attribute.toText());
+                    attrSB.append(" ");
+                }
+                attrSB.deleteCharAt(attrSB.length() - 1);
+                sb.append(TextRenderer.surroundString(attrSB.toString()));
             }
-            actionsSB.deleteCharAt(actionsSB.length() - 1);
-            sb.append(TextRenderer.surroundString(actionsSB.toString()));
+
+            if (actions != null && !actions.getSet().isEmpty()) {
+                sb.append("actions");
+                StringBuilder actionsSB = new StringBuilder();
+                List<Action> actionList = new ArrayList<>(actions.getSet());
+                Collections.sort(actionList);
+                for (Action action : actionList) {
+                    actionsSB.append(action.getIdentifier());
+                    actionsSB.append(" ");
+                }
+                actionsSB.deleteCharAt(actionsSB.length() - 1);
+                sb.append(TextRenderer.surroundString(actionsSB.toString()));
+            }
         }
 
         if (sb.charAt(sb.length() - 1) == ';') {

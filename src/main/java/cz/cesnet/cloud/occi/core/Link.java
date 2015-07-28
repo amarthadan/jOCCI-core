@@ -165,13 +165,13 @@ public class Link extends Entity {
     public String toText() {
         StringBuilder sb = new StringBuilder();
 
-        sb.append(getKind().toText());
+        sb.append(getKind().toText(false));
 
         List<Mixin> mixinList = new ArrayList<>(getMixins());
         Collections.sort(mixinList);
         for (Mixin m : mixinList) {
             sb.append("\n");
-            sb.append(m.toText());
+            sb.append(m.toText(false));
         }
 
         String attributesString = attributesToPrefixText();
@@ -193,12 +193,12 @@ public class Link extends Entity {
     public Headers toHeaders() {
         Headers headers = new Headers();
 
-        headers.putAll(getKind().toHeaders());
+        headers.putAll(getKind().toHeaders(false));
 
         List<Mixin> mixinList = new ArrayList<>(getMixins());
         Collections.sort(mixinList);
         for (Mixin m : mixinList) {
-            Headers mixinHeaders = m.toHeaders();
+            Headers mixinHeaders = m.toHeaders(false);
             for (String name : mixinHeaders.keySet()) {
                 for (String value : mixinHeaders.get(name)) {
                     headers.add(name, value);
