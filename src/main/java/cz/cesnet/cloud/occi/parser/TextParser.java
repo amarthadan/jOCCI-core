@@ -849,6 +849,13 @@ public class TextParser implements Parser {
             Map<String, String> attributesWithValues = parseAttributesWithValues(attributes.split(";"));
             for (String name : attributesWithValues.keySet()) {
                 link.addAttribute(name, attributesWithValues.get(name));
+                // ***********HACK*********
+                if (name.equals("occi.core.id")) {
+                    String value = attributesWithValues.get(name);
+                    value = value.substring(value.lastIndexOf('/') + 1);
+                    link.addAttribute(name, value);
+                }
+                // ***********HACK*********
             }
 
             return link;
