@@ -100,6 +100,11 @@ public class TextParser implements Parser {
     public static final Pattern PATTERN_ATTRIBUTES = Pattern.compile(REGEXP_ATTRIBUTES);
     public static final Pattern PATTERN_LINK = Pattern.compile(REGEXP_LINK);
 
+    public static final String CATEGORY_HEADER = "category";
+    public static final String LINK_HEADER = "link";
+    public static final String ATTRIBUTE_HEADER = "x-occi-attribute";
+    public static final String LOCATION_HEADER = "location";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(TextParser.class);
 
     /**
@@ -133,11 +138,11 @@ public class TextParser implements Parser {
     private Model parseModelFromHeaders(Headers headers) throws ParsingException {
         LOGGER.debug("Reading response headers.");
 
-        if (!headers.containsKey("Category")) {
-            throw new ParsingException("No header 'Category' among headers.");
+        if (!headers.containsKey(CATEGORY_HEADER)) {
+            throw new ParsingException("No header '" + CATEGORY_HEADER + "' among headers.");
         }
 
-        String[] categories = headers.getFirst("Category").split(",");
+        String[] categories = headers.getFirst(CATEGORY_HEADER).split(",");
         return parseModelFromArray(categories);
     }
 
@@ -439,11 +444,11 @@ public class TextParser implements Parser {
     private List<URI> parseLocationsFromHeaders(Headers headers) throws ParsingException {
         LOGGER.debug("Reading response headers.");
 
-        if (!headers.containsKey("Location")) {
-            throw new ParsingException("No header 'Location' among headers.");
+        if (!headers.containsKey(LOCATION_HEADER)) {
+            throw new ParsingException("No header '" + LOCATION_HEADER + "' among headers.");
         }
 
-        String[] locations = headers.getFirst("Location").split(",");
+        String[] locations = headers.getFirst(LOCATION_HEADER).split(",");
         return makeURIList(locations);
     }
 
@@ -492,19 +497,19 @@ public class TextParser implements Parser {
     private Collection parseCollectionFromHeaders(Headers headers, CollectionType collectionType) throws ParsingException {
         LOGGER.debug("Reading headers.");
 
-        if (!headers.containsKey("Category")) {
-            throw new ParsingException("No 'Category' header.");
+        if (!headers.containsKey(CATEGORY_HEADER)) {
+            throw new ParsingException("No '" + CATEGORY_HEADER + "' header.");
         }
 
         List<String> lines = new ArrayList<>();
-        lines.addAll(Arrays.asList(headers.getFirst("Category").split(",")));
+        lines.addAll(Arrays.asList(headers.getFirst(CATEGORY_HEADER).split(",")));
 
-        if (headers.containsKey("X-Occi-Attribute")) {
-            lines.addAll(Arrays.asList(headers.getFirst("X-Occi-Attribute").split(",")));
+        if (headers.containsKey(ATTRIBUTE_HEADER)) {
+            lines.addAll(Arrays.asList(headers.getFirst(ATTRIBUTE_HEADER).split(",")));
         }
 
-        if (headers.containsKey("Link")) {
-            lines.addAll(Arrays.asList(headers.getFirst("Link").split(",")));
+        if (headers.containsKey(LINK_HEADER)) {
+            lines.addAll(Arrays.asList(headers.getFirst(LINK_HEADER).split(",")));
         }
 
         return parseCollectionFromArray(lines.toArray(new String[0]), collectionType);
