@@ -129,7 +129,7 @@ public class TextParser implements Parser {
         LOGGER.debug("Reading response body.");
 
         body = body.trim();
-        String replaced = body.replaceAll("Category:\\s*", "");
+        String replaced = body.replaceAll("(C|c)(A|a)(T|t)(E|e)(G|g)(O|o)(R|r)(Y|y):\\s*", "");
 
         String[] lines = replaced.split("[\\r\\n]+");
         return parseModelFromArray(lines);
@@ -453,7 +453,7 @@ public class TextParser implements Parser {
         LOGGER.debug("Reading response body.");
 
         body = body.trim();
-        String replaced = body.replaceAll("X-OCCI-Location:\\s*", "");
+        String replaced = body.replaceAll("(X|x)-(O|o)(C|c)(C|c)(I|i)-(L|l)(O|o)(C|c)(A|a)(T|t)(I|i)(O|o)(N|n):\\s*", "");
         String[] lines = replaced.split("[\\r\\n]+");
         return makeURIList(lines);
     }
@@ -516,9 +516,9 @@ public class TextParser implements Parser {
         LOGGER.debug("Reading body.");
 
         body = body.trim();
-        String replaced = body.replaceAll("Category:\\s*", "");
-        replaced = replaced.replaceAll("Link:\\s*", "");
-        replaced = replaced.replaceAll("X-OCCI-Attribute:\\s*", "");
+        String replaced = body.replaceAll("(C|c)(A|a)(T|t)(E|e)(G|g)(O|o)(R|r)(Y|y):\\s*", "");
+        replaced = replaced.replaceAll("(L|l)(I|i)(N|n)(K|k):\\s*", "");
+        replaced = replaced.replaceAll("(X|x)-(O|o)(C|c)(C|c)(I|i)-(A|a)(T|t)(T|t)(R|r)(I|i)(B|b)(U|u)(T|t)(E|e):\\s*", "");
         String[] lines = replaced.split("[\\r\\n]+");
 
         return parseCollectionFromArray(lines, collectionType);
