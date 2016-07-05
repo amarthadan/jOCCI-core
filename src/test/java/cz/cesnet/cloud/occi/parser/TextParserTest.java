@@ -159,37 +159,9 @@ public class TextParserTest {
     @Test
     public void testInvalidParseModelPlainMixin() {
         TextParser instance = new TextParser();
-
-        //mixin without location
-        try {
-            String body = "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"";
-            instance.parseModel(MediaType.TEXT_PLAIN, body, null);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
-        //mixin with empty location
-        try {
-            String body = "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"";
-            instance.parseModel(MediaType.TEXT_PLAIN, body, null);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
         //mixin with illegal scheme
         try {
             String body = "Category: ipnetwork;scheme=\"/\\/_)#@564...,p,pkl\";class=\"mixin\";title=\"IP Network Mixin\";location=\"/mixins/ipnetwork/\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"";
-            instance.parseModel(MediaType.TEXT_PLAIN, body, null);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
-        //mixin with illegal location
-        try {
-            String body = "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"/\\/_)#@564...,p,pkl\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"";
             instance.parseModel(MediaType.TEXT_PLAIN, body, null);
             fail();
         } catch (ParsingException ex) {
@@ -433,24 +405,6 @@ public class TextParserTest {
     public void testInvalidParseModelOcciMixin() {
         TextParser instance = new TextParser();
         Headers headers = createDefaultHeaders();
-
-        //mixin without location
-        try {
-            headers.add("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
-            instance.parseModel(MediaType.TEXT_OCCI, null, headers);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
-
-        //mixin with empty location
-        try {
-            headers.add("Category", "Category: ipnetwork;scheme=\"http://schemas.ogf.org/occi/infrastructure/network#\";class=\"mixin\";title=\"IP Network Mixin\";location=\"\";attributes=\"occi.network.address{required} occi.network.gateway occi.network.allocation occi.network.state\"");
-            instance.parseModel(MediaType.TEXT_OCCI, null, headers);
-            fail();
-        } catch (ParsingException ex) {
-            //cool
-        }
 
         //mixin with illegal scheme
         try {

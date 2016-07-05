@@ -182,9 +182,6 @@ public class TextParser implements Parser {
                     model = addKind(matcher, kindMapping, model);
                     break;
                 case "mixin":
-                    if (location == null || location.isEmpty()) {
-                        throw new ParsingException("No location found.");
-                    }
                     model = addMixin(matcher, mixinMapping, model);
                     break;
                 case "action":
@@ -776,6 +773,7 @@ public class TextParser implements Parser {
             URI locationUri = null;
             if (location != null) {
                 locationUri = new URI(location);
+                locationUri = new URI(locationUri.getPath());
             }
             Kind kind = new Kind(new URI(scheme), term, title, locationUri, parsedAttributes);
 
@@ -794,8 +792,12 @@ public class TextParser implements Parser {
 
         try {
             URI locationUri = null;
-            if (location != null) {
+            if (location == null || location.isEmpty()) {
+                locationUri = new URI("/mixin/" + term);
+                locationUri = new URI(locationUri.getPath());
+            } else {
                 locationUri = new URI(location);
+                locationUri = new URI(locationUri.getPath());
             }
             Set<Attribute> parsedAttributes = parseAttributes(attributes);
             Mixin mixin = new Mixin(new URI(scheme), term, title, locationUri, parsedAttributes);
