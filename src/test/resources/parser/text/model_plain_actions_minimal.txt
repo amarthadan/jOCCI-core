@@ -1,1 +1,1 @@
-Category: up;scheme="http://schemas.ogf.org/occi/infrastructure/network/action#";class="action"
+category: up;scheme="http://schemas.ogf.org/occi/infrastructure/network/action#";class="action"
