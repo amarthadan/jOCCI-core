@@ -15,7 +15,7 @@ Using Maven:
 <dependency>
     <groupId>cz.cesnet.cloud</groupId>
     <artifactId>jocci-core</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.4</version>
 </dependency>
 ```
 ### Continuous integration
