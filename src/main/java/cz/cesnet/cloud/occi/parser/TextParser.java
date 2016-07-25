@@ -129,7 +129,7 @@ public class TextParser implements Parser {
         LOGGER.debug("Reading response body.");
 
         body = body.trim();
-        String replaced = body.replaceAll("Category:\\s*", "");
+        String replaced = Pattern.compile("Category:\\s*", Pattern.CASE_INSENSITIVE).matcher(body).replaceAll("");
 
         String[] lines = replaced.split("[\\r\\n]+");
         return parseModelFromArray(lines);
@@ -453,7 +453,7 @@ public class TextParser implements Parser {
         LOGGER.debug("Reading response body.");
 
         body = body.trim();
-        String replaced = body.replaceAll("X-OCCI-Location:\\s*", "");
+        String replaced = Pattern.compile("X-OCCI-Location:\\s*", Pattern.CASE_INSENSITIVE).matcher(body).replaceAll("");
         String[] lines = replaced.split("[\\r\\n]+");
         return makeURIList(lines);
     }
@@ -516,9 +516,9 @@ public class TextParser implements Parser {
         LOGGER.debug("Reading body.");
 
         body = body.trim();
-        String replaced = body.replaceAll("Category:\\s*", "");
-        replaced = replaced.replaceAll("Link:\\s*", "");
-        replaced = replaced.replaceAll("X-OCCI-Attribute:\\s*", "");
+        String replaced = Pattern.compile("Category:\\s*", Pattern.CASE_INSENSITIVE).matcher(body).replaceAll("");
+        replaced = Pattern.compile("Link:\\s*", Pattern.CASE_INSENSITIVE).matcher(body).replaceAll("");
+        replaced = Pattern.compile("X-OCCI-Attribute:\\s*", Pattern.CASE_INSENSITIVE).matcher(body).replaceAll("");
         String[] lines = replaced.split("[\\r\\n]+");
 
         return parseCollectionFromArray(lines, collectionType);
