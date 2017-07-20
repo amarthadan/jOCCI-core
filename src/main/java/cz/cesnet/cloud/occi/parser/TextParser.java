@@ -275,6 +275,9 @@ public class TextParser implements Parser {
         mixin = (Mixin) connectActions(actions, mixin, model);
 
         if (rel != null && !rel.isEmpty()) {
+            String[] rel_parts = rel.split("\\s+");
+            rel = rel_parts[0];
+
             if (!model.containsMixin(rel)) {
                 LOGGER.debug("Unexpected relation " + rel + " in mixin " + term + ". Storing for later mapping");
                 if (mapping.containsKey(rel)) {
